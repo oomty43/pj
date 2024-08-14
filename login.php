@@ -1,36 +1,3 @@
-<?php
-session_start();
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "project";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $s_id = $_POST['s_id'];
-    $s_pws = $_POST['s_pws'];
-
-    $sql = "SELECT * FROM student WHERE s_id = ? AND s_pws = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $s_id, $s_pws);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $_SESSION['s_id'] = $s_id;
-        header("Location: main.php");
-        exit();
-    } else {
-        echo "<script>alert('รหัสนักศึกษา หรือรหัสผ่านไม่ถูกต้อง');</script>";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         input[type=text], input[type=password] {
             width: 100%;
@@ -77,10 +45,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-decoration: none;
             color: #4CAF50;
         }
+        .admin-login {
+            position: right;
+            size : 5px;
+            top: 10px;
+            right: 10px;
+            bottom : 10px;
+        }
+        .admin-login a {
+            text-decoration: none;
+            color: #4CAF50;
+        }
+        .guest-login {
+            margin-top: 20px;
+            color: #4CAF50;
+        }
+        .guest-login a {
+            text-decoration: none;
+            color: #4CAF50;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="admin-login">
+            <p><a href="loginadmin.php">เข้าสู่ระบบสำหรับผู้ดูแล</a></p>
+            </form>
+        </div>
         <h2>เข้าสู่ระบบ</h2>
         <form method="post">
             <input type="text" name="s_id" placeholder="รหัสนักศึกษา" required>
@@ -89,6 +80,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         <div class="register-link">
             <p>ยังไม่ได้เป็นสมาชิก? <a href="register.php">สมัครสมาชิก</a></p>
+        </div>
+        <div class="guest-login">
+            <p><a href="guestlogin.php">เยี่ยมชมเว็บไซต์</a></p>
+            </form>
         </div>
     </div>
 </body>
