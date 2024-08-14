@@ -263,4 +263,4 @@ $conn->close();
     </div>
 
 </body>
-</html>
+</html> <!-- Student Information Form -->
