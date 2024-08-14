@@ -45,40 +45,6 @@ if ($result->num_rows > 0) {
 }
 
 $stmt->close();
-
-// จัดการการอัปเดตข้อมูล
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // รับข้อมูลจากฟอร์ม
-    $s_pna = $_POST['s_pna'];
-    $s_na = $_POST['s_na'];
-    $s_la = $_POST['s_la'];
-    $s_pws = $_POST['s_pws']; // อาจพิจารณาเปลี่ยนเป็น type="password" ถ้าต้องการความปลอดภัย
-    $s_stat = $_POST['s_stat'];
-    $s_bloodtype = $_POST['s_bloodtype'];
-    $s_race = $_POST['s_race'];
-    $s_birth = $_POST['s_birth'];
-    $s_nationlity = $_POST['s_nationlity'];
-    $religious = $_POST['religious'];
-    $s_marriage = $_POST['s_marriage'];
-    $s_province = $_POST['s_province'];
-    $s_country = $_POST['s_country'];
-
-    // เตรียมคำสั่ง SQL อัปเดตข้อมูล
-    $sql_update = "UPDATE student SET s_pna = ?, s_na = ?, s_la = ?, s_pws = ?, s_stat = ?, s_bloodtype = ?, s_race = ?, s_birth = ?, s_nationlity = ?, religious = ?, s_marriage = ?, s_province = ?, s_country = ? WHERE s_id = ?";
-    $stmt_update = $conn->prepare($sql_update);
-
-    // ตรวจสอบชนิดของพารามิเตอร์
-    $stmt_update->bind_param("isssssssssssi", $s_pna, $s_na, $s_la, $s_pws, $s_stat, $s_bloodtype, $s_race, $s_birth, $s_nationlity, $religious, $s_marriage, $s_province, $s_country, $s_id);
-
-    if ($stmt_update->execute()) {
-        echo "<p>ข้อมูลถูกอัปเดตเรียบร้อยแล้ว</p>";
-    } else {
-        echo "<p>เกิดข้อผิดพลาดในการอัปเดตข้อมูล: " . $conn->error . "</p>";
-    }
-
-    $stmt_update->close();
-}
-
 $conn->close();
 ?>
 
@@ -87,7 +53,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดการข้อมูลส่วนตัวนักศึกษา</title>
+    <title>แก้ไขข้อมูลนักศึกษา</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -139,7 +105,8 @@ $conn->close();
         .form-group input[type="text"],
         .form-group input[type="password"],
         .form-group input[type="radio"],
-        .form-group input[type="date"] {
+        .form-group input[type="date"],
+        .form-group input[type="file"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -155,24 +122,18 @@ $conn->close();
             width: auto;
             margin-right: 10px;
         }
-        .btn-group {
-            display: flex;
-            justify-content: space-between;
-        }
         .btn-save,
         .btn-cancel {
             display: inline-block;
             width: 48%;
             padding: 10px;
+            background-color: #28a745;
             color: white;
             text-align: center;
             border: none;
             border-radius: 5px;
             text-decoration: none;
             font-size: 16px;
-        }
-        .btn-save {
-            background-color: #28a745;
         }
         .btn-cancel {
             background-color: #dc3545;
@@ -199,15 +160,17 @@ $conn->close();
 
     <!-- Centered Text -->
     <div class="center-text">
-        จัดการข้อมูลส่วนตัวนักศึกษา
+        แก้ไขข้อมูลนักศึกษา
     </div>
 
     <!-- Student Information Form -->
     <div class="form-container">
-        <form action="editstd.php" method="post">
+        <form action="editstd_process.php" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label>รูปภาพ</label>
-                <img src="upload/<?php echo $row['s_pic']; ?>" alt="Student Picture">
+                <img src="upload/<?php echo $row['s_pic']; ?>" alt="รูปภาพของนักเรียน">
+                <input type="file" name="s_pic">
+                <input type="hidden" name="s_pic_old" value="<?php echo $row['s_pic']; ?>">
             </div>
 
             <div class="form-group">
@@ -215,10 +178,11 @@ $conn->close();
                 <input type="radio" name="s_pna" value="1" <?php echo $row['s_pna'] == 1 ? 'checked' : ''; ?>> นาย
                 <input type="radio" name="s_pna" value="2" <?php echo $row['s_pna'] == 2 ? 'checked' : ''; ?>> นาง
                 <input type="radio" name="s_pna" value="3" <?php echo $row['s_pna'] == 3 ? 'checked' : ''; ?>> นางสาว
+                <input type="radio" name="s_pna" value="4" <?php echo $row['s_pna'] == 4 ? 'checked' : ''; ?>> ไม่ระบุเพศ
             </div>
 
             <div class="form-group">
-                <label>ชื่อ</label>
+                <label>ชื่อนักศึกษา</label>
                 <input type="text" name="s_na" value="<?php echo $row['s_na']; ?>">
             </div>
 
@@ -234,7 +198,7 @@ $conn->close();
 
             <div class="form-group">
                 <label>รหัสผ่าน</label>
-                <input type="password" name="s_pws" value="<?php echo $row['s_pws']; ?>">
+                <input type="text" name="s_pws" value="<?php echo $row['s_pws']; ?>"> <!-- ใช้ type="text" แทนที่จะเป็น type="password" -->
             </div>
 
             <div class="form-group">
@@ -257,7 +221,7 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label>วันเดือนปีเกิด</label>
+                <label>วันเกิด</label>
                 <input type="date" name="s_birth" value="<?php echo $row['s_birth']; ?>">
             </div>
 
@@ -268,19 +232,19 @@ $conn->close();
 
             <div class="form-group">
                 <label>ศาสนา</label>
-                <select name="religious">
-                    <option value="1" <?php echo $row['religious'] == 1 ? 'selected' : ''; ?>>พุทธ</option>
-                    <option value="2" <?php echo $row['religious'] == 2 ? 'selected' : ''; ?>>คริสต์</option>
-                    <option value="3" <?php echo $row['religious'] == 3 ? 'selected' : ''; ?>>อิสลาม</option>
-                    <option value="4" <?php echo $row['religious'] == 4 ? 'selected' : ''; ?>>พราหมณ์ฮินดู</option>
-                    <option value="5" <?php echo $row['religious'] == 5 ? 'selected' : ''; ?>>อื่นๆ</option>
-                </select>
+                <input type="radio" name="religious" value="1" <?php echo $row['religious'] == 1 ? 'checked' : ''; ?>> พุทธ
+                <input type="radio" name="religious" value="2" <?php echo $row['religious'] == 2 ? 'checked' : ''; ?>> คริสต์
+                <input type="radio" name="religious" value="3" <?php echo $row['religious'] == 3 ? 'checked' : ''; ?>> อิสลาม
+                <input type="radio" name="religious" value="4" <?php echo $row['religious'] == 4 ? 'checked' : ''; ?>> ฮินดู
+                <input type="radio" name="religious" value="5" <?php echo $row['religious'] == 5 ? 'checked' : ''; ?>> อื่นๆ
             </div>
 
             <div class="form-group">
-                <label>สถานภาพสมรส</label>
-                <input type="radio" name="s_marriage" value="1" <?php echo $row['s_marriage'] == 1 ? 'checked' : ''; ?>> สมรสแล้ว
-                <input type="radio" name="s_marriage" value="0" <?php echo $row['s_marriage'] == 0 ? 'checked' : ''; ?>> โสด
+                <label>สถานภาพการสมรส</label>
+                <input type="radio" name="s_marriage" value="1" <?php echo $row['s_marriage'] == 1 ? 'checked' : ''; ?>> โสด
+                <input type="radio" name="s_marriage" value="2" <?php echo $row['s_marriage'] == 2 ? 'checked' : ''; ?>> สมรส
+                <input type="radio" name="s_marriage" value="3" <?php echo $row['s_marriage'] == 3 ? 'checked' : ''; ?>> หย่า
+                <input type="radio" name="s_marriage" value="4" <?php echo $row['s_marriage'] == 4 ? 'checked' : ''; ?>> แยกกันอยู่
             </div>
 
             <div class="form-group">
@@ -293,9 +257,9 @@ $conn->close();
                 <input type="text" name="s_country" value="<?php echo $row['s_country']; ?>">
             </div>
 
-            <div class="btn-group">
+            <div class="form-group">
                 <button type="submit" class="btn-save">บันทึก</button>
-                <a href="edit_student2.php" class="btn-cancel">ยกเลิก</a>
+                <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
             </div>
         </form>
     </div>

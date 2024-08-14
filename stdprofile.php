@@ -31,7 +31,7 @@ function getPrefix($s_pna) {
 
 // ดึงข้อมูลนักศึกษาจากฐานข้อมูลตาม user id ใน session
 $s_id = $_SESSION['s_id'];
-$sql = "SELECT s_pna, s_na, s_la, s_pic, s_stat, s_pws FROM student WHERE s_id = ?";
+$sql = "SELECT s_pna, s_na, s_la, s_pic, s_stat, s_pws, s_email FROM student WHERE s_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $s_id);
 $stmt->execute();
@@ -53,7 +53,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าหลักเว็บไซต์</title>
+    <title>ข้อมูลส่วนตัวนักศึกษา</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -144,14 +144,14 @@ $conn->close();
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
-        <a href="mainstd.php">หน้าหลัก</a>
+        <a href="stdmain.php">หน้าหลัก</a>
         <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
         <a href="stdaward.php">ผลงานส่วนตัว</a>
     </div>
 
     <!-- Centered Text -->
     <div class="center-text">
-        จัดการข้อมูลส่วนตัวนักศึกษา
+        ข้อมูลส่วนตัวนักศึกษา
     </div>
 
     <!-- Student Information Form -->
@@ -169,8 +169,11 @@ $conn->close();
         $s_id = $_SESSION['s_id'];
 
         // คำสั่ง SQL เพื่อดึงข้อมูลจากตาราง student
-        $sql = "SELECT s_pic, s_pna, s_na, s_la, s_id, s_pws, s_stat FROM student WHERE s_id = '$s_id'";
-        $result = $conn->query($sql);
+        $sql = "SELECT s_pic, s_pna, s_na, s_la, s_id, s_pws, s_stat, s_email FROM student WHERE s_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $s_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -209,6 +212,11 @@ $conn->close();
             </div>
 
             <div class="form-group">
+                <label>อีเมล</label>
+                <input type="text" name="s_email" value="<?php echo $row['s_email']; ?>" readonly>
+            </div>
+
+            <div class="form-group">
                 <label>สถานะ</label>
                 <input type="radio" name="s_stat" value="1" <?php echo $row['s_stat'] == 1 ? 'checked' : ''; ?> disabled> ยังคงศึกษาอยู่
                 <input type="radio" name="s_stat" value="0" <?php echo $row['s_stat'] == 0 ? 'checked' : ''; ?> disabled> จบการศึกษาแล้ว
@@ -222,6 +230,7 @@ $conn->close();
         }
 
         // ปิดการเชื่อมต่อ
+        $stmt->close();
         $conn->close();
         ?>
     </div>
