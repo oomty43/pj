@@ -58,19 +58,15 @@ if (isset($_FILES['s_pic']) && $_FILES['s_pic']['error'] == UPLOAD_ERR_OK) {
     $s_pic = $_POST['s_pic_old'];
 }
 
-$sql = "UPDATE student SET s_pna = :s_pna, s_na = :s_na, s_la = :s_la, s_pws = :s_pws, s_stat = :s_stat, s_bloodtype = :s_bloodtype, s_race = :s_race, s_birth = :s_birth, s_nationlity = :s_nationlity, religious = :religious, s_marriage = :s_marriage, s_province = :s_province, s_country = :s_country WHERE s_id = :s_id";
+$sql = "UPDATE student SET s_pna = :s_pna, s_na = :s_na, s_id = :s_id, s_la = :s_la, s_email = :s_email, s_address = :s_address  WHERE s_id = :s_id";
 
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':s_pna', $s_pna, PDO::PARAM_INT);
 $stmt->bindParam(':s_na', $s_na, PDO::PARAM_STR);
-$stmt->bindParam(':s_id', $s_id, PDO::PARAM_STR); // สมมติว่า s_id เป็นชนิด string
-
-$stmt->execute();
-
-
-//$stmt->bindParam(':s_la', $s_la, PDO::PARAM_STR);
-//$stmt->bindParam(':s_email', $s_email, PDO::PARAM_STR);
-//$stmt->bindParam(':s_address', $s_address, PDO::PARAM_STR);
+$stmt->bindParam(':s_id', $s_id, PDO::PARAM_STR); 
+$stmt->bindParam(':s_la', $s_la, PDO::PARAM_STR);
+$stmt->bindParam(':s_email', $s_email, PDO::PARAM_STR);
+$stmt->bindParam(':s_address', $s_address, PDO::PARAM_STR);
 //$stmt->bindParam(':	s_stat', $s_stat, PDO::PARAM_INT);
 //$stmt->bindParam(':s_pic', $s_pic, PDO::PARAM_STR);
 //$stmt->bindParam(':s_bloodtype', $s_bloodtype, PDO::PARAM_INT);
