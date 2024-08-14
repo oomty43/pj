@@ -82,7 +82,7 @@ $conn->close();
 </head>
 <body>
     <div class="login-container">
-        <h2>Admin Login</h2>
+        <h2>ผู้ดูแลระบบ </h2>
         <form method="post" action="">
             <div class="form-group">
                 <input type="text" name="a_user" placeholder="Username" required>
@@ -91,7 +91,7 @@ $conn->close();
                 <input type="password" name="a_pws" placeholder="Password" required>
             </div>
             <div class="form-group">
-                <input type="submit" value="Login">
+                <input type="submit" value="เข้าสู่ระบบ">
             </div>
             <?php
             if (isset($error_message)) {
