@@ -141,7 +141,7 @@ $conn->close();
             <p>ยังไม่ได้เป็นสมาชิก? <a href="register.php">สมัครสมาชิก</a></p>
         </div>
         <div class="guest-login">
-            <p><a href="guestlogin.php">เยี่ยมชมเว็บไซต์</a></p>
+            <p><a href="guestmain.php">เยี่ยมชมเว็บไซต์</a></p>
             </form>
         </div>
     </div>
