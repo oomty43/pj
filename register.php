@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $s_pws = $_POST['s_pws'];
     $s_na = $_POST['s_na'];
     $s_la = $_POST['s_la'];
+    $s_gender = $_POST['s_gender']; // รับค่าข้อมูลเพศ
 
     // ตรวจสอบว่ารหัสนักศึกษามีความยาว 12 ตัวอักษรหรือไม่
     if (strlen($s_id) != 12 || !ctype_digit($s_id)) {
@@ -22,9 +23,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $s_pws = password_hash($s_pws, PASSWORD_DEFAULT); // เข้ารหัสรหัสผ่านก่อนเก็บในฐานข้อมูล
+    // ตรวจสอบว่ามีรหัสนักศึกษาในฐานข้อมูลอยู่แล้วหรือไม่
+    $checkSql = "SELECT s_id FROM student WHERE s_id = '$s_id'";
+    $checkResult = $conn->query($checkSql);
 
-    $sql = "INSERT INTO student (s_id, s_pws, s_na, s_la) VALUES ('$s_id', '$s_pws', '$s_na', '$s_la')";
+    if ($checkResult->num_rows > 0) {
+        echo "<script>
+            alert('มีผู้ใช้นี้อยู่แล้ว');
+            window.history.back();
+        </script>";
+        exit();
+    }
+
+    // เก็บรหัสผ่านเป็นข้อความธรรมดา
+    $sql = "INSERT INTO student (s_id, s_pws, s_na, s_la, s_gender) VALUES ('$s_id', '$s_pws', '$s_na', '$s_la', '$s_gender')";
 
     if ($conn->query($sql) === TRUE) {
         echo "<script>
@@ -80,12 +92,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         input[type=submit]:hover {
             background-color: #45a049;
         }
+        .form-group {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .back-link {
+            margin-top: 20px;
+        }
+        .back-link a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 16px;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>สมัครสมาชิก</h2>
         <form method="post">
+            <div class="form-group">
+                <label for="s_gender">เพศ:</label>
+                <select id="s_gender" name="s_gender" required>
+                    <option value="" disabled selected>เลือกเพศ</option>
+                    <option value="ชาย">ชาย</option>
+                    <option value="หญิง">หญิง</option>
+                </select>
+            </div>
+
             <label for="s_id">รหัสนักศึกษา:</label>
             <input type="text" id="s_id" name="s_id" pattern="\d{12}" required title="กรุณากรอกรหัสนักศึกษา 12 ตัวอักษร">
 
@@ -100,6 +146,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <input type="submit" value="สมัครสมาชิก">
         </form>
+        <div class="back-link">
+            <a href="login.php">กลับไปที่หน้าเข้าสู่ระบบ</a>
+        </div>
     </div>
 </body>
 </html>
