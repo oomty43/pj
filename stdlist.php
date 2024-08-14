@@ -16,8 +16,30 @@ if ($conn->connect_error) {
 }
 
 // คำสั่ง SQL เพื่อดึงข้อมูลนักศึกษา
-$sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat FROM student";
+// ดึงข้อมูลจากตาราง student
+$sql = "SELECT s_id, s_pic, s_pna, s_na, s_la, s_email, s_stat FROM student";
 $result = $conn->query($sql);
+
+// ฟังก์ชั่นแปลงค่า s_pna
+function getPrefix($s_pna) {
+    switch ($s_pna) {
+        case 1:
+            return "นาย";
+        case 2:
+            return "นาง";
+        case 3:
+            return "นางสาว";
+        default:
+            return "ไม่ทราบ";
+    }
+}
+?>
+<?php
+// ฟังก์ชั่นแปลงค่าสถานะนักศึกษา
+function getStudentStatus($s_stat)
+{
+    return $s_stat == 1 ? "ยังคงศึกษาอยู่" : "จบการศึกษาแล้ว";
+}
 ?>
 
 <!DOCTYPE html>
@@ -87,10 +109,10 @@ $result = $conn->query($sql);
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row['s_id']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['s_pna']) . " " . htmlspecialchars($row['s_na']) . "</td>";
+                        echo "<td>" . getPrefix($row['s_pna']) . " " . htmlspecialchars($row['s_na']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['s_la']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['s_email']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['s_stat']) . "</td>";
+                        echo "<td>" . getStudentStatus($row['s_stat']) . "</td>";
                         echo "</tr>";
                     }
                 } else {
