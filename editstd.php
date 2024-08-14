@@ -31,7 +31,7 @@ function getPrefix($s_pna) {
 
 // ดึงข้อมูลนักศึกษาจากฐานข้อมูลตาม user id ใน session
 $s_id = $_SESSION['s_id'];
-$sql = "SELECT s_pna, s_na, s_la FROM student WHERE s_id = ?";
+$sql = "SELECT s_pic, s_pna, s_na, s_la, s_id, s_pws, s_stat, s_bloodtype, s_race, s_birth, s_nationlity, religious, s_marriage, s_province, s_country FROM student WHERE s_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $s_id);
 $stmt->execute();
@@ -44,113 +44,223 @@ if ($result->num_rows > 0) {
     $welcome_message = "ไม่พบข้อมูลนักศึกษา";
 }
 
+
 $stmt->close();
 $conn->close();
 ?>
 
+
+
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>แก้ไขข้อมูลนักศึกษา</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลักเว็บไซต์</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-        .container {
+        .banner {
+            width: 100%;
+            height: auto;
+        }
+        .nav-buttons {
+            text-align: right;
+            margin: 10px;
+        }
+        .nav-buttons a {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .nav-buttons a:hover {
+            background-color: #0056b3;
+        }
+        .center-text {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .form-container {
             width: 50%;
             margin: 0 auto;
-            background-color: #fff;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+        .form-group {
+            margin-bottom: 15px;
         }
-        label, input, select {
-            margin: 10px 0;
-            width: 48%;
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
-        input[type="submit"] {
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group input[type="radio"],
+        .form-group input[type="date"] {
             width: 100%;
             padding: 10px;
-            background-color: #4CAF50;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .form-group input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        .btn-save,
+        .btn-cancel {
+            display: inline-block;
+            width: 48%;
+            padding: 10px;
+            background-color: #28a745;
             color: white;
+            text-align: center;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
         }
-        input[type="submit"]:hover {
-            background-color: #45a049;
+        .btn-cancel {
+            background-color: #dc3545;
+        }
+        .btn-save:hover {
+            background-color: #218838;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>แก้ไขข้อมูลนักศึกษา</h2>
-        <form method="post" action="">
-            <label for="s_id">รหัสนักศึกษา:</label>
-            <input type="text" id="s_id" name="s_id" value="<?php echo $s_id; ?>" disabled>
-            
-            <label for="s_pws">รหัสผ่าน:</label>
-            <input type="password" id="s_pws" name="s_pws" value="<?php echo $s_pws; ?>" required>
-            
-            <label for="s_pna">คำนำหน้า:</label>
-            <select id="s_pna" name="s_pna" required>
-                <option value="1" <?php if ($s_pna == 1) echo "selected"; ?>>นาย</option>
-                <option value="2" <?php if ($s_pna == 2) echo "selected"; ?>>นาง</option>
-                <option value="3" <?php if ($s_pna == 3) echo "selected"; ?>>นางสาว</option>
-            </select>
-            
-            <label for="s_na">ชื่อ:</label>
-            <input type="text" id="s_na" name="s_na" value="<?php echo $s_na; ?>" required>
-            
-            <label for="s_la">นามสกุล:</label>
-            <input type="text" id="s_la" name="s_la" value="<?php echo $s_la; ?>" required>
-            
-            <label for="s_email">อีเมล์:</label>
-            <input type="email" id="s_email" name="s_email" value="<?php echo $s_email; ?>" required>
-            
-            <label for="s_address">ที่อยู่:</label>
-            <input type="text" id="s_address" name="s_address" value="<?php echo $s_address; ?>" required>
-            
-            <label for="s_stat">สถานะนักศึกษา:</label>
-            <input type="text" id="s_stat" name="s_stat" value="<?php echo $s_stat; ?>" required>
-            
-            <label for="s_bloodtype">กรุ๊ปเลือด:</label>
-            <input type="text" id="s_bloodtype" name="s_bloodtype" value="<?php echo $s_bloodtype; ?>" required>
-            
-            <label for="s_race">เชื้อชาติ:</label>
-            <input type="text" id="s_race" name="s_race" value="<?php echo $s_race; ?>" required>
-            
-            <label for="s_birth">วันเดือนปีเกิด:</label>
-            <input type="text" id="s_birth" name="s_birth" value="<?php echo $s_birth; ?>" required>
-            
-            <label for="s_nationlity">สัญชาติ:</label>
-            <input type="text" id="s_nationlity" name="s_nationlity" value="<?php echo $s_nationlity; ?>" required>
-            
-            <label for="religious">ศาสนา:</label>
-            <input type="text" id="religious" name="religious" value="<?php echo $religious; ?>" required>
-            
-            <label for="s_marriage">สถานภาพสมรส:</label>
-            <input type="text" id="s_marriage" name="s_marriage" value="<?php echo $s_marriage; ?>" required>
-            
-            <label for="s_province">จังหวัด:</label>
-            <input type="text" id="s_province" name="s_province" value="<?php echo $s_province; ?>" required>
-            
-            <label for="s_country">ประเทศ:</label>
-            <input type="text" id="s_country" name="s_country" value="<?php echo $s_country; ?>" required>
-            
-            <label for="s_gender">เพศ:</label>
-            <input type="text" id="s_gender" name="s_gender" value="<?php echo $s_gender; ?>" required>
-            
-            <input type="submit" value="บันทึกการแก้ไข">
+
+    <!-- Banner -->
+    <img src="uploads/testb.jpg" alt="Banner" class="banner">
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <a href="stdmain.php">หน้าหลัก</a>
+        <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
+        <a href="stdaward.php">ผลงานส่วนตัว</a>
+    </div>
+
+    <!-- Centered Text -->
+    <div class="center-text">
+        จัดการข้อมูลส่วนตัวนักศึกษา
+    </div>
+
+    <!-- Student Information Form -->
+    <div class="form-container">
+        <form action="editstd.php" method="post">
+            <div class="form-group">
+                <label>รูปภาพ</label>
+                <img src="upload/<?php echo $row['s_pic']; ?>" alt="Student Picture">
+            </div>
+
+            <div class="form-group">
+                <label>คำนำหน้าชื่อ</label>
+                <input type="radio" name="s_pna" value="1" <?php echo $row['s_pna'] == 1 ? 'checked' : ''; ?>> นาย
+                <input type="radio" name="s_pna" value="2" <?php echo $row['s_pna'] == 2 ? 'checked' : ''; ?>> นาง
+                <input type="radio" name="s_pna" value="3" <?php echo $row['s_pna'] == 3 ? 'checked' : ''; ?>> นางสาว
+                <input type="radio" name="s_pna" value="4" <?php echo $row['s_pna'] == 4 ? 'checked' : ''; ?>> ไม่ระบุเพศ
+            </div>
+
+            <div class="form-group">
+                <label>ชื่อนักศึกษา</label>
+                <input type="text" name="s_na" value="<?php echo $row['s_na']; ?>">
+            </div>
+
+            <div class="form-group">
+                <label>นามสกุล</label>
+                <input type="text" name="s_la" value="<?php echo $row['s_la']; ?>">
+            </div>
+
+            <div class="form-group">
+                <label>รหัสนักศึกษา</label>
+                <input type="text" name="s_id" value="<?php echo $row['s_id']; ?>" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>รหัสผ่าน</label>
+                <input type="password" name="s_pws" value="<?php echo $row['s_pws']; ?>">
+            </div>
+
+            <div class="form-group">
+                <label>สถานะ</label>
+                <input type="radio" name="s_stat" value="1" <?php echo $row['s_stat'] == 1 ? 'checked' : ''; ?>> ยังคงศึกษาอยู่
+                <input type="radio" name="s_stat" value="0" <?php echo $row['s_stat'] == 0 ? 'checked' : ''; ?>> จบการศึกษาแล้ว
+            </div>
+
+            <div class="form-group">
+                <label>กรุ๊ปเลือด</label>
+                <input type="radio" name="s_bloodtype" value="1" <?php echo $row['s_bloodtype'] == 1 ? 'checked' : ''; ?>> A
+                <input type="radio" name="s_bloodtype" value="2" <?php echo $row['s_bloodtype'] == 2 ? 'checked' : ''; ?>> B
+                <input type="radio" name="s_bloodtype" value="3" <?php echo $row['s_bloodtype'] == 3 ? 'checked' : ''; ?>> AB
+                <input type="radio" name="s_bloodtype" value="4" <?php echo $row['s_bloodtype'] == 4 ? 'checked' : ''; ?>> O
+            </div>
+
+            <div class="form-group">
+                <label>เชื้อชาติ</label>
+                <input type="text" name="s_race" value="<?php echo $row['s_race']; ?>">
+            </div>
+
+            <div class="form-group">
+                <label>วันเดือนปีเกิด</label>
+                <input type="date" name="s_birth" value="<?php echo $row['s_birth']; ?>">
+            </div>
+
+            <div class="form-group">
+                <label>สัญชาติ</label>
+                <input type="text" name="s_nationlity" value="<?php echo $row['s_nationlity']; ?>">
+            </div>
+
+            <div class="form-group">
+            <label>ศาสนา</label>
+    <select name="religious">
+        <option value="1" <?php echo $row['religious'] == 1 ? 'selected' : ''; ?>>พุทธ</option>
+        <option value="2" <?php echo $row['religious'] == 2 ? 'selected' : ''; ?>>คริสต์</option>
+        <option value="3" <?php echo $row['religious'] == 3 ? 'selected' : ''; ?>>อิสลาม</option>
+        <option value="4" <?php echo $row['religious'] == 4 ? 'selected' : ''; ?>>พราหมณ์ฮินดู</option>
+        <option value="5" <?php echo $row['religious'] == 5 ? 'selected' : ''; ?>>อื่นๆ</option>
+    </select>
+            </div>
+
+            <div class="form-group">
+                <label>สถานภาพสมรส</label>
+                <input type="radio" name="s_marriage" value="1" <?php echo $row['s_marriage'] == 1 ? 'checked' : ''; ?>> สมรสแล้ว
+                <input type="radio" name="s_marriage" value="0" <?php echo $row['s_marriage'] == 0 ? 'checked' : ''; ?>> โสด
+            </div>
+
+            <div class="form-group">
+                <label>จังหวัด</label>
+                <input type="text" name="s_province" value="<?php echo $row['s_province']; ?>">
+            </div>
+
+            <div class="form-group">
+                <label>ประเทศ</label>
+                <input type="text" name="s_country" value="<?php echo $row['s_country']; ?>">
+            </div>
+
+            <button type="submit" class="btn-save">บันทึก</button>
+            <a href="edit_student2.php" class="btn-cancel">ยกเลิก</a>
         </form>
     </div>
+
 </body>
 </html>
