@@ -31,7 +31,7 @@ function getPrefix($s_pna) {
 
 // ดึงข้อมูลนักศึกษาจากฐานข้อมูลตาม user id ใน session
 $s_id = $_SESSION['s_id'];
-$sql = "SELECT s_pna, s_na, s_la FROM student WHERE s_id = ?";
+$sql = "SELECT s_pna, s_na, s_la, s_pic, s_stat, s_pws FROM student WHERE s_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $s_id);
 $stmt->execute();
@@ -144,7 +144,7 @@ $conn->close();
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
-        <a href="stdmain.php">หน้าหลัก</a>
+        <a href="mainstd.php">หน้าหลัก</a>
         <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
         <a href="stdaward.php">ผลงานส่วนตัว</a>
     </div>
@@ -205,7 +205,7 @@ $conn->close();
 
             <div class="form-group">
                 <label>รหัสผ่าน</label>
-                <input type="password" name="s_pws" value="<?php echo $row['s_pws']; ?>" readonly>
+                <input type="text" name="s_pws" value="<?php echo $row['s_pws']; ?>" readonly>
             </div>
 
             <div class="form-group">
