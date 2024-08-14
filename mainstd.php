@@ -1,3 +1,53 @@
+<?php
+session_start(); // เริ่มต้น session
+
+// ตรวจสอบว่าผู้ใช้เข้าสู่ระบบหรือไม่
+if (!isset($_SESSION['s_id'])) {
+    header('Location: login.php'); // หากไม่ได้เข้าสู่ระบบ ให้กลับไปที่หน้า login
+    exit();
+}
+
+// เชื่อมต่อฐานข้อมูล
+$conn = new mysqli("localhost", "root", "", "project");
+
+// ตรวจสอบการเชื่อมต่อ
+if ($conn->connect_error) {
+    die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
+}
+
+// ฟังก์ชั่นแปลงค่า s_pna
+function getPrefix($s_pna) {
+    switch ($s_pna) {
+        case 1:
+            return "นาย";
+        case 2:
+            return "นาง";
+        case 3:
+            return "นางสาว";
+        default:
+            return "ไม่ทราบ";
+    }
+}
+
+// ดึงข้อมูลนักศึกษาจากฐานข้อมูลตาม user id ใน session
+$s_id = $_SESSION['s_id'];
+$sql = "SELECT s_pna, s_na, s_la FROM student WHERE s_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $s_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $welcome_message = "ยินดีต้อนรับ : " . getPrefix($row["s_pna"]) . " " . $row["s_na"] . " " . $row["s_la"];
+} else {
+    $welcome_message = "ไม่พบข้อมูลนักศึกษา";
+}
+
+$stmt->close();
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -5,6 +55,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>หน้าหลักเว็บไซต์</title>
     <style>
+        /* สไตล์เดิม */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -49,12 +100,23 @@
             font-size: 18px;
             color: #333;
         }
+        .welcome-message {
+            margin: 20px;
+            font-size: 20px;
+            color: #333;
+            text-align: right; /* ทำให้ข้อความชิดขวา */
+        }
     </style>
 </head>
 <body>
 
     <!-- Banner -->
     <img src="uploads/testb.jpg" alt="Banner" class="banner">
+
+    <!-- แสดงข้อความต้อนรับ -->
+    <div class="welcome-message">
+        <?php echo $welcome_message; ?>
+    </div>
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
