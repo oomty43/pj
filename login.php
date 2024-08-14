@@ -116,7 +116,7 @@ $conn->close();
 <body>
     <div class="container">
         <div class="admin-login">
-            <p><a href="loginstd.php">เข้าสู่ระบบสำหรับผู้ดูแล</a></p>
+            <p><a href="loginadmin.php">เข้าสู่ระบบสำหรับผู้ดูแล</a></p>
             </form>
         </div>
         <h2>เข้าสู่ระบบ</h2>
