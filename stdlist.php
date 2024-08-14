@@ -15,10 +15,16 @@ if ($conn->connect_error) {
     die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
 }
 
+// รับค่าการค้นหาจากฟอร์ม
+$search = isset($_POST['search']) ? $_POST['search'] : '';
+
 // คำสั่ง SQL เพื่อดึงข้อมูลนักศึกษา
-// ดึงข้อมูลจากตาราง student
-$sql = "SELECT s_id, s_pic, s_pna, s_na, s_la, s_email, s_stat FROM student";
-$result = $conn->query($sql);
+$sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat FROM student WHERE s_id LIKE ? OR s_na LIKE ? OR s_la LIKE ?";
+$stmt = $conn->prepare($sql);
+$searchParam = '%' . $search . '%';
+$stmt->bind_param('sss', $searchParam, $searchParam, $searchParam);
+$stmt->execute();
+$result = $stmt->get_result();
 
 // ฟังก์ชั่นแปลงค่า s_pna
 function getPrefix($s_pna) {
@@ -33,8 +39,7 @@ function getPrefix($s_pna) {
             return "ไม่ทราบ";
     }
 }
-?>
-<?php
+
 // ฟังก์ชั่นแปลงค่าสถานะนักศึกษา
 function getStudentStatus($s_stat)
 {
@@ -87,11 +92,47 @@ function getStudentStatus($s_stat)
         .back-link a:hover {
             text-decoration: underline;
         }
+        .search-form {
+            margin-bottom: 20px;
+            text-align: right; /* ทำให้ฟอร์มค้นหาอยู่ชิดขวา */
+        }
+        .search-form form {
+            display: inline-block; /* ทำให้ฟอร์มค้นหาเป็นบล็อกในแนวนอน */
+        }
+        .search-form input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px; /* กำหนดความกว้างของกล่องค้นหา */
+        }
+        .search-form input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px; /* เพิ่มระยะห่างระหว่างกล่องค้นหาและปุ่มค้นหา */
+        }
+        .search-form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>รายชื่อนักศึกษา</h2>
+
+        <!-- ฟอร์มค้นหา -->
+        <div class="search-form">
+            <form method="post">
+                <input type="text" name="search" placeholder="ค้นหาตามรหัสนักศึกษา, ชื่อ, นามสกุล" value="<?php echo htmlspecialchars($search); ?>">
+                <input type="submit" value="ค้นหา">
+            </form>
+        </div>
+
         <table>
             <thead>
                 <tr>
