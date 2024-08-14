@@ -1,3 +1,47 @@
+<?php
+session_start();
+
+// เชื่อมต่อกับฐานข้อมูล
+$servername = "localhost";
+$username = "root";  // ชื่อผู้ใช้ MySQL
+$password = "";      // รหัสผ่าน MySQL (ถ้ามี)
+$dbname = "project"; // ชื่อฐานข้อมูล
+
+// สร้างการเชื่อมต่อ
+$conn = new mysqli($servername, $username, $password, $dbname);
+// ตรวจสอบการเชื่อมต่อ
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// ตรวจสอบการส่งฟอร์มล็อกอิน
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $s_id = $_POST['s_id'];
+    $s_pws = $_POST['s_pws'];
+  
+
+    // ค้นหาข้อมูลผู้ดูแลในฐานข้อมูล
+    $sql = "SELECT * FROM student WHERE s_id = ? AND s_pws = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $s_id, $s_pws);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        // เข้าสู่ระบบสำเร็จ
+        $_SESSION['s_id'] = $s_id;
+        header("Location: mainstd.php"); // ไปยังหน้า mainstd.php หลังจากล็อกอินสำเร็จ
+        exit();
+    } else {
+        // ล็อกอินไม่สำเร็จ
+        $error_message = "<span style='color: red; font-size: 12px;'>ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</span>";
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,19 +108,34 @@
             text-decoration: none;
             color: #4CAF50;
         }
+        .error-message {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="admin-login">
-            <p><a href="loginadmin.php">เข้าสู่ระบบสำหรับผู้ดูแล</a></p>
+            <p><a href="loginstd.php">เข้าสู่ระบบสำหรับผู้ดูแล</a></p>
             </form>
         </div>
         <h2>เข้าสู่ระบบ</h2>
-        <form method="post">
-            <input type="text" name="s_id" placeholder="รหัสนักศึกษา" required>
-            <input type="password" name="s_pws" placeholder="รหัสผ่าน" required>
-            <input type="submit" value="เข้าสู่ระบบ">
+        <form method="post" action="">
+            
+            <div class="form-group">
+                <input type="text" name="s_id" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="s_pws" placeholder="Password" required>
+            </div>
+            <?php
+            if (isset($error_message)) {
+                echo '<div class="error-message">' . $error_message . '</div>';
+            }
+            ?>
+            <div class="form-group">
+                <input type="submit" value="Login">
+            </div>
         </form>
         <div class="register-link">
             <p>ยังไม่ได้เป็นสมาชิก? <a href="register.php">สมัครสมาชิก</a></p>
