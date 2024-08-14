@@ -58,7 +58,7 @@
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
-        <a href="stdmain.php">หน้าหลัก</a>
+        <a href="stdlist.php">ดูรายชื่อนักศึกษา</a>
         <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
         <a href="stdaward.php">ผลงานส่วนตัว</a>
     </div>
