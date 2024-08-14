@@ -127,8 +127,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="s_gender">เพศ:</label>
                 <select id="s_gender" name="s_gender" required>
                     <option value="" disabled selected>เลือกเพศ</option>
-                    <option value="ชาย">ชาย</option>
-                    <option value="หญิง">หญิง</option>
+                    <option value="1">ชาย</option>
+                    <option value="2">หญิง</option>
+                    <option value="3">ไม่ระบุ</option>
                 </select>
             </div>
 
