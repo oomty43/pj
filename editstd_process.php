@@ -31,6 +31,7 @@ $s_pna = $_POST['s_pna'];
 $s_na = $_POST['s_na'];
 $s_la = $_POST['s_la'];
 $s_pws = $_POST['s_pws'];
+$s_email = $_POST['s_email'];
 $s_stat = $_POST['s_stat'];
 $s_bloodtype = $_POST['s_bloodtype'];
 $s_race = $_POST['s_race'];
@@ -60,6 +61,7 @@ if (isset($_FILES['s_pic']) && $_FILES['s_pic']['error'] == UPLOAD_ERR_OK) {
 
 $sql = "UPDATE student SET s_pna = :s_pna, s_na = :s_na, s_id = :s_id, s_la = :s_la, s_email = :s_email, s_address = :s_address  WHERE s_id = :s_id";
 
+
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':s_pna', $s_pna, PDO::PARAM_INT);
 $stmt->bindParam(':s_na', $s_na, PDO::PARAM_STR);
@@ -78,6 +80,18 @@ $stmt->bindParam(':s_address', $s_address, PDO::PARAM_STR);
 //$stmt->bindParam(':s_province', $s_province, PDO::PARAM_STR);
 //$stmt->bindParam(':s_country', $s_country, PDO::PARAM_STR);
 //$stmt->bindParam(':s_gender', $s_gender, PDO::PARAM_INT);
+
+if ($stmt->execute()) {
+    // แสดง popup และกลับไปหน้าหลักหรือหน้าอื่นๆ
+    echo "<script>
+            alert('ทำการแก้ไขข้อมูลสำเร็จ');
+            window.location.href = 'stdprofile.php';
+          </script>";
+} else {
+    echo "เกิดข้อผิดพลาด: " . $conn->error;
+}
+
+$stmt->close();
 
 $stmt->execute();
 

@@ -31,7 +31,7 @@ function getPrefix($s_pna) {
 
 // ดึงข้อมูลนักศึกษาจากฐานข้อมูลตาม user id ใน session
 $s_id = $_SESSION['s_id'];
-$sql = "SELECT s_pic, s_pna, s_na, s_la, s_id, s_pws, s_stat, s_bloodtype, s_race, s_birth, s_nationlity, religious, s_marriage, s_province, s_country FROM student WHERE s_id = ?";
+$sql = "SELECT s_pic, s_pna, s_na, s_la, s_id, s_pws, s_email, s_stat, s_bloodtype, s_race, s_birth, s_nationlity, religious, s_marriage, s_province, s_country FROM student WHERE s_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $s_id);
 $stmt->execute();
@@ -200,6 +200,12 @@ $conn->close();
                 <label>รหัสผ่าน</label>
                 <input type="text" name="s_pws" value="<?php echo $row['s_pws']; ?>"> <!-- ใช้ type="text" แทนที่จะเป็น type="password" -->
             </div>
+
+            <div class="form-group">
+                <label>อีเมล</label>
+                <input type="text" name="s_email" value="<?php echo $row['s_email']; ?>">
+            </div>
+
 
             <div class="form-group">
                 <label>สถานะ</label>
@@ -391,7 +397,7 @@ $conn->close();
 
             <div class="form-group">
                 <button type="submit" class="btn-save">บันทึก</button>
-                <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
+                <a href="stdprofile.php" class="btn-cancel">ยกเลิก</a>
             </div>
         </form>
     </div>
