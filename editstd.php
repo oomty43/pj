@@ -216,9 +216,31 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label>เชื้อชาติ</label>
-                <input type="text" name="s_race" value="<?php echo $row['s_race']; ?>">
-            </div>
+    <label>เชื้อชาติ</label>
+    <select name="s_race">
+        <?php
+        // รายการเชื้อชาติ
+        $races = [
+            1 => "ไทย",
+            2 => "ลาว",
+            3 => "เมียนมา",
+            4 => "เวียดนาม",
+            5 => "กำพูชา",
+            6 => "มาเลเซีย",
+            7 => "อินโดนิเซีย",
+            8 => "จีน",
+            9 => "สหรัฐอเมริกา",
+            10 => "อังกฤษ"
+        ];
+
+        // แสดงรายการใน select พร้อมกับเลือกอัตโนมัติถ้าค่าตรงกับค่าที่มีอยู่แล้ว
+        foreach ($races as $key => $race) {
+            echo "<option value=\"$key\" " . ($row['s_race'] == $key ? 'selected' : '') . ">$race</option>";
+        }
+        ?>
+    </select>
+</div>
+
 
             <div class="form-group">
                 <label>วันเกิด</label>
@@ -226,9 +248,30 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label>สัญชาติ</label>
-                <input type="text" name="s_nationlity" value="<?php echo $row['s_nationlity']; ?>">
-            </div>
+    <label>สัญชาติ</label>
+    <select name="s_nationlity">
+        <?php
+        // รายการสัญชาติ
+        $nationalities = [
+            1 => "ไทย",
+            2 => "ลาว",
+            3 => "เมียนมา",
+            4 => "เวียดนาม",
+            5 => "กำพูชา",
+            6 => "มาเลเซีย",
+            7 => "อินโดนิเซีย",
+            8 => "จีน",
+            9 => "สหรัฐอเมริกา",
+            10 => "อังกฤษ"
+        ];
+
+        // แสดงรายการใน select พร้อมกับเลือกอัตโนมัติถ้าค่าตรงกับค่าที่มีอยู่แล้ว
+        foreach ($nationalities as $key => $nationality) {
+            echo "<option value=\"$key\" " . ($row['s_nationlity'] == $key ? 'selected' : '') . ">$nationality</option>";
+        }
+        ?>
+    </select>
+</div>
 
             <div class="form-group">
                 <label>ศาสนา</label>
