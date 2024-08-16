@@ -9,16 +9,16 @@ $dbname = "project"; // ชื่อฐานข้อมูล
 
 // สร้างการเชื่อมต่อ
 $conn = new mysqli($servername, $username, $password, $dbname);
+
 // ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("เชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);
 }
 
 // ตรวจสอบการส่งฟอร์มล็อกอิน
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $a_user = $_POST['a_user'];
     $a_pws = $_POST['a_pws'];
-  
 
     // ค้นหาข้อมูลผู้ดูแลในฐานข้อมูล
     $sql = "SELECT * FROM admin WHERE a_user = ? AND a_pws = ?";
@@ -44,26 +44,35 @@ $conn->close();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>Admin Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบผู้ดูแลระบบ</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212; /* พื้นหลังสีดำ */
+            color: #f0f0f0; /* ตัวอักษรสีขาว */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .login-container {
-            margin-top: 100px;
             width: 300px;
+            background-color: #1e1e1e; /* พื้นหลังกล่องสีเทาเข้ม */
             padding: 20px;
-            background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: inline-block;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
         .login-container h2 {
+            color: #fbc02d; /* สีเหลือง */
             margin-bottom: 20px;
+            font-weight: 600;
         }
         .form-group {
             margin-bottom: 20px;
@@ -71,24 +80,43 @@ $conn->close();
         .form-group input {
             width: calc(100% - 20px);
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #333; /* ขอบสีเทาเข้ม */
             border-radius: 5px;
+            background-color: #333; /* พื้นหลังกล่องข้อความสีเทาเข้ม */
+            color: #f0f0f0; /* ตัวอักษรสีขาว */
+            font-size: 14px;
+        }
+        input[type=submit] {
+            width: 100%;
+            background-color: #fbc02d; /* สีเหลือง */
+            color: #121212; /* ตัวอักษรสีดำ */
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        input[type=submit]:hover {
+            background-color: #f9a825; /* สีเหลืองเข้ม */
         }
         .error-message {
-            color: red;
+            color: #e53935; /* สีแดง */
             font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>ผู้ดูแลระบบ </h2>
+        <h2>Admin</h2>
         <form method="post" action="">
             <div class="form-group">
-                <input type="text" name="a_user" placeholder="Username" required>
+                <input type="text" name="a_user" placeholder="ชื่อผู้ใช้" required>
             </div>
             <div class="form-group">
-                <input type="password" name="a_pws" placeholder="Password" required>
+                <input type="password" name="a_pws" placeholder="รหัสผ่าน" required>
             </div>
             <div class="form-group">
                 <input type="submit" value="เข้าสู่ระบบ">
