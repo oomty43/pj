@@ -58,7 +58,7 @@
 <body>
 
     <!-- Banner -->
-    <img src="uploads/te.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner.jpg" alt="Banner" class="banner">
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">

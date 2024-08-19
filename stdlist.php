@@ -2,11 +2,7 @@
 session_start();
 
 // เชื่อมต่อกับฐานข้อมูล
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "project";
-
+include 'db_connect.php';
 // สร้างการเชื่อมต่อ
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -17,12 +13,22 @@ if ($conn->connect_error) {
 
 // รับค่าการค้นหาจากฟอร์ม
 $search = isset($_POST['search']) ? $_POST['search'] : '';
+$statusFilter = isset($_POST['status']) ? $_POST['status'] : '';
 
 // คำสั่ง SQL เพื่อดึงข้อมูลนักศึกษา
-$sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat FROM student WHERE s_id LIKE ? OR s_na LIKE ? OR s_la LIKE ?";
+$sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat FROM student WHERE (s_id LIKE ? OR s_na LIKE ? OR s_la LIKE ?)";
+if ($statusFilter !== '') {
+    $sql .= " AND s_stat = ?";
+}
 $stmt = $conn->prepare($sql);
 $searchParam = '%' . $search . '%';
-$stmt->bind_param('sss', $searchParam, $searchParam, $searchParam);
+
+if ($statusFilter !== '') {
+    $stmt->bind_param('ssss', $searchParam, $searchParam, $searchParam, $statusFilter);
+} else {
+    $stmt->bind_param('sss', $searchParam, $searchParam, $searchParam);
+}
+
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -41,8 +47,7 @@ function getPrefix($s_pna) {
 }
 
 // ฟังก์ชั่นแปลงค่าสถานะนักศึกษา
-function getStudentStatus($s_stat)
-{
+function getStudentStatus($s_stat) {
     return $s_stat == 1 ? "ยังคงศึกษาอยู่" : "จบการศึกษาแล้ว";
 }
 ?>
@@ -58,27 +63,28 @@ function getStudentStatus($s_stat)
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f0f0f0;
+            color: #333;
         }
         .container {
             width: 80%;
             margin: 50px auto;
-            background-color: #fff;
+            background-color: #ffffff;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         table th, table td {
-            border: 1px solid #dddddd;
-            padding: 8px;
+            border: 1px solid #ddd;
+            padding: 10px;
             text-align: left;
         }
         table th {
-            background-color: #f2f2f2;
+            background-color: #f8f8f8;
         }
         .back-link {
             margin-top: 20px;
@@ -86,7 +92,7 @@ function getStudentStatus($s_stat)
         }
         .back-link a {
             text-decoration: none;
-            color: #007BFF;
+            color: #007bff;
             font-size: 16px;
         }
         .back-link a:hover {
@@ -94,27 +100,30 @@ function getStudentStatus($s_stat)
         }
         .search-form {
             margin-bottom: 20px;
-            text-align: right; /* ทำให้ฟอร์มค้นหาอยู่ชิดขวา */
+            text-align: right;
         }
         .search-form form {
-            display: inline-block; /* ทำให้ฟอร์มค้นหาเป็นบล็อกในแนวนอน */
+            display: inline-block;
         }
-        .search-form input[type="text"] {
+        .search-form input[type="text"],
+        .search-form select {
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: 200px; /* กำหนดความกว้างของกล่องค้นหา */
+            width: 200px;
+            margin-right: 10px;
+            background-color: #ffffff;
+            color: #333;
         }
         .search-form input[type="submit"] {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #007BFF;
-            color: white;
+            background-color: #007bff;
+            color: #ffffff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-left: 10px; /* เพิ่มระยะห่างระหว่างกล่องค้นหาและปุ่มค้นหา */
         }
         .search-form input[type="submit"]:hover {
             background-color: #0056b3;
@@ -129,6 +138,11 @@ function getStudentStatus($s_stat)
         <div class="search-form">
             <form method="post">
                 <input type="text" name="search" placeholder="ค้นหาตามรหัสนักศึกษา, ชื่อ, นามสกุล" value="<?php echo htmlspecialchars($search); ?>">
+                <select name="status">
+                    <option value="">-- เลือกสถานะ --</option>
+                    <option value="1" <?php echo ($statusFilter === '1') ? 'selected' : ''; ?>>ยังคงศึกษาอยู่</option>
+                    <option value="0" <?php echo ($statusFilter === '0') ? 'selected' : ''; ?>>จบการศึกษาแล้ว</option>
+                </select>
                 <input type="submit" value="ค้นหา">
             </form>
         </div>

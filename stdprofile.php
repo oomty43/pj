@@ -111,8 +111,9 @@ $conn->close();
             border-radius: 5px;
         }
         .form-group img {
-            max-width: 100%;
-            height: auto;
+            max-width: 200px; /* กำหนดความกว้างสูงสุด */
+            max-height: 200px; /* กำหนดความสูงสูงสุด */
+            object-fit: cover; /* ครอบตัดรูปภาพตามสัดส่วน */
             border-radius: 5px;
             margin-bottom: 15px;
         }
@@ -139,8 +140,7 @@ $conn->close();
 </head>
 <body>
 
-    <!-- Banner -->
-    <img src="uploads/testb.jpg" alt="Banner" class="banner">
+
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">

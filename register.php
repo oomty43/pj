@@ -2,11 +2,7 @@
 session_start();
 
 // เชื่อมต่อกับฐานข้อมูล
-$servername = "localhost";
-$username = "root";  
-$password = "";      
-$dbname = "project"; 
-
+include 'db_connect.php';
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
