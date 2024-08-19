@@ -45,6 +45,29 @@ if ($result->num_rows > 0) {
 }
 
 $stmt->close();
+
+// ตรวจสอบหมายเลขหน้าปัจจุบัน
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$items_per_page = 3;
+$offset = ($page - 1) * $items_per_page;
+
+// ดึงข้อมูลข่าวสารจากฐานข้อมูล
+$sql = "SELECT i_id, i_cover, i_head, i_date FROM information ORDER BY i_date DESC LIMIT $offset, $items_per_page";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $news_items = $result->fetch_all(MYSQLI_ASSOC);
+} else {
+    $news_items = [];
+}
+
+// คำนวณจำนวนหน้าทั้งหมด
+$sql_total = "SELECT COUNT(*) AS total FROM information";
+$result_total = $conn->query($sql_total);
+$row_total = $result_total->fetch_assoc();
+$total_items = $row_total['total'];
+$total_pages = ceil($total_items / $items_per_page);
+
 $conn->close();
 ?>
 
@@ -78,14 +101,6 @@ $conn->close();
             border-radius: 5px;
             margin-left: 10px;
         }
-        .news-item img {
-    max-width: 100%; /* จำกัดความกว้างไม่ให้เกิน 100% ของคอนเทนเนอร์ */
-    max-height: 300px; /* จำกัดความสูงสูงสุดที่ 300px */
-    object-fit: cover; /* ให้รูปภาพไม่บิดเบี้ยวแต่ครอบคลุมพื้นที่ */
-    border-radius: 5px;
-    display: block;
-    margin: 0 auto;
-}
         .nav-buttons a:hover {
             background-color: #0056b3;
         }
@@ -100,19 +115,53 @@ $conn->close();
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .news-item img {
-            width: 100%;
-            height: auto;
+            max-width: 100%; /* จำกัดความกว้างไม่ให้เกิน 100% ของคอนเทนเนอร์ */
+            max-height: 300px; /* จำกัดความสูงสูงสุดที่ 300px */
+            object-fit: cover; /* ให้รูปภาพไม่บิดเบี้ยวแต่ครอบคลุมพื้นที่ */
             border-radius: 5px;
+            display: block;
+            margin: 0 auto;
         }
         .news-item h2 {
             font-size: 18px;
             color: #333;
+        }
+        .news-item p.date {
+            font-size: 14px;
+            color: #666;
+        }
+        .news-item a {
+            display: inline-block;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .news-item a:hover {
+            background-color: #0056b3;
         }
         .welcome-message {
             margin: 20px;
             font-size: 20px;
             color: #333;
             text-align: right; /* ทำให้ข้อความชิดขวา */
+        }
+        .pagination {
+            text-align: center;
+            margin: 20px;
+        }
+        .pagination a {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .pagination a:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -136,33 +185,31 @@ $conn->close();
     <!-- News Section -->
     <div class="news-container">
         <?php
-        // เชื่อมต่อฐานข้อมูล
-        $conn = new mysqli("localhost", "root", "", "project");
-
-        // ตรวจสอบการเชื่อมต่อ
-        if ($conn->connect_error) {
-            die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
-        }
-
-        // คำสั่ง SQL เพื่อดึงข้อมูลจากตาราง information
-        $sql = "SELECT i_cover, i_head FROM information";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            // แสดงผลข้อมูล
-            while($row = $result->fetch_assoc()) {
+        if (!empty($news_items)) {
+            foreach ($news_items as $item) {
+                $formatted_date = date('d-m-Y', strtotime($item["i_date"])); // แปลงวันที่เป็นรูปแบบที่ต้องการ
                 echo "<div class='news-item'>";
-                echo "<img src='uploads/" . $row["i_cover"] . "' alt='ข่าวสาร'>";
-                echo "<h2>" . $row["i_head"] . "</h2>";
+                echo "<img src='uploads/" . htmlspecialchars($item["i_cover"]) . "' alt='ข่าวสาร'>";
+                echo "<h2>" . htmlspecialchars($item["i_head"]) . "</h2>";
+                echo "<p class='date'>" . $formatted_date . "</p>"; // แสดงวันที่
+                echo "<p><a href='news_detail.php?i_id=" . htmlspecialchars($item["i_id"]) . "'>อ่านเพิ่มเติม</a></p>";
                 echo "</div>";
             }
         } else {
             echo "ไม่มีข่าวสาร";
         }
-
-        // ปิดการเชื่อมต่อ
-        $conn->close();
         ?>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <?php if ($page > 1): ?>
+            <a href="?page=<?php echo $page - 1; ?>">« ก่อนหน้า</a>
+        <?php endif; ?>
+
+        <?php if ($page < $total_pages): ?>
+            <a href="?page=<?php echo $page + 1; ?>">ถัดไป »</a>
+        <?php endif; ?>
     </div>
 
 </body>
