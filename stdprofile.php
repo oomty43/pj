@@ -27,7 +27,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $welcome_message = "ยินดีต้อนรับ : " . getPrefix($row["s_pna"]) . " " . $row["s_na"] . " " . $row["s_la"];
+    $welcome_message = "  " . getPrefix($row["s_pna"]) . " " . $row["s_na"] . " " . $row["s_la"];
 } else {
     $welcome_message = "ไม่พบข้อมูลนักศึกษา";
 }
@@ -41,7 +41,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ข้อมูลส่วนตัวนักศึกษา</title>
+    <title>ข้อมูลส่วนตัว</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -74,21 +74,29 @@ $conn->close();
             font-size: 24px;
             color: #333;
         }
+        .welcome-message {
+            text-align: right;
+            margin: 10px 20px; /* เพิ่ม margin เพื่อให้ห่างจากขอบขวา */
+            font-size: 18px;
+            color: #333;
+        }
         .form-container {
-            width: 50%;
+            width: 80%;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
             background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .form-group label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
+            color: #333;
         }
         .form-group input[type="text"],
         .form-group input[type="password"],
@@ -97,13 +105,15 @@ $conn->close();
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box;
         }
         .form-group img {
-            max-width: 200px; /* กำหนดความกว้างสูงสุด */
-            max-height: 200px; /* กำหนดความสูงสูงสุด */
-            object-fit: cover; /* ครอบตัดรูปภาพตามสัดส่วน */
-            border-radius: 5px;
-            margin-bottom: 15px;
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
         }
         .form-group input[type="radio"] {
             width: auto;
@@ -128,18 +138,24 @@ $conn->close();
 </head>
 <body>
 
-
+    <!-- Banner -->
+    <img src="uploads/banner.jpg" alt="Banner" class="banner">
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
         <a href="mainstd.php">หน้าหลัก</a>
-        <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
         <a href="stdaward.php">ผลงานส่วนตัว</a>
+        <a href="logout.php">ออกจากระบบ</a>
+    </div>
+
+    <!-- แสดงข้อความต้อนรับ -->
+    <div class="welcome-message">
+        <?php echo $welcome_message; ?>
     </div>
 
     <!-- Centered Text -->
     <div class="center-text">
-        ข้อมูลส่วนตัวนักศึกษา
+        ข้อมูลส่วนตัว
     </div>
 
     <!-- Student Information Form -->
@@ -176,7 +192,6 @@ $conn->close();
                 <input type="radio" name="s_pna" value="1" <?php echo $row['s_pna'] == 1 ? 'checked' : ''; ?> disabled> นาย
                 <input type="radio" name="s_pna" value="2" <?php echo $row['s_pna'] == 2 ? 'checked' : ''; ?> disabled> นาง
                 <input type="radio" name="s_pna" value="3" <?php echo $row['s_pna'] == 3 ? 'checked' : ''; ?> disabled> นางสาว
-                <input type="radio" name="s_pna" value="4" <?php echo $row['s_pna'] == 4 ? 'checked' : ''; ?> disabled> ไม่ระบุเพศ
             </div>
 
             <div class="form-group">
