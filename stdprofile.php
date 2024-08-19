@@ -180,7 +180,7 @@ $conn->close();
         ?>
             <div class="form-group">
                 <label>รูปภาพ</label>
-                <img src="upload/<?php echo $row['s_pic']; ?>" alt="Student Picture">
+                <img src="uploads/<?php echo $row['s_pic']; ?>" alt="Student Picture">
             </div>
 
             <div class="form-group">
