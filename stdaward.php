@@ -178,36 +178,41 @@ if ($result->num_rows > 0) {
         <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
         <a href="stdaward.php">ผลงานส่วนตัว</a>
     </div>
-
-    <!-- ตารางแสดงข้อมูล -->
-    <div class="form-container">
-        <h2>ข้อมูลการเข้าอบรม (Course)</h2>
-        <table>
-            <tr>
-                <th>ชื่อโครงการอบรม (c_id)</th>
-                <th>ชื่อ-นามสกุลนักศึกษา</th>
-                <th>ชื่อสถานที่อบรม (c_add)</th>
-                <th>ปีที่อบรม (c_date)</th>
-            </tr>
-            <?php
-            $sql = "SELECT c.c_id, CONCAT(s.s_na, ' ', s.s_la) AS student_name, c.c_add, YEAR(c.c_date) AS c_year
-                    FROM course c
-                    INNER JOIN student s ON s.s_id = c.s_id
-                    WHERE c.s_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $s_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>{$row['c_id']}</td>";
-                echo "<td>{$row['student_name']}</td>";
-                echo "<td>{$row['c_add']}</td>";
-                echo "<td>{$row['c_year']}</td>";
-                echo "</tr>";
-            }
-            ?>
-        </table>
+        <br></br>
+        <div class="form-container">
+    <h2>ข้อมูลการเข้าอบรม (Course)</h2>
+    <table>
+        <tr>
+            <th>ชื่อโครงการอบรม (c_na)</th>
+            <th>ชื่อ-นามสกุลนักศึกษา</th>
+            <th>ชื่อสถานที่อบรม (c_add)</th>
+            <th>ปีที่อบรม (c_date)</th>
+        </tr>
+        <?php
+        $sql = "SELECT c.c_id, c.c_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name, c.c_add, YEAR(c.c_date) AS c_year
+                FROM course c
+                INNER JOIN student s ON s.s_id = c.s_id
+                WHERE c.s_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $s_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>{$row['c_na']}</td>";
+            echo "<td>{$row['student_name']}</td>";
+            echo "<td>{$row['c_add']}</td>";
+            echo "<td>{$row['c_year']}</td>";
+            echo "<td>";
+            echo "<a href='edit_course.php?c_id={$row['c_id']}'>แก้ไข</a> | ";
+            echo "<a href='delete_course.php?c_id={$row['c_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+            echo "</td>";
+            echo "</tr>";
+            echo "</tr>";
+    }
+    ?>
+</table>
+<a href="add_course.php"><button>เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
         <h2>ข้อมูลทักษะพิเศษ (Skill)</h2>
         <table>
