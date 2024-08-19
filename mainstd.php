@@ -1,19 +1,7 @@
 <?php
 session_start(); // เริ่มต้น session
 
-// ตรวจสอบว่าผู้ใช้เข้าสู่ระบบหรือไม่
-if (!isset($_SESSION['s_id'])) {
-    header('Location: login.php'); // หากไม่ได้เข้าสู่ระบบ ให้กลับไปที่หน้า login
-    exit();
-}
-
-// เชื่อมต่อฐานข้อมูล
-$conn = new mysqli("localhost", "root", "", "project");
-
-// ตรวจสอบการเชื่อมต่อ
-if ($conn->connect_error) {
-    die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
-}
+include 'std_con.php';
 
 // ฟังก์ชั่นแปลงค่า s_pna
 function getPrefix($s_pna) {

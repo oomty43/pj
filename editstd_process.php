@@ -1,11 +1,7 @@
 <?php
 session_start(); // เริ่มต้น session
 
-// ตรวจสอบว่าผู้ใช้เข้าสู่ระบบหรือไม่
-if (!isset($_SESSION['s_id'])) {
-    header('Location: login.php'); // หากไม่ได้เข้าสู่ระบบ ให้กลับไปที่หน้า login
-    exit();
-}
+include 'std_con.php';
 
 // เชื่อมต่อฐานข้อมูล
 try {

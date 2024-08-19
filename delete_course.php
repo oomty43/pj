@@ -2,17 +2,7 @@
 // เริ่มต้น session
 session_start(); 
 
-// ตรวจสอบว่าผู้ใช้เข้าสู่ระบบหรือไม่
-if (!isset($_SESSION['s_id'])) {
-    header('Location: login.php');
-    exit();
-}
-
-// เชื่อมต่อฐานข้อมูล
-$conn = new mysqli("localhost", "root", "", "project");
-if ($conn->connect_error) {
-    die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
-}
+include 'std_con.php';
 
 // ตรวจสอบว่ามี c_id ถูกส่งมาหรือไม่
 if (isset($_GET['c_id'])) {

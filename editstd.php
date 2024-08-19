@@ -8,7 +8,7 @@ if (!isset($_SESSION['s_id'])) {
 }
 
 // เชื่อมต่อฐานข้อมูล
-include 'db_connect.php';
+include 'std_con.php';
 
 // ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
