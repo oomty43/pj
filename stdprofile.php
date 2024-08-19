@@ -111,8 +111,9 @@ $conn->close();
             border-radius: 5px;
         }
         .form-group img {
-            max-width: 100%;
-            height: auto;
+            max-width: 200px; /* กำหนดความกว้างสูงสุด */
+            max-height: 200px; /* กำหนดความสูงสูงสุด */
+            object-fit: cover; /* ครอบตัดรูปภาพตามสัดส่วน */
             border-radius: 5px;
             margin-bottom: 15px;
         }
@@ -180,7 +181,7 @@ $conn->close();
         ?>
             <div class="form-group">
                 <label>รูปภาพ</label>
-                <img src="upload/<?php echo $row['s_pic']; ?>" alt="Student Picture">
+                <img src="uploads/<?php echo $row['s_pic']; ?>" alt="Student Picture">
             </div>
 
             <div class="form-group">
