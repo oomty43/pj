@@ -78,6 +78,14 @@ $conn->close();
             border-radius: 5px;
             margin-left: 10px;
         }
+        .news-item img {
+    max-width: 100%; /* จำกัดความกว้างไม่ให้เกิน 100% ของคอนเทนเนอร์ */
+    max-height: 300px; /* จำกัดความสูงสูงสุดที่ 300px */
+    object-fit: cover; /* ให้รูปภาพไม่บิดเบี้ยวแต่ครอบคลุมพื้นที่ */
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto;
+}
         .nav-buttons a:hover {
             background-color: #0056b3;
         }
@@ -144,7 +152,7 @@ $conn->close();
             // แสดงผลข้อมูล
             while($row = $result->fetch_assoc()) {
                 echo "<div class='news-item'>";
-                echo "<img src='upload/" . $row["i_cover"] . "' alt='ข่าวสาร'>";
+                echo "<img src='uploads/" . $row["i_cover"] . "' alt='ข่าวสาร'>";
                 echo "<h2>" . $row["i_head"] . "</h2>";
                 echo "</div>";
             }

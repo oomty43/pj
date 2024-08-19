@@ -8,7 +8,7 @@ if (!isset($_SESSION['s_id'])) {
 }
 
 // เชื่อมต่อฐานข้อมูล
-$conn = new mysqli("localhost", "root", "", "project");
+include 'db_connect.php';
 
 // ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {

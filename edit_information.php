@@ -2,11 +2,7 @@
 session_start();
 
 // เชื่อมต่อกับฐานข้อมูล
-$servername = "localhost";
-$username = "root";  // ชื่อผู้ใช้ MySQL
-$password = "";      // รหัสผ่าน MySQL (ถ้ามี)
-$dbname = "project"; // ชื่อฐานข้อมูล
-
+include 'db_connect.php';
 // สร้างการเชื่อมต่อ
 $conn = new mysqli($servername, $username, $password, $dbname);
 

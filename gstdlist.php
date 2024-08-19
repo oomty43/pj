@@ -11,10 +11,6 @@ if ($conn->connect_error) {
     die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
 }
 
-// คำสั่ง SQL เพื่อดึงข้อมูลนักศึกษา
-$sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat FROM student";
-$result = $conn->query($sql);
-
 // ฟังก์ชั่นแปลงค่า s_pna
 function getPrefix($s_pna) {
     switch ($s_pna) {
@@ -30,8 +26,7 @@ function getPrefix($s_pna) {
 }
 
 // ฟังก์ชั่นแปลงค่าสถานะนักศึกษา
-function getStudentStatus($s_stat)
-{
+function getStudentStatus($s_stat) {
     return $s_stat == 1 ? "ยังคงศึกษาอยู่" : "จบการศึกษาแล้ว";
 }
 ?>
@@ -73,11 +68,11 @@ function getStudentStatus($s_stat)
             margin-bottom: 20px;
             text-align: right;
         }
-        .search-bar input[type="text"] {
+        .search-bar select, .search-bar input[type="text"] {
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: 200px;
+            margin-right: 10px;
         }
         .search-bar input[type="submit"] {
             background-color: #007BFF;
@@ -112,6 +107,11 @@ function getStudentStatus($s_stat)
         <div class="search-bar">
             <form method="get" action="">
                 <input type="text" name="search" placeholder="ค้นหารหัสนักศึกษา, ชื่อ, นามสกุล" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <select name="status">
+                    <option value="">เลือกสถานะทั้งหมด</option>
+                    <option value="1" <?php echo isset($_GET['status']) && $_GET['status'] == 1 ? 'selected' : ''; ?>>ยังคงศึกษาอยู่</option>
+                    <option value="0" <?php echo isset($_GET['status']) && $_GET['status'] == 0 ? 'selected' : ''; ?>>จบการศึกษาแล้ว</option>
+                </select>
                 <input type="submit" value="ค้นหา">
             </form>
         </div>
@@ -131,11 +131,18 @@ function getStudentStatus($s_stat)
                 <?php
                 // คำสั่ง SQL เพื่อค้นหาข้อมูลนักศึกษา
                 $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+                $status = isset($_GET['status']) ? $conn->real_escape_string($_GET['status']) : '';
+
                 $sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat 
                         FROM student 
-                        WHERE s_id LIKE '%$search%' 
+                        WHERE (s_id LIKE '%$search%' 
                         OR s_na LIKE '%$search%' 
-                        OR s_la LIKE '%$search%'";
+                        OR s_la LIKE '%$search%')";
+
+                if ($status !== '') {
+                    $sql .= " AND s_stat = '$status'";
+                }
+
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
