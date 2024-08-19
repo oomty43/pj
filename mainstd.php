@@ -111,7 +111,7 @@ $conn->close();
 <body>
 
     <!-- Banner -->
-    <img src="uploads/testb.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner.jpg" alt="Banner" class="banner">
 
     <!-- แสดงข้อความต้อนรับ -->
     <div class="welcome-message">

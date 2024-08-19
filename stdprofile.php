@@ -140,8 +140,7 @@ $conn->close();
 </head>
 <body>
 
-    <!-- Banner -->
-    <img src="uploads/testb.jpg" alt="Banner" class="banner">
+
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
