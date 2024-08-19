@@ -151,6 +151,39 @@ if ($result->num_rows > 0) {
         th {
             background-color: #f2f2f2;
         }
+        .btn-add {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 10px;
+        }
+        .btn-edit {
+            background-color: #ffc107;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn-add:hover {
+            background-color: #218838;
+        }
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+
     </style>
 </head>
 <body>
@@ -194,15 +227,17 @@ if ($result->num_rows > 0) {
             echo "<td>{$row['c_add']}</td>";
             echo "<td>{$row['c_year']}</td>";
             echo "<td>";
-            echo "<a href='edit_course.php?c_id={$row['c_id']}'>แก้ไข</a> | ";
-            echo "<a href='delete_course.php?c_id={$row['c_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+            echo "<a class='btn-edit' href='edit_course.php?c_id={$row['c_id']}'>แก้ไข</a>";
+            echo "</td>";
+            echo "<td>";
+            echo "<a class='btn-delete' href='delete_course.php?c_id={$row['c_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
             echo "</td>";
             echo "</tr>";
             echo "</tr>";
     }
     ?>
 </table>
-<a href="add_course.php"><button>เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
+<a href="add_course.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
         <h2>ข้อมูลทักษะพิเศษ (Skill)</h2>
         <table>
@@ -211,7 +246,7 @@ if ($result->num_rows > 0) {
                 <th>ชื่อ-นามสกุลนักศึกษา</th>
             </tr>
             <?php
-            $sql = "SELECT sk.sk_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT sk.sk_id, sk.sk_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name
                     FROM skill sk
                     INNER JOIN student s ON s.s_id = sk.s_id
                     WHERE sk.s_id = ?";
@@ -223,10 +258,18 @@ if ($result->num_rows > 0) {
                 echo "<tr>";
                 echo "<td>{$row['sk_na']}</td>";
                 echo "<td>{$row['student_name']}</td>";
+                echo "<td>";
+                echo "<a class='btn-edit' href='edit_skill.php?sk_id={$row['sk_id']}'>แก้ไข</a>";
+                echo "</td>";
+                echo "<td>";
+                echo "<a class='btn-delete' href='delete_skill.php?sk_id={$row['sk_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "</td>";
+                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
+        <a href="add_skill.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
         <h2>ข้อมูลประวัติการฝึกงาน (Internship History)</h2>
         <table>
@@ -237,7 +280,7 @@ if ($result->num_rows > 0) {
                 <th>ไฟล์โปรเจคฝึกงาน (its_file)</th>
             </tr>
             <?php
-            $sql = "SELECT its.its_name, its.its_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name, its.its_file
+            $sql = "SELECT its.its_id, its.its_name, its.its_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name, its.its_file
                     FROM its_history its
                     INNER JOIN student s ON s.s_id = its.s_id
                     WHERE its.s_id = ?";
@@ -251,10 +294,18 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['its_date']}</td>";
                 echo "<td>{$row['student_name']}</td>";
                 echo "<td><a href='{$row['its_file']}'>ดาวน์โหลด</a></td>";
+                echo "<td>";
+                echo "<a class='btn-edit' href='edit_intern.php?its_id={$row['its_id']}'>แก้ไข</a>";
+                echo "</td>";
+                echo "<td>";
+                echo "<a class='btn-delete' href='delete_intern.php?its_id={$row['its_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "</td>";
+                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
+        <a href="add_intern.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
         <h2>ข้อมูลการเขียนภาษาโปรแกรม (Programming Skills)</h2>
         <table>
@@ -263,7 +314,7 @@ if ($result->num_rows > 0) {
                 <th>ชื่อ-นามสกุลนักศึกษา</th>
             </tr>
             <?php
-            $sql = "SELECT pg.pg_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT pg.pg_id, pg.pg_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name
                     FROM program pg
                     INNER JOIN student s ON s.s_id = pg.s_id
                     WHERE pg.s_id = ?";
@@ -275,10 +326,18 @@ if ($result->num_rows > 0) {
                 echo "<tr>";
                 echo "<td>{$row['pg_na']}</td>";
                 echo "<td>{$row['student_name']}</td>";
+                echo "<td>";
+                echo "<a class='btn-edit' href='edit_program.php?pg_id={$row['pg_id']}'>แก้ไข</a>";
+                echo "</td>";
+                echo "<td>";
+                echo "<a class='btn-delete' href='delete_program.php?pg_id={$row['pg_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "</td>";
+                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
+        <a href="add_program.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
         <h2>ข้อมูลการทำงาน (Work History)</h2>
         <table>
@@ -288,7 +347,7 @@ if ($result->num_rows > 0) {
                 <th>ชื่อ-นามสกุลนักศึกษา</th>
             </tr>
             <?php
-            $sql = "SELECT w.w_na, w.w_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT w.w_id, w.w_na, w.w_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name
                     FROM wk w
                     INNER JOIN student s ON s.s_id = w.s_id
                     WHERE w.s_id = ?";
@@ -301,10 +360,18 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['w_na']}</td>";
                 echo "<td>{$row['w_date']}</td>";
                 echo "<td>{$row['student_name']}</td>";
+                echo "<td>";
+                echo "<a class='btn-edit' href='edit_work.php?w_id={$row['w_id']}'>แก้ไข</a>";
+                echo "</td>";
+                echo "<td>";
+                echo "<a class='btn-delete' href='delete_program.php?w_id={$row['w_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "</td>";
+                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
+        <a href="add_work.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
         <h2>ข้อมูลใบรับรอง (Certificates)</h2>
         <table>
@@ -316,7 +383,7 @@ if ($result->num_rows > 0) {
                 <th>ชื่อ-นามสกุลนักศึกษา</th>
             </tr>
             <?php
-            $sql = "SELECT ce.ce_na, ce.og_na, ce.ce_year, ce.ce_file, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT ce.ce_id, ce.ce_na, ce.og_na, ce.ce_year, ce.ce_file, CONCAT(s.s_na, ' ', s.s_la) AS student_name
                     FROM certi ce
                     INNER JOIN student s ON s.s_id = ce.s_id
                     WHERE ce.s_id = ?";
@@ -331,10 +398,18 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['ce_year']}</td>";
                 echo "<td><a href='{$row['ce_file']}'>ดาวน์โหลด</a></td>";
                 echo "<td>{$row['student_name']}</td>";
+                echo "<td>";
+                echo "<a class='btn-edit' href='edit_cert.php?ce_id={$row['ce_id']}'>แก้ไข</a>";
+                echo "</td>";
+                echo "<td>";
+                echo "<a class='btn-delete' href='delete_cert.php?ce_id={$row['ce_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "</td>";
+                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
+        <a href="add_cert.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
         <h2>ข้อมูลกิจกรรม (Events)</h2>
         <table>
@@ -345,7 +420,7 @@ if ($result->num_rows > 0) {
                 <th>ชื่อ-นามสกุลนักศึกษา</th>
             </tr>
             <?php
-            $sql = "SELECT e.e_na, e.e_add, e.e_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT e.e_id, e.e_na, e.e_add, e.e_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name
                     FROM ev e
                     INNER JOIN student s ON s.s_id = e.s_id
                     WHERE e.s_id = ?";
@@ -359,10 +434,18 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['e_add']}</td>";
                 echo "<td>{$row['e_date']}</td>";
                 echo "<td>{$row['student_name']}</td>";
+                echo "<td>";
+                echo "<a class='btn-edit' href='edit_event.php?e_id={$row['e_id']}'>แก้ไข</a>";
+                echo "</td>";
+                echo "<td>";
+                echo "<a class='btn-delete' href='delete_event.php?e_id={$row['e_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "</td>";
+                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
+        <a href="add_event.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
         <h2>ข้อมูลประวัติการศึกษา (Education History)</h2>
         <table>
@@ -373,7 +456,7 @@ if ($result->num_rows > 0) {
                 <th>ชื่อ-นามสกุลนักศึกษา</th>
             </tr>
             <?php
-            $sql = "SELECT eh.eh_na, eh.eh_level, eh.eh_end, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT eh.eh_id, eh.eh_na, eh.eh_level, eh.eh_end, CONCAT(s.s_na, ' ', s.s_la) AS student_name
                     FROM edu_history eh
                     INNER JOIN student s ON s.s_id = eh.s_id
                     WHERE eh.s_id = ?";
@@ -387,10 +470,18 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['eh_level']}</td>";
                 echo "<td>{$row['eh_end']}</td>";
                 echo "<td>{$row['student_name']}</td>";
+                echo "<td>";
+                echo "<a class='btn-edit' href='edit_eh.php?eh_id={$row['eh_id']}'>แก้ไข</a>";
+                echo "</td>";
+                echo "<td>";
+                echo "<a class='btn-delete' href='delete_eh.php?eh_id={$row['eh_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "</td>";
+                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
+        <a href="add_eh.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
     </div>
 
 </body>
