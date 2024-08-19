@@ -8,7 +8,7 @@ if (!isset($_SESSION['s_id'])) {
 }
 
 // เชื่อมต่อฐานข้อมูล
-include 'std_con.php';
+$conn = new mysqli("localhost", "root", "", "project");
 
 // ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
@@ -149,7 +149,7 @@ $conn->close();
 <body>
 
     <!-- Banner -->
-    <img src="uploads/testb.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner.jpg" alt="Banner" class="banner">
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">

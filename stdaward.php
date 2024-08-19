@@ -161,7 +161,7 @@ if ($result->num_rows > 0) {
     <div class="nav-buttons">
         <a href="mainstd.php">หน้าหลัก</a>
         <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
-    
+        <a href="logout.php">ออกจากระบบ</a>
     </div>
     <!-- แสดงข้อความต้อนรับ -->
     <div class="welcome-message">
