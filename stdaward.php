@@ -28,7 +28,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $welcome_message = "ยินดีต้อนรับ : " . getPrefix($row["s_pna"]) . " " . $row["s_na"] . " " . $row["s_la"];
+    $welcome_message = ": " . getPrefix($row["s_pna"]) . " " . $row["s_na"] . " " . $row["s_la"];
 } else {
     $welcome_message = "ไม่พบข้อมูลนักศึกษา";
 }
@@ -156,18 +156,18 @@ if ($result->num_rows > 0) {
 <body>
 
     <!-- Banner -->
-    <img src="uploads/testb.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner.jpg" alt="Banner" class="banner">
 
+    <div class="nav-buttons">
+        <a href="mainstd.php">หน้าหลัก</a>
+        <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
+    
+    </div>
     <!-- แสดงข้อความต้อนรับ -->
     <div class="welcome-message">
         <?php echo $welcome_message; ?>
     </div>
 
-    <div class="nav-buttons">
-        <a href="mainstd.php">หน้าหลัก</a>
-        <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
-        <a href="stdaward.php">ผลงานส่วนตัว</a>
-    </div>
         <br></br>
         <div class="form-container">
     <h2>ข้อมูลการเข้าอบรม (Course)</h2>

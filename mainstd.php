@@ -158,17 +158,19 @@ $conn->close();
     <!-- Banner -->
     <img src="uploads/banner.jpg" alt="Banner" class="banner">
 
-    <!-- แสดงข้อความต้อนรับ -->
-    <div class="welcome-message">
-        <?php echo $welcome_message; ?>
-    </div>
-
+  
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
         <a href="stdlist.php">ดูรายชื่อนักศึกษา</a>
         <a href="stdprofile.php">ข้อมูลส่วนตัว</a>
         <a href="stdaward.php">ผลงานส่วนตัว</a>
+        <a href="logout.php">ออกจากระบบ</a>
     </div>
+      <!-- แสดงข้อความต้อนรับ -->
+      <div class="welcome-message">
+        <?php echo $welcome_message; ?>
+    </div>
+
 
     <!-- News Section -->
     <div class="news-container">

@@ -15,11 +15,11 @@ if ($conn->connect_error) {
     die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
 }
 
-// รับค่า i_id จาก URL
+// รับ ID ของข่าวสารจาก URL
 $i_id = isset($_GET['i_id']) ? (int)$_GET['i_id'] : 0;
 
-// ดึงข้อมูลข่าวสารจากฐานข้อมูลตาม i_id
-$sql = "SELECT i_head, i_cover, i_date, i_deltail FROM information WHERE i_id = ?";
+// ดึงข้อมูลข่าวสารจากฐานข้อมูลตาม ID
+$sql = "SELECT i_head, i_deltail, i_cover, i_date FROM information WHERE i_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $i_id);
 $stmt->execute();
@@ -28,7 +28,8 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $news_item = $result->fetch_assoc();
 } else {
-    $news_item = null;
+    echo "ไม่พบข้อมูลข่าวสาร";
+    exit();
 }
 
 $stmt->close();
@@ -44,46 +45,48 @@ $conn->close();
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
         .container {
             width: 80%;
             margin: 20px auto;
-            background-color: #fff;
+            background-color: white;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .news-item img {
+        .news-cover {
             width: 100%;
-            height: auto;
+            max-height: 500px;
+            object-fit: cover;
             border-radius: 5px;
+            margin-bottom: 20px;
         }
-        .news-item h1 {
+        .news-title {
             font-size: 24px;
             color: #333;
-            margin-top: 0;
+            margin-bottom: 10px;
         }
-        .news-item .date {
-            font-size: 14px;
-            color: #777;
-            margin: 10px 0;
-        }
-        .news-item p {
+        .news-date {
             font-size: 16px;
-            line-height: 1.6;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .news-detail {
+            font-size: 18px;
             color: #333;
+            line-height: 1.6;
         }
         .back-link {
             display: inline-block;
-            margin-top: 20px;
             padding: 10px 20px;
             background-color: #007BFF;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            margin-top: 20px;
         }
         .back-link:hover {
             background-color: #0056b3;
@@ -93,17 +96,12 @@ $conn->close();
 <body>
 
     <div class="container">
-        <?php if ($news_item): ?>
-            <div class="news-item">
-                <h1><?php echo htmlspecialchars($news_item['i_head']); ?></h1>
-                <img src="uploads/<?php echo htmlspecialchars($news_item['i_cover']); ?>" alt="ข่าวสาร">
-                <div class="date"><?php echo htmlspecialchars(date('d F Y', strtotime($news_item['i_date']))); ?></div>
-                <p><?php echo htmlspecialchars($news_item['i_deltail']); ?></p>
-            </div>
-        <?php else: ?>
-            <p>ไม่มีข้อมูลข่าวสารที่พบ</p>
-        <?php endif; ?>
-        
+        <img src="uploads/<?php echo htmlspecialchars($news_item['i_cover']); ?>" alt="ข่าวสาร" class="news-cover">
+        <div class="news-title"><?php echo htmlspecialchars($news_item['i_head']); ?></div>
+        <div class="news-date"><?php echo htmlspecialchars($news_item['i_date']); ?></div>
+        <div class="news-detail">
+            <?php echo nl2br(htmlspecialchars($news_item['i_deltail'])); ?>
+        </div>
         <a href="mainstd.php" class="back-link">กลับไปที่หน้าหลัก</a>
     </div>
 
