@@ -1,16 +1,15 @@
 <?php
-session_start(); // เริ่มต้น session
+// เริ่มต้น session
+session_start(); 
 
 // ตรวจสอบว่าผู้ใช้เข้าสู่ระบบหรือไม่
 if (!isset($_SESSION['s_id'])) {
-    header('Location: login.php'); // หากไม่ได้เข้าสู่ระบบ ให้กลับไปที่หน้า login
+    header('Location: login.php');
     exit();
 }
 
 // เชื่อมต่อฐานข้อมูล
 $conn = new mysqli("localhost", "root", "", "project");
-
-// ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
     die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
 }
@@ -29,9 +28,9 @@ function getPrefix($s_pna) {
     }
 }
 
-// ดึงข้อมูลนักศึกษาจากฐานข้อมูลตาม user id ใน session
+// ดึงข้อมูลนักศึกษาจากฐานข้อมูล
 $s_id = $_SESSION['s_id'];
-$sql = "SELECT s_pic, s_pna, s_na, s_la, s_id, s_pws, s_email, s_address, s_stat, s_bloodtype, s_race, s_birth, s_nationlity, religious, s_marriage, s_province, s_country FROM student WHERE s_id = ?";
+$sql = "SELECT s_pic, s_pna, s_na, s_la FROM student WHERE s_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $s_id);
 $stmt->execute();
@@ -43,46 +42,7 @@ if ($result->num_rows > 0) {
 } else {
     $welcome_message = "ไม่พบข้อมูลนักศึกษา";
 }
-
-$sql = "SELECT c.c_id, c_na, c.c_add, c.c_date, c.s_id, s.s_na, s.s_la
-        FROM course c
-        INNER JOIN student s ON s.s_id = c.s_id";
-$result = $conn->query($sql);
-
-$sql = "SELECT sk.sk_id, sk.sk_na, sk.s_id, s.s_na, s.s_la
-        FROM skill sk
-        INNER JOIN student s ON s.s_id = sk.s_id";
-$result = $conn->query($sql);
-
-$sql = "SELECT its.its_id, its_name , its.its_date, its.its_file, s.s_na, s.s_la
-        FROM its_history its
-        INNER JOIN student s ON s.s_id = its.s_id";
-$result = $conn->query($sql);
-
-$sql = "SELECT pg.pg_id, pg.pg_name, s.s_na, s.s_la
-        FROM program pg
-        INNER JOIN student s ON s.s_id = pg.s_id";
-$result = $conn->query($sql);
-
-$sql = "SELECT w.w_id, w.w_na, w.w_date, s.s_na, s.s_la
-        FROM wk w
-        INNER JOIN student s ON s.s_id = w.s_id";
-$result = $conn->query($sql);
-
-$sql = "SELECT ce.ce_id, ce.ce_na, ce.ce_year , ce.og_na, ce.ce_file, s.s_na, s.s_la
-        FROM certi ce
-        INNER JOIN student s ON s.s_id = ce.s_id";
-$result = $conn->query($sql);
-
-$sql = "SELECT e.e_id , e.e_na, e.e_add , e.e_date, e.e_pic, s.s_na, s.s_la
-        FROM ev e
-        INNER JOIN student s ON s.s_id = e.s_id";
-$result = $conn->query($sql);
-
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="th">
@@ -186,6 +146,21 @@ $result = $conn->query($sql);
             color: #333;
             text-align: right; /* ทำให้ข้อความชิดขวา */
         }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
@@ -193,8 +168,8 @@ $result = $conn->query($sql);
     <!-- Banner -->
     <img src="uploads/testb.jpg" alt="Banner" class="banner">
 
-        <!-- แสดงข้อความต้อนรับ -->
-        <div class="welcome-message">
+    <!-- แสดงข้อความต้อนรับ -->
+    <div class="welcome-message">
         <?php echo $welcome_message; ?>
     </div>
 
@@ -204,3 +179,228 @@ $result = $conn->query($sql);
         <a href="stdaward.php">ผลงานส่วนตัว</a>
     </div>
 
+    <!-- ตารางแสดงข้อมูล -->
+    <div class="form-container">
+        <h2>ข้อมูลการเข้าอบรม (Course)</h2>
+        <table>
+            <tr>
+                <th>ชื่อโครงการอบรม (c_id)</th>
+                <th>ชื่อ-นามสกุลนักศึกษา</th>
+                <th>ชื่อสถานที่อบรม (c_add)</th>
+                <th>ปีที่อบรม (c_date)</th>
+            </tr>
+            <?php
+            $sql = "SELECT c.c_id, CONCAT(s.s_na, ' ', s.s_la) AS student_name, c.c_add, YEAR(c.c_date) AS c_year
+                    FROM course c
+                    INNER JOIN student s ON s.s_id = c.s_id
+                    WHERE c.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['c_id']}</td>";
+                echo "<td>{$row['student_name']}</td>";
+                echo "<td>{$row['c_add']}</td>";
+                echo "<td>{$row['c_year']}</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+
+        <h2>ข้อมูลทักษะพิเศษ (Skill)</h2>
+        <table>
+            <tr>
+                <th>ชื่อทักษะ (sk_na)</th>
+                <th>ชื่อ-นามสกุลนักศึกษา</th>
+            </tr>
+            <?php
+            $sql = "SELECT sk.sk_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+                    FROM skill sk
+                    INNER JOIN student s ON s.s_id = sk.s_id
+                    WHERE sk.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['sk_na']}</td>";
+                echo "<td>{$row['student_name']}</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+
+        <h2>ข้อมูลประวัติการฝึกงาน (Internship History)</h2>
+        <table>
+            <tr>
+                <th>ชื่อที่ฝึกงาน (its_name)</th>
+                <th>ระยะเวลาฝึกงาน (its_date)</th>
+                <th>ชื่อ-นามสกุลนักศึกษา</th>
+                <th>ไฟล์โปรเจคฝึกงาน (its_file)</th>
+            </tr>
+            <?php
+            $sql = "SELECT its.its_name, its.its_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name, its.its_file
+                    FROM its_history its
+                    INNER JOIN student s ON s.s_id = its.s_id
+                    WHERE its.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['its_name']}</td>";
+                echo "<td>{$row['its_date']}</td>";
+                echo "<td>{$row['student_name']}</td>";
+                echo "<td><a href='{$row['its_file']}'>ดาวน์โหลด</a></td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+
+        <h2>ข้อมูลการเขียนภาษาโปรแกรม (Programming Skills)</h2>
+        <table>
+            <tr>
+                <th>ชื่อทักษะภาษาโปรแกรม (pg_na)</th>
+                <th>ชื่อ-นามสกุลนักศึกษา</th>
+            </tr>
+            <?php
+            $sql = "SELECT pg.pg_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+                    FROM program pg
+                    INNER JOIN student s ON s.s_id = pg.s_id
+                    WHERE pg.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['pg_na']}</td>";
+                echo "<td>{$row['student_name']}</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+
+        <h2>ข้อมูลการทำงาน (Work History)</h2>
+        <table>
+            <tr>
+                <th>สถานที่ทำงาน (w_na)</th>
+                <th>ปีที่เริ่มทำงาน (w_date)</th>
+                <th>ชื่อ-นามสกุลนักศึกษา</th>
+            </tr>
+            <?php
+            $sql = "SELECT w.w_na, w.w_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+                    FROM wk w
+                    INNER JOIN student s ON s.s_id = w.s_id
+                    WHERE w.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['w_na']}</td>";
+                echo "<td>{$row['w_date']}</td>";
+                echo "<td>{$row['student_name']}</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+
+        <h2>ข้อมูลใบรับรอง (Certificates)</h2>
+        <table>
+            <tr>
+                <th>ชื่อใบรับรอง (ce_na)</th>
+                <th>หน่วยงานที่รับรอง (og_na)</th>
+                <th>ปีที่ได้รับ (ce_year)</th>
+                <th>เอกสารแนบ (ce_file)</th>
+                <th>ชื่อ-นามสกุลนักศึกษา</th>
+            </tr>
+            <?php
+            $sql = "SELECT ce.ce_na, ce.og_na, ce.ce_year, ce.ce_file, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+                    FROM certi ce
+                    INNER JOIN student s ON s.s_id = ce.s_id
+                    WHERE ce.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['ce_na']}</td>";
+                echo "<td>{$row['og_na']}</td>";
+                echo "<td>{$row['ce_year']}</td>";
+                echo "<td><a href='{$row['ce_file']}'>ดาวน์โหลด</a></td>";
+                echo "<td>{$row['student_name']}</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+
+        <h2>ข้อมูลกิจกรรม (Events)</h2>
+        <table>
+            <tr>
+                <th>ชื่อกิจกรรม (e_na)</th>
+                <th>สถานที่จัดกิจกรรม (e_add)</th>
+                <th>ปี (e_date)</th>
+                <th>ชื่อ-นามสกุลนักศึกษา</th>
+            </tr>
+            <?php
+            $sql = "SELECT e.e_na, e.e_add, e.e_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+                    FROM ev e
+                    INNER JOIN student s ON s.s_id = e.s_id
+                    WHERE e.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['e_na']}</td>";
+                echo "<td>{$row['e_add']}</td>";
+                echo "<td>{$row['e_date']}</td>";
+                echo "<td>{$row['student_name']}</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+
+        <h2>ข้อมูลประวัติการศึกษา (Education History)</h2>
+        <table>
+            <tr>
+                <th>ชื่อสถานที่ศึกษา (eh_na)</th>
+                <th>ระดับการศึกษา (eh_level)</th>
+                <th>ปีที่จบการศึกษา (eh_end)</th>
+                <th>ชื่อ-นามสกุลนักศึกษา</th>
+            </tr>
+            <?php
+            $sql = "SELECT eh.eh_na, eh.eh_level, eh.eh_end, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+                    FROM edu_history eh
+                    INNER JOIN student s ON s.s_id = eh.s_id
+                    WHERE eh.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['eh_na']}</td>";
+                echo "<td>{$row['eh_level']}</td>";
+                echo "<td>{$row['eh_end']}</td>";
+                echo "<td>{$row['student_name']}</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+    </div>
+
+</body>
+</html>
+
+<?php
+$conn->close();
+?>
