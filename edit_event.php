@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssi", $e_na, $e_add, $e_date, $e_id);
 
     if ($stmt->execute()) {
-        header("Location: mainstd.php");
+        header("Location: stdaward.php");
     } else {
         echo "Error: " . $stmt->error;
     }

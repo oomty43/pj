@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->execute()) {
                 echo "เพิ่มข้อมูลใบรับรองเรียบร้อยแล้ว";
-                header("Location: mainstd.php"); // เปลี่ยนเส้นทางไปยังหน้าหลักหลังจากเพิ่มข้อมูลสำเร็จ
+                header("Location: stdaward.php"); // เปลี่ยนเส้นทางไปยังหน้าหลักหลังจากเพิ่มข้อมูลสำเร็จ
                 exit;
             } else {
                 echo "เกิดข้อผิดพลาดในการบันทึกข้อมูล: " . $stmt->error;

@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssi", $ce_na, $og_na, $ce_year, $ce_id);
 
     if ($stmt->execute()) {
-        header("Location: mainstd.php");
+        header("Location: stdaward.php");
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -38,14 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
         .form-container {
-            width: 50%;
+            width: 100%;
+            max-width: 600px;
             margin: 50px auto;
             padding: 20px;
             background-color: white;
-            border-radius: 5px;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .form-group {
@@ -56,53 +57,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .form-group input[type="text"] {
+        .form-group input[type="text"],
+        .form-group input[type="date"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn-save {
-            display: inline-block;
-            width: 48%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
-        }
+        .btn-save,
         .btn-cancel {
             display: inline-block;
             width: 48%;
             padding: 10px;
-            background-color: #dc3545;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
             font-size: 16px;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
             cursor: pointer;
+            border: none;
+        }
+        .btn-save {
+            background-color: #28a745;
+        }
+        .btn-save:hover {
+            background-color: #218838;
+        }
+        .btn-cancel {
+            background-color: #dc3545;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
 <body>
-    <form action="edit_cert.php?ce_id=<?php echo $ce_id; ?>" method="POST">
-        <label>ชื่อใบรับรอง:</label>
-        <input type="text" name="ce_na" value="<?php echo $row['ce_na']; ?>"><br>
-        <label>หน่วยงานที่รับรอง:</label>
-        <input type="text" name="og_na" value="<?php echo $row['og_na']; ?>"><br>
-        <label>ปีที่ได้รับ:</label>
-        <input type="date" name="ce_year" value="<?php echo $row['ce_year']; ?>"><br>
-        <button type="submit">บันทึก</button>
-        <a href="mainstd.php">ยกเลิก</a>
-    </form>
+    <div class="form-container">
+        <h2>แก้ไขข้อมูลใบรับรอง</h2>
+        <form action="edit_cert.php?ce_id=<?php echo $ce_id; ?>" method="POST">
+            <div class="form-group">
+                <label>ชื่อใบรับรอง:</label>
+                <input type="text" name="ce_na" value="<?php echo $row['ce_na']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label>หน่วยงานที่รับรอง:</label>
+                <input type="text" name="og_na" value="<?php echo $row['og_na']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label>ปีที่ได้รับ:</label>
+                <input type="date" name="ce_year" value="<?php echo $row['ce_year']; ?>" required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn-save">บันทึก</button>
+                <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
+
 <?php
 $conn->close();
 ?>

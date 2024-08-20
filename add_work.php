@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssi", $w_na, $w_date, $s_id);
     
     if ($stmt->execute()) {
-        echo "<script>alert('เพิ่มข้อมูลการทำงานสำเร็จ!'); window.location.href='mainstd.php';</script>";
+        echo "<script>alert('เพิ่มข้อมูลการทำงานสำเร็จ!'); window.location.href='stdaward.php';</script>";
     } else {
         echo "<script>alert('เกิดข้อผิดพลาดในการเพิ่มข้อมูล! กรุณาลองใหม่');</script>";
     }
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="date" id="w_date" name="w_date" required>
             </div>
             <button type="submit" class="btn-submit">บันทึก</button>
-            <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
+            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
         </form>
     </div>
 

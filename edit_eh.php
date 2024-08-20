@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssi", $eh_na, $eh_level, $eh_end, $eh_id);
 
     if ($stmt->execute()) {
-        header("Location: mainstd.php");
+        header("Location: stdaward.php");
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="form-group buttons">
                 <button type="submit" class="btn-save">บันทึก</button>
-                <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
+                <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
             </div>
         </form>
     </div>
