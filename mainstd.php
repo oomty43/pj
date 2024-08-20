@@ -17,6 +17,30 @@ function getPrefix($s_pna) {
     }
 }
 
+// ฟังก์ชันสำหรับแปลงวันที่เป็นภาษาไทย
+function thai_date($date) {
+    $thai_months = [
+        "01" => "มกราคม",
+        "02" => "กุมภาพันธ์",
+        "03" => "มีนาคม",
+        "04" => "เมษายน",
+        "05" => "พฤษภาคม",
+        "06" => "มิถุนายน",
+        "07" => "กรกฎาคม",
+        "08" => "สิงหาคม",
+        "09" => "กันยายน",
+        "10" => "ตุลาคม",
+        "11" => "พฤศจิกายน",
+        "12" => "ธันวาคม"
+    ];
+
+    $year = (int)date('Y', strtotime($date)) + 543; // แปลงปีเป็น พ.ศ.
+    $month = $thai_months[date('m', strtotime($date))]; // หาชื่อเดือน
+    $day = date('d', strtotime($date)); // ดึงวันที่
+
+    return "$day $month $year"; // คืนค่าที่แปลงแล้ว
+}
+
 // ดึงข้อมูลนักศึกษาจากฐานข้อมูลตาม user id ใน session
 $s_id = $_SESSION['s_id'];
 $sql = "SELECT s_pna, s_na, s_la FROM student WHERE s_id = ?";
@@ -158,7 +182,6 @@ $conn->close();
     <!-- Banner -->
     <img src="uploads/banner.jpg" alt="Banner" class="banner">
 
-  
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
         <a href="stdlist.php">ดูรายชื่อนักศึกษา</a>
@@ -166,18 +189,18 @@ $conn->close();
         <a href="stdaward.php">ผลงานส่วนตัว</a>
         <a href="logout.php">ออกจากระบบ</a>
     </div>
-      <!-- แสดงข้อความต้อนรับ -->
-      <div class="welcome-message">
+  
+    <!-- แสดงข้อความต้อนรับ -->
+    <div class="welcome-message">
         <?php echo $welcome_message; ?>
     </div>
-
 
     <!-- News Section -->
     <div class="news-container">
         <?php
         if (!empty($news_items)) {
             foreach ($news_items as $item) {
-                $formatted_date = date('d-m-Y', strtotime($item["i_date"])); // แปลงวันที่เป็นรูปแบบที่ต้องการ
+                $formatted_date = thai_date($item["i_date"]); // แปลงวันที่เป็นภาษาไทย
                 echo "<div class='news-item'>";
                 echo "<img src='uploads/" . htmlspecialchars($item["i_cover"]) . "' alt='ข่าวสาร'>";
                 echo "<h2>" . htmlspecialchars($item["i_head"]) . "</h2>";

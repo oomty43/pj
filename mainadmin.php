@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <?php session_start(); 
-    if(!isset($_SESSION['a_user'])){
+    <?php 
+    session_start(); 
+    if (!isset($_SESSION['a_user'])) {
         echo "
             <script>
                 alert('กรุณาเข้าสู่ระบบ');
                 window.location='loginadmin.php';
             </script>
         ";
-    }?>
+    }
+    
+    // ตรวจสอบว่ามีการส่งคำสั่งออกจากระบบหรือไม่
+    if (isset($_GET['logout'])) {
+        session_destroy(); // ทำลาย session
+        header("Location: loginadmin.php"); // กลับไปยังหน้าเข้าสู่ระบบ
+        exit();
+    }
+    ?>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta charset="UTF-8">
@@ -73,6 +82,12 @@
         a.btn-student:hover {
             background-color: #E64A19; /* สีส้มเข้มเมื่อโฮเวอร์ */
         }
+        a.btn-logout {
+            background-color: #dc3545; /* สีแดงสำหรับปุ่มออกจากระบบ */
+        }
+        a.btn-logout:hover {
+            background-color: #c82333; /* สีแดงเข้มเมื่อโฮเวอร์ */
+        }
     </style>
 </head>
 <body>
@@ -82,6 +97,7 @@
             <li><a href="display_admin.php" class="btn-manage">จัดการข้อมูลผู้ดูแลระบบ</a></li>
             <li><a href="display_information.php" class="btn-info">จัดการข้อมูลข่าวสาร</a></li>
             <li><a href="display_student.php" class="btn-student">จัดการข้อมูลนักศึกษา</a></li>
+            <li><a href="?logout=true" class="btn-logout">ออกจากระบบ</a></li> <!-- ปุ่มออกจากระบบ -->
         </ul>
     </div>
 </body>
