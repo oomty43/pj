@@ -4,7 +4,7 @@ session_start();
 include 'std_con.php';
 
 if (!isset($_GET['pg_id'])) {
-    echo "<script>alert('ไม่มี ID ที่ต้องการแก้ไข!'); window.location.href='mainstd.php';</script>";
+    echo "<script>alert('ไม่มี ID ที่ต้องการแก้ไข!'); window.location.href='stdaward.php';</script>";
     exit();
 }
 
@@ -18,7 +18,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    echo "<script>alert('ไม่พบข้อมูลที่ต้องการแก้ไข!'); window.location.href='mainstd.php';</script>";
+    echo "<script>alert('ไม่พบข้อมูลที่ต้องการแก้ไข!'); window.location.href='stdaward.php';</script>";
     exit();
 }
 
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sii", $pg_na, $pg_id, $_SESSION['s_id']);
 
     if ($stmt->execute()) {
-        echo "<script>alert('แก้ไขข้อมูลสำเร็จ!'); window.location.href='mainstd.php';</script>";
+        echo "<script>alert('แก้ไขข้อมูลสำเร็จ!'); window.location.href='stdaward.php';</script>";
     } else {
         echo "<script>alert('เกิดข้อผิดพลาดในการแก้ไขข้อมูล! กรุณาลองใหม่');</script>";
     }
@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" id="pg_na" name="pg_na" value="<?php echo $row['pg_na']; ?>" required>
             </div>
             <button type="submit" class="btn-submit">บันทึก</button>
-            <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
+            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
         </form>
     </div>
 

@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         echo "แก้ไขข้อมูลสำเร็จ!";
-        header("Location: mainstd.php");
+        header("Location: stdaward.php");
         exit();
     } else {
         echo "เกิดข้อผิดพลาดในการแก้ไขข้อมูล";
@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" id="sk_na" name="sk_na" value="<?php echo htmlspecialchars($sk_na); ?>" required>
             </div>
             <button type="submit" class="btn-save">บันทึก</button>
-            <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
+            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
         </form>
     </div>
 </body>

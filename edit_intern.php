@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         echo "แก้ไขข้อมูลการฝึกงานสำเร็จ";
-        header("Location: mainstd.php");
+        header("Location: stdaward.php");
     } else {
         echo "เกิดข้อผิดพลาด: " . $stmt->error;
     }

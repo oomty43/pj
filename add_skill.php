@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("si", $sk_na, $s_id);
         
         if ($stmt->execute()) {
-            echo "<script>alert('เพิ่มข้อมูลทักษะสำเร็จ'); window.location.href='stdprofile.php';</script>";
+            echo "<script>alert('เพิ่มข้อมูลทักษะสำเร็จ'); window.location.href='stdaward.php';</script>";
         } else {
             echo "<script>alert('เกิดข้อผิดพลาดในการเพิ่มข้อมูลทักษะ');</script>";
         }
