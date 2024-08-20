@@ -1,3 +1,73 @@
+<?php
+session_start(); 
+
+// ข้อมูลการเชื่อมต่อฐานข้อมูล
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "project";
+
+// สร้างการเชื่อมต่อ
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// ตรวจสอบการเชื่อมต่อ
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // รับค่าจากฟอร์ม
+    $s_id = $_POST['s_id'];
+    $s_pws = $_POST['s_pws'];
+    $s_pna = $_POST['s_pna'];
+    $s_na = $_POST['s_na'];
+    $s_la = $_POST['s_la'];
+    $s_email = $_POST['s_email'];
+    $s_address = $_POST['s_address'];
+    $s_stat = $_POST['s_stat'];
+    $s_pic = $_FILES['s_pic']['name']; // รับชื่อไฟล์ที่อัพโหลด
+    $s_bloodtype = $_POST['s_bloodtype'];
+    $s_race = $_POST['s_race'];
+    $s_birth = $_POST['s_birth'];
+    $s_nationlity = $_POST['s_nationlity'];
+    $religious = $_POST['religious'];
+    $s_marriage = $_POST['s_marriage'];
+    $s_province = $_POST['s_province'];
+    $s_country = $_POST['s_country'];
+
+    // ตรวจสอบและอัพโหลดไฟล์ภาพ
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($s_pic);
+    move_uploaded_file($_FILES['s_pic']['tmp_name'], $target_file);
+
+    // เตรียมคำสั่ง SQL
+    $sql = "INSERT INTO student (s_id, s_pws, s_pna, s_na, s_la, s_email, s_address, s_stat, s_pic, s_bloodtype, s_race, s_birth, s_nationlity, religious, s_marriage, s_province, s_country)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    // เตรียมคำสั่งสำหรับการดำเนินการ
+    $stmt = $conn->prepare($sql);
+
+    // ผูกค่าที่จะใช้กับคำสั่ง SQL
+    $stmt->bind_param("sssssssssssssssss", $s_id, $s_pws, $s_pna, $s_na, $s_la, $s_email, $s_address, $s_stat, $s_pic, $s_bloodtype, $s_race, $s_birth, $s_nationlity, $religious, $s_marriage, $s_province, $s_country);
+
+    // ดำเนินการคำสั่ง
+    if ($stmt->execute()) {
+        echo "เพิ่มข้อมูลสำเร็จ!";
+        header("Location: display_student.php");
+        exit;
+    } else {
+        echo "เกิดข้อผิดพลาด: " . $stmt->error;
+    }
+
+    // ปิดการเชื่อมต่อคำสั่ง
+    $stmt->close();
+}
+
+// ปิดการเชื่อมต่อฐานข้อมูล
+$conn->close();
+?>
+
+?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
