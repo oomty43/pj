@@ -42,32 +42,36 @@
             background-color: #444; /* สีพื้นหลังของ input */
             color: #fff; /* สีตัวอักษรใน input */
         }
-        input[type="submit"] {
-            background-color: #4CAF50; /* สีปุ่มบันทึก */
-            color: white; /* สีตัวอักษรในปุ่ม */
-            border: none; /* ไม่มีกรอบ */
-            cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นมือเมื่อชี้ */
-            font-size: 18px; /* ขนาดฟอนต์ */
-            padding: 15px; /* ขนาดปุ่ม */
-            border-radius: 5px; /* มุมกลม */
-            transition: background-color 0.3s; /* เพิ่มการเปลี่ยนแปลงสีเมื่อชี้ */
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
         }
-        input[type="submit"]:hover {
-            background-color: #45a049; /* สีปุ่มเมื่อชี้ */
-        }
-        .btn-cancel {
-            background-color: #dc3545; /* สีปุ่มยกเลิก */
-            color: white;
-            padding: 15px; /* ขนาดปุ่ม */
-            text-decoration: none;
-            border: none;
+        button, a.btn-cancel {
+            display: inline-block;
+            width: 48%; /* ทำให้ปุ่มทั้งสองมีขนาดกว้าง 48% เพื่อให้สามารถวางคู่กันได้ */
+            padding: 15px;
+            font-size: 18px;
+            text-align: center;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
-            font-size: 18px; /* ขนาดฟอนต์ */
+            border: none;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
-        .btn-cancel:hover {
-            background-color: #c82333; /* สีปุ่มยกเลิกเมื่อชี้ */
+        button.btn-save {
+            background-color: #4CAF50; /* สีเขียว */
+            color: white;
+        }
+        button.btn-save:hover {
+            background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
+        }
+        a.btn-cancel {
+            background-color: #dc3545; /* สีแดง */
+            color: white;
+        }
+        a.btn-cancel:hover {
+            background-color: #c82333; /* สีแดงเข้มเมื่อ hover */
         }
     </style>
 </head>
@@ -165,7 +169,6 @@
                 <option value="3">หย่า</option>
                 <option value="4">แยกกันอยู่</option>
             </select>
-
             <label for="s_province">จังหวัด:</label>
             <select id="s_province" name="s_province" required>
                 <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
@@ -245,7 +248,7 @@
                 <option value="อุตรดิตถ์">อุตรดิตถ์</option>
                 <option value="อุบลราชธานี">อุบลราชธานี</option>
                 <option value="อำนาจเจริญ">อำนาจเจริญ</option>
-            </select>
+                </select>
             
             <div class="form-group">
                 <label for="s_country">ประเทศ:</label>
