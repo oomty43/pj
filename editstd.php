@@ -168,7 +168,7 @@ $conn->close();
         <form action="editstd_process.php" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label>รูปภาพ</label>
-                <img src="upload/<?php echo $row['s_pic']; ?>" alt="รูปภาพของนักเรียน">
+                <img src="uploads/<?php echo $row['s_pic']; ?>" alt="รูปภาพของนักเรียน">
                 <input type="file" name="s_pic">
                 <input type="hidden" name="s_pic_old" value="<?php echo $row['s_pic']; ?>">
             </div>
