@@ -1,10 +1,70 @@
+<?php
+
+// เชื่อมต่อฐานข้อมูล
+$conn = new mysqli("localhost", "root", "", "project");
+
+// ตรวจสอบการเชื่อมต่อ
+if ($conn->connect_error) {
+    die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
+}
+
+// ฟังก์ชันสำหรับแปลงเดือนเป็นภาษาไทย
+function thai_date($date) {
+    $thai_months = [
+        "01" => "มกราคม",
+        "02" => "กุมภาพันธ์",
+        "03" => "มีนาคม",
+        "04" => "เมษายน",
+        "05" => "พฤษภาคม",
+        "06" => "มิถุนายน",
+        "07" => "กรกฎาคม",
+        "08" => "สิงหาคม",
+        "09" => "กันยายน",
+        "10" => "ตุลาคม",
+        "11" => "พฤศจิกายน",
+        "12" => "ธันวาคม"
+    ];
+
+    $year = substr($date, 0, 4) + 543; // แปลงปีเป็น พ.ศ.
+    $month = $thai_months[substr($date, 5, 2)]; // หาชื่อเดือนจากฟังก์ชันข้างต้น
+    $day = substr($date, 8, 2); // ดึงวันที่ออกมา
+
+    return "$day $month $year";
+}
+
+// ตรวจสอบหมายเลขหน้าปัจจุบัน
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$items_per_page = 3;
+$offset = ($page - 1) * $items_per_page;
+
+// ดึงข้อมูลข่าวสารจากฐานข้อมูล
+$sql = "SELECT i_id, i_cover, i_head, i_date FROM information ORDER BY i_date DESC LIMIT $offset, $items_per_page";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $news_items = $result->fetch_all(MYSQLI_ASSOC);
+} else {
+    $news_items = [];
+}
+
+// คำนวณจำนวนหน้าทั้งหมด
+$sql_total = "SELECT COUNT(*) AS total FROM information";
+$result_total = $conn->query($sql_total);
+$row_total = $result_total->fetch_assoc();
+$total_items = $row_total['total'];
+$total_pages = ceil($total_items / $items_per_page);
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าหลักสำหรับผู้เยี่ยมชม</title>
+    <title>หน้าหลักเว็บไซต์</title>
     <style>
+        /* สไตล์เดิม */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -41,17 +101,53 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .news-item img {
-            width: 100%;
-            height: auto;
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: cover;
             border-radius: 5px;
+            display: block;
+            margin: 0 auto;
         }
         .news-item h2 {
             font-size: 18px;
             color: #333;
         }
-        .news-item p {
-            font-size: 16px;
+        .news-item p.date {
+            font-size: 14px;
             color: #666;
+        }
+        .news-item a {
+            display: inline-block;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .news-item a:hover {
+            background-color: #0056b3;
+        }
+        .welcome-message {
+            margin: 20px;
+            font-size: 20px;
+            color: #333;
+            text-align: right; /* ทำให้ข้อความชิดขวา */
+        }
+        .pagination {
+            text-align: center;
+            margin: 20px;
+        }
+        .pagination a {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .pagination a:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -62,43 +158,38 @@
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
-        <a href="guestmain.php">กระดานข่าวสาร</a>
         <a href="gstdlist.php">รายชื่อนักศึกษา</a>
-        <a href="contact_admin.php">ติดต่อแอดมิน</a>
+        <a href="login.php">เข้าสู่ระบบ</a>
     </div>
 
     <!-- News Section -->
     <div class="news-container">
         <?php
-        // เชื่อมต่อฐานข้อมูล
-        $conn = new mysqli("localhost", "root", "", "project");
-
-        // ตรวจสอบการเชื่อมต่อ
-        if ($conn->connect_error) {
-            die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
-        }
-
-        // คำสั่ง SQL เพื่อดึงข้อมูลจากตาราง information
-        $sql = "SELECT i_head, i_cover, i_deltail, i_date FROM information";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            // แสดงผลข้อมูล
-            while($row = $result->fetch_assoc()) {
+        if (!empty($news_items)) {
+            foreach ($news_items as $item) {
+                $formatted_date = thai_date($item["i_date"]); // ใช้ฟังก์ชันแปลงวันที่เป็นภาษาไทย
                 echo "<div class='news-item'>";
-                echo "<img src='uploads/" . htmlspecialchars($row["i_cover"]) . "' alt='ข่าวสาร'>";
-                echo "<h2>" . htmlspecialchars($row["i_head"]) . "</h2>";
-                echo "<p>" . htmlspecialchars($row["i_deltail"]) . "</p>";
-                echo "<p><em>" . htmlspecialchars($row["i_date"]) . "</em></p>";
+                echo "<img src='uploads/" . htmlspecialchars($item["i_cover"]) . "' alt='ข่าวสาร'>";
+                echo "<h2>" . htmlspecialchars($item["i_head"]) . "</h2>";
+                echo "<p class='date'>" . $formatted_date . "</p>";
+                echo "<p><a href='gnews_detail.php?i_id=" . htmlspecialchars($item["i_id"]) . "'>อ่านเพิ่มเติม</a></p>";
                 echo "</div>";
             }
         } else {
-            echo "<p>ไม่มีข่าวสาร</p>";
+            echo "ไม่มีข่าวสาร";
         }
-
-        // ปิดการเชื่อมต่อ
-        $conn->close();
         ?>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <?php if ($page > 1): ?>
+            <a href="?page=<?php echo $page - 1; ?>">« ก่อนหน้า</a>
+        <?php endif; ?>
+
+        <?php if ($page < $total_pages): ?>
+            <a href="?page=<?php echo $page + 1; ?>">ถัดไป »</a>
+        <?php endif; ?>
     </div>
 
 </body>

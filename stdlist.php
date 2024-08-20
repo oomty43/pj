@@ -38,9 +38,13 @@ function getPrefix($s_pna) {
     }
 }
 
-// ฟังก์ชั่นแปลงค่าสถานะนักศึกษา
-function getStudentStatus($s_stat) {
-    return $s_stat == 1 ? "ยังคงศึกษาอยู่" : "จบการศึกษาแล้ว";
+// ฟังก์ชั่นแปลงค่าสถานะนักศึกษาเป็นปุ่ม
+function getStudentStatusButton($s_stat) {
+    if ($s_stat == 1) {
+        return "<button class='status-btn green'>ยังคงศึกษาอยู่</button>";
+    } else {
+        return "<button class='status-btn blue'>จบการศึกษาแล้ว</button>";
+    }
 }
 ?>
 
@@ -77,6 +81,20 @@ function getStudentStatus($s_stat) {
         }
         table th {
             background-color: #f8f8f8;
+        }
+        .status-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: default;
+        }
+        .status-btn.green {
+            background-color: #28a745;
+        }
+        .status-btn.blue {
+            background-color: #007bff;
         }
         .back-link {
             margin-top: 20px;
@@ -159,7 +177,7 @@ function getStudentStatus($s_stat) {
                         echo "<td>" . getPrefix($row['s_pna']) . " " . htmlspecialchars($row['s_na']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['s_la']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['s_email']) . "</td>";
-                        echo "<td>" . getStudentStatus($row['s_stat']) . "</td>";
+                        echo "<td>" . getStudentStatusButton($row['s_stat']) . "</td>";
                         echo "</tr>";
                     }
                 } else {

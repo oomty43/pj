@@ -12,6 +12,30 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// ฟังก์ชันสำหรับแปลงเดือนเป็นภาษาไทย
+function thai_date($date) {
+    $thai_months = [
+        "01" => "มกราคม",
+        "02" => "กุมภาพันธ์",
+        "03" => "มีนาคม",
+        "04" => "เมษายน",
+        "05" => "พฤษภาคม",
+        "06" => "มิถุนายน",
+        "07" => "กรกฎาคม",
+        "08" => "สิงหาคม",
+        "09" => "กันยายน",
+        "10" => "ตุลาคม",
+        "11" => "พฤศจิกายน",
+        "12" => "ธันวาคม"
+    ];
+
+    $year = substr($date, 0, 4) + 543; // แปลงปีเป็น พ.ศ.
+    $month = $thai_months[substr($date, 5, 2)]; // หาชื่อเดือนจากฟังก์ชันข้างต้น
+    $day = substr($date, 8, 2); // ดึงวันที่ออกมา
+
+    return "$day $month $year";
+}
+
 // เตรียมคำสั่ง SQL เพื่อดึงข้อมูลข่าวสาร
 $sql = "SELECT i.i_id, i.i_head, i.a_id, it.itype_name, i.i_date
         FROM information i
@@ -21,35 +45,55 @@ $result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
     <title>Display Information</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #181818; /* สีพื้นหลังที่เข้ม */
             text-align: center;
+            color: #fff; /* สีตัวอักษร */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         .container {
             width: 80%;
             margin: 50px auto;
-            background-color: #fff;
+            background-color: #333; /* สีพื้นหลังของกล่อง */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             overflow-x: auto;
+        }
+        h2 {
+            color: #ffa500; /* สีของหัวข้อ */
+            margin-bottom: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
         table th, table td {
-            border: 1px solid #dddddd;
-            padding: 8px;
+            border: 1px solid #555;
+            padding: 12px;
             text-align: left;
+            color: #fff; /* สีตัวอักษรในตาราง */
         }
         table th {
-            background-color: #f2f2f2;
+            background-color: #4CAF50;
+            color: white;
+        }
+        table tr:nth-child(even) {
+            background-color: #2a2a2a; /* สีพื้นหลังของแถวคู่ */
+        }
+        table tr:hover {
+            background-color: #383838; /* สีพื้นหลังเมื่อเมาส์ชี้ */
         }
         .add-buttons {
             margin-bottom: 20px;
@@ -61,9 +105,20 @@ $result = $conn->query($sql);
             text-decoration: none;
             border-radius: 5px;
             margin-right: 10px;
+            transition: background-color 0.3s ease;
         }
         .add-buttons a:hover {
             background-color: #45a049;
+        }
+        .action-buttons a {
+            color: #ffa500; /* สีของลิงก์ */
+            text-decoration: none;
+            margin: 0 5px;
+            transition: color 0.3s ease;
+        }
+        .action-buttons a:hover {
+            color: #ff6347; /* สีของลิงก์เมื่อเมาส์ชี้ */
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -73,6 +128,7 @@ $result = $conn->query($sql);
         <div class="add-buttons">
             <a href="add_information.php">เพิ่มข่าวสาร</a>
             <a href="add_info_type.php">เพิ่มประเภทข่าวสาร</a>
+            <a href="mainadmin.php">หน้าหลัก</a>
         </div>
         <table>
             <thead>
@@ -88,14 +144,15 @@ $result = $conn->query($sql);
                 <?php
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
+                        $thai_date = thai_date($row['i_date']); // แปลงวันที่เป็นภาษาไทย
                         echo "<tr>";
-                        echo "<td>" . $row['i_head'] . "</td>";
-                        echo "<td>" . $row['a_id'] . "</td>";
-                        echo "<td>" . $row['itype_name'] . "</td>";
-                        echo "<td>" . $row['i_date'] . "</td>";
-                        echo "<td>";
-                        echo '<a href="view_information.php?id=' . $row['i_id'] . '">ดูรายละเอียด</a> | ';
-                        echo '<a href="edit_information.php?id=' . $row['i_id'] . '">แก้ไข</a> | ';
+                        echo "<td>" . htmlspecialchars($row['i_head']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['a_id']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['itype_name']) . "</td>";
+                        echo "<td>" . htmlspecialchars($thai_date) . "</td>";
+                        echo "<td class='action-buttons'>";
+                        echo '<a href="view_information.php?id=' . $row['i_id'] . '">ดูรายละเอียด</a>';
+                        echo '<a href="edit_information.php?id=' . $row['i_id'] . '">แก้ไข</a>';
                         echo '<a href="delete_information.php?id=' . $row['i_id'] . '">ลบ</a>';
                         echo "</td>";
                         echo "</tr>";
