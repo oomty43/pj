@@ -11,6 +11,7 @@ if (!isset($_SESSION['a_user'])) {
         </script>
     ";
 }
+
 // ตรวจสอบการส่งข้อมูล POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // ตัวแปรที่รับค่าจากฟอร์ม
@@ -45,8 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         echo "<script>
-        alert('บันทึกข้อมูลเรียบร้อยแล้ว');
-      </script>";
+            alert('บันทึกข้อมูลเรียบร้อยแล้ว');
+            window.location = 'display_information.php'; // พากลับไปยังหน้าจัดการข้อมูล
+        </script>";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -54,24 +56,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="th">
 <head>
+    <meta charset="UTF-8">
     <title>Add Information</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #181818; /* สีพื้นหลังที่เข้ม */
             text-align: center;
+            color: #fff; /* สีตัวอักษร */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
             width: 50%;
-            margin: 50px auto;
-            background-color: #fff;
+            max-width: 600px;
+            background-color: #333; /* สีพื้นหลังของกล่อง */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #ffa500; /* สีของหัวข้อ */
+            margin-bottom: 20px;
         }
 
         form {
@@ -82,17 +96,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         input[type=text],
         textarea,
-        input[type=file] {
+        input[type=file],
+        select {
             width: 100%;
             padding: 10px;
-            margin: 5px 0;
+            margin: 10px 0;
             box-sizing: border-box;
-            border: 1px solid #ccc;
+            border: 1px solid #555;
             border-radius: 4px;
-            resize: vertical;
+            background-color: #222; /* สีพื้นหลังของ input */
+            color: #fff; /* สีตัวอักษรใน input */
         }
 
-        input[type=submit] {
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        input[type=submit],
+        .cancel-button {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
@@ -100,14 +124,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 45%; /* ขนาดปุ่ม */
+            text-align: center;
+            text-decoration: none;
+        }
+
+        input[type=submit] {
+            margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
         }
 
         input[type=submit]:hover {
             background-color: #45a049;
         }
+
+        .cancel-button {
+            background-color: #FF6347; /* สีของปุ่มยกเลิก */
+            margin-left: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+        }
+
+        .cancel-button:hover {
+            background-color: #FF4500; /* สีของปุ่มยกเลิกเมื่อเมาส์ชี้ */
+        }
     </style>
 </head>
-
 <body>
     <div class="container">
         <h2>เพิ่มข่าวสาร</h2>
@@ -133,9 +173,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </select>
 
             <input type="hidden" name="a_user" value="<?php echo $_SESSION['a_user']; ?>">
-            <input type="submit" value="เพิ่มข้อมูล">
+
+            <div class="button-group">
+                <input type="submit" value="เพิ่มข้อมูล">
+                <a href="display_information.php" class="cancel-button">ยกเลิก</a>
+            </div>
         </form>
     </div>
 </body>
-
 </html>

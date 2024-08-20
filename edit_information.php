@@ -30,6 +30,7 @@ if (isset($_GET['id'])) {
         $i_deltail = $row['i_deltail'];
         $itype_id = $row['itype_id'];
         $i_cover = $row['i_cover'];
+        $i_date = $row['i_date']; // เก็บวันที่เดิมไว้
     } else {
         echo "ไม่พบข้อมูลข่าวสาร";
         exit();
@@ -66,18 +67,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // ตั้งค่าเวลาปัจจุบันในฟิลด์ i_date
-    $current_time = date("Y-m-d H:i:s");
-
-    // อัปเดตข้อมูลในฐานข้อมูล
+    // อัปเดตข้อมูลในฐานข้อมูล โดยไม่เปลี่ยนแปลงวันที่
     if ($i_cover) {
-        $sql = "UPDATE information SET i_head = ?, i_deltail = ?, itype_id = ?, i_cover = ?, i_date = ? WHERE i_id = ?";
+        $sql = "UPDATE information SET i_head = ?, i_deltail = ?, itype_id = ?, i_cover = ? WHERE i_id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssisii", $i_head, $i_deltail, $itype_id, $i_cover, $current_time, $i_id);
+        $stmt->bind_param("ssssi", $i_head, $i_deltail, $itype_id, $i_cover, $i_id);
     } else {
-        $sql = "UPDATE information SET i_head = ?, i_deltail = ?, itype_id = ?, i_date = ? WHERE i_id = ?";
+        $sql = "UPDATE information SET i_head = ?, i_deltail = ?, itype_id = ? WHERE i_id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssisi", $i_head, $i_deltail, $itype_id, $current_time, $i_id);
+        $stmt->bind_param("sssi", $i_head, $i_deltail, $itype_id, $i_id);
     }
 
     if ($stmt->execute()) {
@@ -98,16 +96,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #181818;
+            color: #fff;
             text-align: center;
         }
         .container {
             width: 50%;
             margin: 50px auto;
-            background-color: #fff;
+            background-color: #333;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
         form {
             display: flex;
@@ -127,22 +126,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         input[type="file"] {
             margin-bottom: 20px;
         }
-        input[type="submit"] {
+        input[type="submit"], .cancel-button {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
+            margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
         }
-        input[type="submit"]:hover {
+        input[type="submit"]:hover, .cancel-button:hover {
             background-color: #45a049;
+        }
+        .cancel-button {
+            background-color: #f44336;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* จัดตำแหน่งปุ่ม */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>แก้ไขข้อมูลข่าวสาร</h2>
+        <h2 style="color: #ffa500;">แก้ไขข้อมูลข่าวสาร</h2>
         <form method="post" enctype="multipart/form-data">
             <label for="i_head">หัวข้อข่าว:</label>
             <input type="text" name="i_head" value="<?php echo htmlspecialchars($i_head); ?>" required>
@@ -173,7 +181,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <img src="<?php echo htmlspecialchars($i_cover); ?>" alt="Cover Image" style="max-width: 100px;">
             <?php endif; ?>
 
-            <input type="submit" value="บันทึกการแก้ไข">
+            <div class="button-container">
+                <input type="submit" value="บันทึก">
+                <a href="display_information.php" class="cancel-button">ยกเลิก</a>
+            </div>
         </form>
     </div>
 </body>
