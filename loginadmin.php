@@ -1,27 +1,27 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <?php 
+<?php
+session_start();
 
-    // เชื่อมต่อกับฐานข้อมูล
-    $servername = "localhost";
-    $username = "root";  // ชื่อผู้ใช้ MySQL
-    $password = "";      // รหัสผ่าน MySQL (ถ้ามี)
-    $dbname = "project"; // ชื่อฐานข้อมูล
+// เชื่อมต่อกับฐานข้อมูล
+$servername = "localhost";
+$username = "root";  
+$password = "";      
+$dbname = "project"; 
 
-    // สร้างการเชื่อมต่อ
-    $conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-    // ตรวจสอบการเชื่อมต่อ
-    if ($conn->connect_error) {
-        die("เชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);
-    }
+if ($conn->connect_error) {
+    die("เชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);
+}
 
-    // ตรวจสอบการส่งฟอร์มล็อกอิน
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $a_user = $_POST['a_user'];
-        $a_pws = $_POST['a_pws'];
+// ตรวจสอบการส่งฟอร์มล็อกอิน
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $a_user = trim($_POST['a_user']);
+    $a_pws = trim($_POST['a_pws']);
 
+    // ตรวจสอบว่าชื่อผู้ใช้และรหัสผ่านไม่เป็นค่าว่าง
+    if (empty($a_user) || empty($a_pws)) {
+        $error_message = "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
+    } else {
         // ค้นหาข้อมูลผู้ดูแลในฐานข้อมูล
         $sql = "SELECT * FROM admin WHERE a_user = ? AND a_pws = ?";
         $stmt = $conn->prepare($sql);
@@ -38,13 +38,17 @@
             // ล็อกอินไม่สำเร็จ
             $error_message = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
         }
-
-        $stmt->close();
     }
 
-    $conn->close();
-    ?>
+    $stmt->close();
+}
 
+$conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เข้าสู่ระบบผู้ดูแลระบบ</title>
