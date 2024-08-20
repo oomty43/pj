@@ -25,9 +25,13 @@ function getPrefix($s_pna) {
     }
 }
 
-// ฟังก์ชั่นแปลงค่าสถานะนักศึกษา
+// ฟังก์ชั่นแปลงค่าสถานะนักศึกษาเป็นปุ่ม
 function getStudentStatus($s_stat) {
-    return $s_stat == 1 ? "ยังคงศึกษาอยู่" : "จบการศึกษาแล้ว";
+    if ($s_stat == 1) {
+        return "<button style='background-color: green; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>ยังคงศึกษาอยู่</button>";
+    } else {
+        return "<button style='background-color: blue; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>จบการศึกษาแล้ว</button>";
+    }
 }
 ?>
 
