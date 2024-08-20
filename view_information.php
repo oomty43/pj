@@ -103,7 +103,7 @@ $conn->close();
             <p><strong>วันที่ลงข่าว:</strong> <?php echo htmlspecialchars($row['i_date']); ?></p>
         </div>
         <div class="back-link">
-            <a href="display_information.php">กลับหน้ารายการข่าวสาร</a>
+            <a href="display_information.php">กลับหน้าหลัก</a>
         </div>
     </div>
 </body>

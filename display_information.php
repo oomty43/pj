@@ -73,6 +73,7 @@ $result = $conn->query($sql);
         <div class="add-buttons">
             <a href="add_information.php">เพิ่มข่าวสาร</a>
             <a href="add_info_type.php">เพิ่มประเภทข่าวสาร</a>
+            <a href="mainadmin.php">หน้าหลัก</a>
         </div>
         <table>
             <thead>

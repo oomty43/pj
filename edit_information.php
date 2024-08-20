@@ -29,7 +29,6 @@ if (isset($_GET['id'])) {
         $i_head = $row['i_head'];
         $i_deltail = $row['i_deltail'];
         $itype_id = $row['itype_id'];
-        $i_date = $row['i_date'];
         $i_cover = $row['i_cover'];
     } else {
         echo "ไม่พบข้อมูลข่าวสาร";
@@ -54,21 +53,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // ตรวจสอบว่าเป็นไฟล์ภาพหรือไม่
         $check = getimagesize($_FILES["i_cover"]["tmp_name"]);
-        if($check !== false) {
+        if ($check !== false) {
             if (move_uploaded_file($_FILES["i_cover"]["tmp_name"], $target_file)) {
                 $i_cover = $target_file;
             } else {
                 echo "เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ";
+                $i_cover = null;
             }
         } else {
             echo "ไฟล์ที่อัปโหลดไม่ใช่รูปภาพ";
+            $i_cover = null;
         }
     }
 
+    // ตั้งค่าเวลาปัจจุบันในฟิลด์ i_date
+    $current_time = date("Y-m-d H:i:s");
+
     // อัปเดตข้อมูลในฐานข้อมูล
-    $sql = "UPDATE information SET i_head = ?, i_deltail = ?, itype_id = ?, i_cover = ? WHERE i_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssisi", $i_head, $i_deltail, $itype_id, $i_cover, $i_id);
+    if ($i_cover) {
+        $sql = "UPDATE information SET i_head = ?, i_deltail = ?, itype_id = ?, i_cover = ?, i_date = ? WHERE i_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssisii", $i_head, $i_deltail, $itype_id, $i_cover, $current_time, $i_id);
+    } else {
+        $sql = "UPDATE information SET i_head = ?, i_deltail = ?, itype_id = ?, i_date = ? WHERE i_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssisi", $i_head, $i_deltail, $itype_id, $current_time, $i_id);
+    }
 
     if ($stmt->execute()) {
         // บันทึกข้อมูลเรียบร้อยแล้ว ให้กลับไปยังหน้า display_information.php

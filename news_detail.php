@@ -18,6 +18,30 @@ if ($conn->connect_error) {
 // รับ ID ของข่าวสารจาก URL
 $i_id = isset($_GET['i_id']) ? (int)$_GET['i_id'] : 0;
 
+// ฟังก์ชันสำหรับแปลงเดือนเป็นภาษาไทย
+function thai_date($date) {
+    $thai_months = [
+        "01" => "มกราคม",
+        "02" => "กุมภาพันธ์",
+        "03" => "มีนาคม",
+        "04" => "เมษายน",
+        "05" => "พฤษภาคม",
+        "06" => "มิถุนายน",
+        "07" => "กรกฎาคม",
+        "08" => "สิงหาคม",
+        "09" => "กันยายน",
+        "10" => "ตุลาคม",
+        "11" => "พฤศจิกายน",
+        "12" => "ธันวาคม"
+    ];
+
+    $year = substr($date, 0, 4) + 543; // แปลงปีเป็น พ.ศ.
+    $month = $thai_months[substr($date, 5, 2)]; // หาชื่อเดือนจากฟังก์ชันข้างต้น
+    $day = substr($date, 8, 2); // ดึงวันที่ออกมา
+
+    return "$day $month $year";
+}
+
 // ดึงข้อมูลข่าวสารจากฐานข้อมูลตาม ID
 $sql = "SELECT i_head, i_deltail, i_cover, i_date FROM information WHERE i_id = ?";
 $stmt = $conn->prepare($sql);
@@ -27,6 +51,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $news_item = $result->fetch_assoc();
+    $thai_date = thai_date($news_item['i_date']); // แปลงวันที่เป็นภาษาไทย
 } else {
     echo "ไม่พบข้อมูลข่าวสาร";
     exit();
@@ -59,8 +84,9 @@ $conn->close();
         }
         .news-cover {
             width: 100%;
-            max-height: 500px;
-            object-fit: cover;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
             border-radius: 5px;
             margin-bottom: 20px;
         }
@@ -79,6 +105,10 @@ $conn->close();
             color: #333;
             line-height: 1.6;
         }
+        .back-link-container {
+            text-align: center; /* จัดตำแหน่งปุ่มให้อยู่ตรงกลาง */
+            margin-top: 20px;
+        }
         .back-link {
             display: inline-block;
             padding: 10px 20px;
@@ -86,7 +116,6 @@ $conn->close();
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 20px;
         }
         .back-link:hover {
             background-color: #0056b3;
@@ -94,15 +123,20 @@ $conn->close();
     </style>
 </head>
 <body>
+    
+    <!-- Banner -->
+    <img src="uploads/banner.jpg" alt="Banner" class="banner">
 
     <div class="container">
         <img src="uploads/<?php echo htmlspecialchars($news_item['i_cover']); ?>" alt="ข่าวสาร" class="news-cover">
         <div class="news-title"><?php echo htmlspecialchars($news_item['i_head']); ?></div>
-        <div class="news-date"><?php echo htmlspecialchars($news_item['i_date']); ?></div>
+        <div class="news-date"><?php echo htmlspecialchars($thai_date); ?></div>
         <div class="news-detail">
             <?php echo nl2br(htmlspecialchars($news_item['i_deltail'])); ?>
         </div>
-        <a href="mainstd.php" class="back-link">กลับไปที่หน้าหลัก</a>
+        <div class="back-link-container">
+            <a href="mainstd.php" class="back-link">กลับไปที่หน้าหลัก</a>
+        </div>
     </div>
 
 </body>

@@ -1,11 +1,9 @@
-
-
 <?php
 session_start();
 // เชื่อมต่อกับฐานข้อมูล
 include 'db_connect.php';
 $conn = new mysqli($servername, $username, $password, $dbname);
-if(!isset($_SESSION['a_user'])){
+if (!isset($_SESSION['a_user'])) {
     echo "
         <script>
             alert('กรุณา login');
@@ -18,9 +16,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // ตัวแปรที่รับค่าจากฟอร์ม
     $i_head = $_POST['i_head'];
     $i_deltail = $_POST['i_deltail'];
-    $i_date = $_POST['i_date'];
     $itype_id = $_POST['itype_id'];
     $a_user = $_POST['a_user'];
+
+    // ดึงวันที่ปัจจุบัน
+    $i_date = date("Y-m-d H:i:s"); // รูปแบบเวลาจะเป็นปี-เดือน-วัน ชั่วโมง:นาที:วินาที
+
     // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
     if ($_FILES['i_cover']['name']) {
         $i_cover = $_FILES['i_cover']['name'];
@@ -33,30 +34,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $i_cover = ""; // ถ้าไม่ได้อัปโหลดรูปภาพ
     }
 
-    // เชื่อมต่อกับฐานข้อมูล
-
-
     // ตรวจสอบการเชื่อมต่อ
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
     // เตรียมคำสั่ง SQL เพื่อเพิ่มข้อมูล
-    $sql = "INSERT INTO information (i_head, i_deltail, i_cover, itype_id,i_date,a_id)
+    $sql = "INSERT INTO information (i_head, i_deltail, i_cover, itype_id, i_date, a_id)
             VALUES ('$i_head', '$i_deltail', '$i_cover', '$itype_id', '$i_date','$a_user')";
 
     if ($conn->query($sql) === TRUE) {
-
         echo "<script>
         alert('บันทึกข้อมูลเรียบร้อยแล้ว');
-      
       </script>";
-
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-
-   
 }
 ?>
 
@@ -89,7 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         input[type=text],
         textarea,
-        input[type=date],
         input[type=file] {
             width: 100%;
             padding: 10px;
@@ -128,20 +120,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <label for="i_cover">รูปปก:</label>
             <input type="file" id="i_cover" name="i_cover" accept="image/*" required>
-            <?php $sql = "select * from info_type";
-            $result = $conn->query($sql);
 
+            <?php 
+            $sql = "SELECT * FROM info_type";
+            $result = $conn->query($sql);
             ?>
-            <select name="itype_id" id="">
-                <?php
-                foreach ($result as $row):
-                    ?>
-                    <option value="<?php echo $row['itype_id'] ?>"><?php echo $row['itype_name']; ?></option>
+            <label for="itype_id">ประเภทข่าวสาร:</label>
+            <select name="itype_id" id="itype_id" required>
+                <?php foreach ($result as $row): ?>
+                    <option value="<?php echo $row['itype_id']; ?>"><?php echo $row['itype_name']; ?></option>
                 <?php endforeach; ?>
             </select>
 
-            <label for="i_date">วันที่:</label>
-            <input type="date" id="i_date" name="i_date" required>
             <input type="hidden" name="a_user" value="<?php echo $_SESSION['a_user']; ?>">
             <input type="submit" value="เพิ่มข้อมูล">
         </form>

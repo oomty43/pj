@@ -16,7 +16,7 @@ $result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,25 +24,26 @@ $result = $conn->query($sql);
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #181818; /* สีพื้นหลังที่เข้ม */
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
         .container {
-            background-color: #fff;
+            background-color: #333; /* สีพื้นหลังของกล่อง */
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
             width: 90%;
-            max-width: 800px;
+            max-width: 600px; /* จำกัดขนาดความกว้าง */
+            color: #fff; /* สีตัวอักษร */
         }
         h2 {
             text-align: center;
-            color: #333;
+            color: #ffa500; /* สีของหัวข้อ */
         }
         a.button {
             display: inline-block;
@@ -53,41 +54,50 @@ $result = $conn->query($sql);
             text-decoration: none;
             border-radius: 4px;
             text-align: center;
+            transition: background-color 0.3s ease; /* เพิ่มการเคลื่อนไหว */
+        }
+        a.button:hover {
+            background-color: #45a049;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 10px;
         }
         table, th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #555; /* สีของเส้นตาราง */
         }
         th, td {
             padding: 12px;
             text-align: left;
+            color: #ddd; /* สีตัวอักษรในตาราง */
         }
         th {
             background-color: #4CAF50;
             color: white;
         }
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #2a2a2a; /* สีพื้นหลังของแถวคู่ */
         }
         tr:hover {
-            background-color: #f1f1f1;
+            background-color: #383838; /* สีพื้นหลังเมื่อเมาส์ชี้ */
         }
         .actions a {
-            color: #007BFF;
+            color: #ffa500; /* สีของลิงก์ */
             text-decoration: none;
+            transition: color 0.3s ease;
         }
         .actions a:hover {
+            color: #ff6347; /* สีของลิงก์เมื่อเมาส์ชี้ */
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Admin Table</h2>
+        <h2>รายชื่อผู้ดูแลระบบ</h2>
         <a href="add_admin.php" class="button">เพิ่มข้อมูลผู้ดูแลระบบ</a>
+        <a href="mainadmin.php" class="button">หน้าหลัก</a>
         <table>
             <tr>
                 <th>Username</th>
