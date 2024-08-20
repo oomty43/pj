@@ -6,13 +6,14 @@ include 'std_con.php';
 
 $s_id = $_SESSION['s_id'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $its_name = $_POST['its_name'];
-    $its_date = $_POST['its_date'];
-    $its_file = $_FILES['its_file'];
+    $ce_na = $_POST['ce_na'];
+    $og_na = $_POST['og_na'];
+    $ce_year = $_POST['ce_year'];
+    $ce_file = $_FILES['ce_file'];
 
     // จัดการกับการอัพโหลดไฟล์
     $target_dir = "uploads/";
-    $target_file = $target_dir . basename($its_file["name"]);
+    $target_file = $target_dir . basename($ce_file["name"]);
     $uploadOk = 1;
     $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
@@ -26,14 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($uploadOk == 0) {
         echo "ขออภัย, ไฟล์ของคุณไม่สามารถอัพโหลดได้.";
     } else {
-        if (move_uploaded_file($its_file["tmp_name"], $target_file)) {
-            $sql = "INSERT INTO its_history (its_name, its_date, its_file, s_id) VALUES (?, ?, ?, ?)";
+        if (move_uploaded_file($ce_file["tmp_name"], $target_file)) {
+            $sql = "INSERT INTO certi (ce_na, og_na, ce_year, ce_file, s_id) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssi", $its_name, $its_date, $target_file, $s_id);
-
+            $stmt->bind_param("ssssi", $ce_na, $og_na, $ce_year, $target_file, $s_id);
 
             if ($stmt->execute()) {
-                echo "เพิ่มข้อมูลฝึกงานเรียบร้อยแล้ว";
+                echo "เพิ่มข้อมูลใบรับรองเรียบร้อยแล้ว";
                 header("Location: mainstd.php"); // เปลี่ยนเส้นทางไปยังหน้าหลักหลังจากเพิ่มข้อมูลสำเร็จ
                 exit;
             } else {
@@ -53,7 +53,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เพิ่มข้อมูลการฝึกงาน</title>
+    <title>เพิ่มข้อมูลใบรับรอง</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -85,55 +85,43 @@ $conn->close();
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn-save,
-        .btn-cancel {
-            display: inline-block;
-            width: 48%;
+        .btn-submit {
+            width: 100%;
             padding: 10px;
+            background-color: #28a745;
             color: white;
-            text-align: center;
             border: none;
             border-radius: 5px;
-            text-decoration: none;
             font-size: 16px;
+            cursor: pointer;
         }
-        .btn-save {
-            background-color: #28a745;
-        }
-        .btn-save:hover {
+        .btn-submit:hover {
             background-color: #218838;
-        }
-        .btn-cancel {
-            background-color: #dc3545;
-        }
-        .btn-cancel:hover {
-            background-color: #c82333;
         }
     </style>
 </head>
 <body>
-
     <div class="form-container">
-        <h2>เพิ่มข้อมูลการฝึกงาน</h2>
-        <form action="add_intern.php" method="POST" enctype="multipart/form-data">
+        <h2>เพิ่มข้อมูลใบรับรอง</h2>
+        <form action="add_cert.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="its_name">ชื่อที่ฝึกงาน:</label>
-                <input type="text" id="its_name" name="its_name" required>
-            </div>
-            <div class="form-group">
-                <label for="its_date">ปีที่ฝึกงาน:</label>
-                <input type="number" id="its_date" name="its_date" required>
+                <label for="ce_na">ชื่อใบรับรอง</label>
+                <input type="text" id="ce_na" name="ce_na" required>
             </div>
             <div class="form-group">
-                <label for="its_file">อัพโหลดไฟล์:</label>
-                <input type="file" id="its_file" name="its_file" required>
+                <label for="og_na">หน่วยงานที่รับรอง</label>
+                <input type="text" id="og_na" name="og_na" required>
             </div>
-            <div class="btn-container">
-                <button type="submit" class="btn-save">บันทึก</button>
-                <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
+            <div class="form-group">
+                <label for="ce_year">ปีที่ได้รับ</label>
+                <input type="number" id="ce_year" name="ce_year" required>
             </div>
+            <div class="form-group">
+                <label for="ce_file">เอกสารแนบ</label>
+                <input type="file" id="ce_file" name="ce_file" accept=".pdf,.doc,.docx" required>
+            </div>
+            <button type="submit" class="btn-submit">บันทึก</button>
         </form>
     </div>
-
 </body>
 </html>
