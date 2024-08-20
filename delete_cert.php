@@ -11,12 +11,12 @@ if (isset($_GET['ce_id'])) {
     $stmt->bind_param("i", $ce_id);
 
     if ($stmt->execute()) {
-        echo "<script>alert('ลบข้อมูลใบรับรองสำเร็จ'); window.location='mainstd.php';</script>";
+        echo "<script>alert('ลบข้อมูลใบรับรองสำเร็จ'); window.location='stdaward.php';</script>";
     } else {
-        echo "<script>alert('เกิดข้อผิดพลาดในการลบข้อมูล'); window.location='mainstd.php';</script>";
+        echo "<script>alert('เกิดข้อผิดพลาดในการลบข้อมูล'); window.location='stdaward.php';</script>";
     }
 } else {
-    echo "<script>alert('ไม่มีข้อมูลที่ต้องการลบ'); window.location='mainstd.php';</script>";
+    echo "<script>alert('ไม่มีข้อมูลที่ต้องการลบ'); window.location='stdaward.php';</script>";
 }
 
 $conn->close();

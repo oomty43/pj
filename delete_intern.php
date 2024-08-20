@@ -20,6 +20,6 @@ if (isset($_GET['its_id'])) {
 }
 
 $conn->close();
-header("Location: mainstd.php");
+header("Location: stdaward.php");
 exit();
 ?>

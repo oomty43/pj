@@ -39,68 +39,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .form-container {
-            width: 50%;
-            margin: 50px auto;
+            width: 400px;
             padding: 20px;
             background-color: white;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
         }
         .form-group {
             margin-bottom: 15px;
+            text-align: left;
         }
         .form-group label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .form-group input[type="text"] {
+        .form-group input[type="text"],
+        .form-group input[type="date"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn-save {
-            display: inline-block;
+        .form-group .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group button,
+        .form-group a.btn-cancel {
             width: 48%;
             padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-save {
             background-color: #28a745;
             color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
         }
         .btn-cancel {
-            display: inline-block;
-            width: 48%;
-            padding: 10px;
             background-color: #dc3545;
             color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
             text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <form action="edit_eh.php?eh_id=<?php echo $eh_id; ?>" method="POST">
-        <label>ชื่อสถานที่ศึกษา:</label>
-        <input type="text" name="eh_na" value="<?php echo $row['eh_na']; ?>"><br>
-        <label>ระดับการศึกษา:</label>
-        <input type="text" name="eh_level" value="<?php echo $row['eh_level']; ?>"><br>
-        <label>ปีที่จบการศึกษา:</label>
-        <input type="date" name="eh_end" value="<?php echo $row['eh_end']; ?>"><br>
-        <button type="submit">บันทึก</button>
-        <a href="mainstd.php">ยกเลิก</a>
-    </form>
+    <div class="form-container">
+        <h2>แก้ไขประวัติการศึกษา</h2>
+        <form action="edit_eh.php?eh_id=<?php echo $eh_id; ?>" method="POST">
+            <div class="form-group">
+                <label for="eh_na">ชื่อสถานที่ศึกษา:</label>
+                <input type="text" id="eh_na" name="eh_na" value="<?php echo $row['eh_na']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="eh_level">ระดับการศึกษา:</label>
+                <input type="text" id="eh_level" name="eh_level" value="<?php echo $row['eh_level']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="eh_end">ปีที่จบการศึกษา:</label>
+                <input type="date" id="eh_end" name="eh_end" value="<?php echo $row['eh_end']; ?>" required>
+            </div>
+            <div class="form-group buttons">
+                <button type="submit" class="btn-save">บันทึก</button>
+                <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
 <?php

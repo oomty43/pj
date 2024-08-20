@@ -20,7 +20,7 @@ if (isset($_GET['c_id'])) {
     }
 
     // เปลี่ยนเส้นทางกลับไปยังหน้าเดิม
-    header("Location: stdprofile.php");
+    header("Location: stdaward.php");
     exit();
 } else {
     echo "ไม่พบข้อมูลที่ต้องการลบ";
