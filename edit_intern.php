@@ -120,6 +120,8 @@ $conn->close();
     </style>
 </head>
 <body>
+
+<div class="form-container">
     <h2>แก้ไขข้อมูลการฝึกงาน</h2>
     <form action="" method="POST" enctype="multipart/form-data">
         <div class="form-group">

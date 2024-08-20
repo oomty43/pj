@@ -364,7 +364,7 @@ if ($result->num_rows > 0) {
                 echo "<a class='btn-edit' href='edit_work.php?w_id={$row['w_id']}'>แก้ไข</a>";
                 echo "</td>";
                 echo "<td>";
-                echo "<a class='btn-delete' href='delete_program.php?w_id={$row['w_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "<a class='btn-delete' href='delete_work.php?w_id={$row['w_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
                 echo "</td>";
                 echo "</tr>";
                 echo "</tr>";
