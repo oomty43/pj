@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("si", $pg_na, $s_id);
     
     if ($stmt->execute()) {
-        echo "<script>alert('เพิ่มข้อมูลทักษะการเขียนโปรแกรมสำเร็จ!'); window.location.href='mainstd.php';</script>";
+        echo "<script>alert('เพิ่มข้อมูลทักษะการเขียนโปรแกรมสำเร็จ!'); window.location.href='stdaward.php';</script>";
     } else {
         echo "<script>alert('เกิดข้อผิดพลาดในการเพิ่มข้อมูล! กรุณาลองใหม่');</script>";
     }
@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" id="pg_na" name="pg_na" required>
             </div>
             <button type="submit" class="btn-submit">บันทึก</button>
-            <a href="mainstd.php" class="btn-cancel">ยกเลิก</a>
+            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
         </form>
     </div>
 

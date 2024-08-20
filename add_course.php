@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sssi", $c_na, $c_add, $c_date, $s_id);
 
     if ($stmt->execute()) {
-        echo "<script>alert('เพิ่มข้อมูลสำเร็จ!'); window.location.href='stdprofile.php';</script>";
+        echo "<script>alert('เพิ่มข้อมูลสำเร็จ!'); window.location.href='stdaward.php';</script>";
     } else {
         echo "เกิดข้อผิดพลาด: " . $stmt->error;
     }

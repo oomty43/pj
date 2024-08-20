@@ -15,7 +15,7 @@ if (isset($_GET['sk_id'])) {
 
     if ($stmt->execute()) {
         echo "ลบข้อมูลสำเร็จ!";
-        header("Location: mainstd.php");
+        header("Location: stdaward.php");
         exit();
     } else {
         echo "เกิดข้อผิดพลาดในการลบข้อมูล";

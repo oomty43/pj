@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         echo "แก้ไขข้อมูลเรียบร้อยแล้ว";
-        header("Location: stdprofile.php");
+        header("Location: stdaward.php");
         exit();
     } else {
         echo "เกิดข้อผิดพลาดในการแก้ไขข้อมูล: " . $conn->error;
@@ -125,7 +125,7 @@ $conn->close();
                 <input type="date" id="c_date" name="c_date" value="<?php echo $c_date; ?>" required>
             </div>
             <button type="submit" class="btn-save">บันทึก</button>
-            <a href="stdprofile.php" class="btn-cancel">ยกเลิก</a>
+            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
         </form>
     </div>
 
