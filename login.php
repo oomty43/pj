@@ -45,8 +45,8 @@ $conn->close();
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #121212; /* พื้นหลังสีดำ */
-            color: #f0f0f0; /* ตัวอักษรสีขาว */
+            background-color: #f0f0f0; /* พื้นหลังสีอ่อน */
+            color: #333; /* ตัวอักษรสีเข้ม */
             margin: 0;
             padding: 0;
             display: flex;
@@ -56,16 +56,15 @@ $conn->close();
         }
         .container {
             width: 360px;
-            background-color: #1e1e1e; /* พื้นหลังกล่องสีเทาเข้ม */
+            background-color: #ffffff; /* พื้นหลังกล่องสีขาว */
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: left;
-            position: relative;
         }
         h2 {
             text-align: center;
-            color: #fbc02d; /* สีเหลือง */
+            color: #007BFF; /* สีน้ำเงิน */
             margin-bottom: 20px;
             font-weight: 600;
         }
@@ -74,16 +73,16 @@ $conn->close();
             padding: 10px;
             margin: 10px 0;
             box-sizing: border-box;
-            border: 1px solid #333; /* ขอบสีเทาเข้ม */
+            border: 1px solid #ccc; /* ขอบสีเทา */
             border-radius: 5px;
             font-size: 14px;
-            color: #f0f0f0; /* ตัวอักษรสีขาว */
-            background-color: #333; /* พื้นหลังกล่องข้อความสีเทาเข้ม */
+            color: #333; /* ตัวอักษรสีเข้ม */
+            background-color: #f9f9f9; /* พื้นหลังกล่องข้อความสีอ่อน */
         }
         input[type=submit] {
             width: 100%;
-            background-color: #fbc02d; /* สีเหลือง */
-            color: #121212; /* ตัวอักษรสีดำ */
+            background-color: #007BFF; /* สีน้ำเงิน */
+            color: white; /* ตัวอักษรสีขาว */
             padding: 12px;
             border: none;
             border-radius: 5px;
@@ -93,7 +92,7 @@ $conn->close();
             transition: background-color 0.3s ease;
         }
         input[type=submit]:hover {
-            background-color: #f9a825; /* สีเหลืองเข้ม */
+            background-color: #0056b3; /* สีน้ำเงินเข้มเมื่อโฮเวอร์ */
         }
         .register-link, .guest-login, .admin-login {
             text-align: center;
@@ -101,7 +100,7 @@ $conn->close();
         }
         .register-link a, .guest-login a, .admin-login a {
             text-decoration: none;
-            color: #fbc02d; /* สีเหลือง */
+            color: #007BFF; /* สีน้ำเงิน */
             font-size: 14px;
         }
         .register-link a:hover, .guest-login a:hover, .admin-login a:hover {

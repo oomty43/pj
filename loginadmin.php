@@ -3,38 +3,41 @@ session_start();
 
 // เชื่อมต่อกับฐานข้อมูล
 $servername = "localhost";
-$username = "root";  // ชื่อผู้ใช้ MySQL
-$password = "";      // รหัสผ่าน MySQL (ถ้ามี)
-$dbname = "project"; // ชื่อฐานข้อมูล
+$username = "root";  
+$password = "";      
+$dbname = "project"; 
 
-// สร้างการเชื่อมต่อ
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
     die("เชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);
 }
 
 // ตรวจสอบการส่งฟอร์มล็อกอิน
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $a_user = $_POST['a_user'];
-    $a_pws = $_POST['a_pws'];
+    $a_user = trim($_POST['a_user']);
+    $a_pws = trim($_POST['a_pws']);
 
-    // ค้นหาข้อมูลผู้ดูแลในฐานข้อมูล
-    $sql = "SELECT * FROM admin WHERE a_user = ? AND a_pws = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $a_user, $a_pws);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows == 1) {
-        // เข้าสู่ระบบสำเร็จ
-        $_SESSION['a_user'] = $a_user;
-        header("Location: mainadmin.php"); // ไปยังหน้า mainadmin.php หลังจากล็อกอินสำเร็จ
-        exit();
+    // ตรวจสอบว่าชื่อผู้ใช้และรหัสผ่านไม่เป็นค่าว่าง
+    if (empty($a_user) || empty($a_pws)) {
+        $error_message = "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
     } else {
-        // ล็อกอินไม่สำเร็จ
-        $error_message = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+        // ค้นหาข้อมูลผู้ดูแลในฐานข้อมูล
+        $sql = "SELECT * FROM admin WHERE a_user = ? AND a_pws = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $a_user, $a_pws);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 1) {
+            // เข้าสู่ระบบสำเร็จ
+            $_SESSION['a_user'] = $a_user;
+            header("Location: mainadmin.php"); // ไปยังหน้า mainadmin.php หลังจากล็อกอินสำเร็จ
+            exit();
+        } else {
+            // ล็อกอินไม่สำเร็จ
+            $error_message = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+        }
     }
 
     $stmt->close();
@@ -106,6 +109,16 @@ $conn->close();
             font-size: 14px;
             margin-top: 10px;
         }
+        .back-link {
+            margin-top: 15px; /* เพิ่มระยะห่าง */
+            display: block;
+            color: #fbc02d; /* สีเหลือง */
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline; /* ขีดเส้นใต้เมื่อชี้ */
+        }
     </style>
 </head>
 <body>
@@ -121,6 +134,7 @@ $conn->close();
             <div class="form-group">
                 <input type="submit" value="เข้าสู่ระบบ">
             </div>
+            <a href="login.php" class="back-link">กลับไปยังหน้าเข้าสู่ระบบ</a>
             <?php
             if (isset($error_message)) {
                 echo '<div class="error-message">' . $error_message . '</div>';
