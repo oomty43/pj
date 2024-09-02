@@ -111,13 +111,13 @@ $conn->close();
         .back-link {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #d35400; /* สีส้มจากโลโก้ */
+            background-color: #E76324; /* สีปุ่มตามที่กำหนด */
             color: white;
             text-decoration: none;
             border-radius: 5px;
         }
         .back-link:hover {
-            background-color: #e67e22; /* สีส้มอ่อน */
+            background-color: #d35400; /* สีเมื่อเมาส์ชี้ */
         }
     </style>
 </head>

@@ -81,7 +81,7 @@ $conn->close();
         }
         input[type=submit] {
             width: 100%;
-            background-color: #FF5722; /* ส้มอ่อน */
+            background-color: #5a5a5a; /* สีเทาเข้ม */
             color: white; /* ตัวอักษรสีขาว */
             padding: 12px;
             border: none;
@@ -92,7 +92,7 @@ $conn->close();
             transition: background-color 0.3s ease;
         }
         input[type=submit]:hover {
-            background-color: #E64A19; /* ส้มเข้มเมื่อโฮเวอร์ */
+            background-color: #3e3e3e; /* สีเทาเข้มกว่าเมื่อโฮเวอร์ */
         }
         .register-link, .guest-login, .admin-login {
             text-align: center;

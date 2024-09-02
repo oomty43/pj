@@ -189,7 +189,7 @@ if ($result->num_rows > 0) {
 <body>
 
     <!-- Banner -->
-    <img src="uploads/banner.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner1.jpg" alt="Banner" class="banner">
 
     <div class="nav-buttons">
         <a href="mainstd.php">หน้าหลัก</a>

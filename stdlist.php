@@ -129,7 +129,7 @@ function getStudentStatusButton($s_stat) {
         .search-form input[type="submit"] {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #007bff;
+            background-color: #E76324;
             color: #ffffff;
             border: none;
             border-radius: 4px;
@@ -149,7 +149,7 @@ function getStudentStatusButton($s_stat) {
             <form method="post">
                 <input type="text" name="search" placeholder="ค้นหาตามรหัสนักศึกษา, ชื่อ, นามสกุล" value="<?php echo htmlspecialchars($search); ?>">
                 <select name="status">
-                    <option value="">-- เลือกสถานะ --</option>
+                    <option value="">-- ทั้งหมด --</option>
                     <option value="1" <?php echo ($statusFilter === '1') ? 'selected' : ''; ?>>ยังคงศึกษาอยู่</option>
                     <option value="0" <?php echo ($statusFilter === '0') ? 'selected' : ''; ?>>จบการศึกษาแล้ว</option>
                 </select>

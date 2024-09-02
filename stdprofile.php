@@ -139,7 +139,7 @@ $conn->close();
 <body>
 
     <!-- Banner -->
-    <img src="uploads/banner.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner1.jpg" alt="Banner" class="banner">
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
