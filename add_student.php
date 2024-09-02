@@ -67,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $conn->close();
 ?>
 
-?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -137,7 +136,7 @@ $conn->close();
             background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
         }
         a.btn-cancel {
-            background-color: #dc3545; /* สีแดง */
+            background-color: #2196F3; /* สีน้ำเงิน */
             color: white;
         }
         a.btn-cancel:hover {
@@ -327,7 +326,7 @@ $conn->close();
 
             <div class="form-group">
                 <button type="submit" class="btn-save">บันทึก</button>
-                <a href="display_student.php" class="btn-cancel">ยกเลิก</a>
+                <a href="display_student.php" class="btn-cancel">ย้อนกลับ</a>
             </div>
         </form>
     </div>

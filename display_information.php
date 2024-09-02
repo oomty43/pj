@@ -124,10 +124,10 @@ $result = $conn->query($sql);
 </head>
 <body>
     <div class="container">
-        <h2>ข้อมูลข่าวสาร</h2>
+        <h2>ข้อมูลข่าวประชาสัมพันธ์</h2>
         <div class="add-buttons">
+            <a href="add_info_type.php">เพิ่มประเภทข่าว</a>
             <a href="add_information.php">เพิ่มข่าวสาร</a>
-            <a href="add_info_type.php">เพิ่มประเภทข่าวสาร</a>
             <a href="mainadmin.php">หน้าหลัก</a>
         </div>
         <table>
@@ -158,7 +158,7 @@ $result = $conn->query($sql);
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='5'>ไม่พบข้อมูลข่าวสาร</td></tr>";
+                    echo "<tr><td colspan='5'>ไม่พบข้อมูลข่าว</td></tr>";
                 }
                 ?>
             </tbody>

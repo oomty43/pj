@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $row = $result->fetch_assoc();
 
             // ตรวจสอบสถานะของผู้ใช้
-            if ($row['status'] == 0) {
+            if ($row['ast'] == 0) {
                 $error_message = "คุณไม่มีสิทธิ์ในการเข้าถึงระบบ";
             } else {
                 // เข้าสู่ระบบสำเร็จ
