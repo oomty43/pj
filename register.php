@@ -18,9 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $s_la = $_POST['s_la'];
     $s_email = $_POST['s_email'];
 
-    // ตรวจสอบว่ารหัสนักศึกษามีความยาว 12 ตัวอักษรหรือไม่
-    if (strlen($s_id) != 12 || !ctype_digit($s_id)) {
-        $error_message = "<span style='color: #e53935; font-size: 12px;'>รหัสนักศึกษา ต้องมีความยาว 12 ตัวอักษรและเป็นตัวเลขเท่านั้น</span>";
+    // ตรวจสอบว่ารหัสนักศึกษามีความยาว 12 ตัวอักษรและมี "0641" ในตำแหน่งที่ 7-10
+    if (strlen($s_id) != 12 || !ctype_digit($s_id) || substr($s_id, 6, 4) !== "0641") {
+        $error_message = "<span style='color: #e53935; font-size: 12px;'>รหัสนักศึกษาไม่ถูกต้อง</span>";
     } else {
         // ตรวจสอบว่ามีรหัสนักศึกษาในฐานข้อมูลอยู่แล้วหรือไม่
         $checkSql = "SELECT s_id FROM student WHERE s_id = ?";
@@ -62,8 +62,8 @@ $conn->close();
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4; /* พื้นหลังสีอ่อน */
-            color: #333; /* ตัวอักษรสีเข้ม */
+            background-color: #f4f4f4;
+            color: #333;
             margin: 0;
             padding: 0;
             display: flex;
@@ -73,7 +73,7 @@ $conn->close();
         }
         .container {
             width: 360px;
-            background-color: #ffffff; /* พื้นหลังกล่องสีขาว */
+            background-color: #ffffff;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -81,7 +81,7 @@ $conn->close();
         }
         h2 {
             text-align: center;
-            color: #007BFF; /* สีน้ำเงิน */
+            color: #007BFF;
             margin-bottom: 20px;
             font-weight: 600;
         }
@@ -90,16 +90,16 @@ $conn->close();
             padding: 10px;
             margin: 10px 0;
             box-sizing: border-box;
-            border: 1px solid #ccc; /* ขอบสีเทา */
+            border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 14px;
-            color: #333; /* ตัวอักษรสีเข้ม */
-            background-color: #f9f9f9; /* พื้นหลังกล่องข้อความสีอ่อน */
+            color: #333;
+            background-color: #f9f9f9;
         }
         input[type=submit] {
             width: 100%;
-            background-color: #28a745; /* สีเขียว */
-            color: white; /* ตัวอักษรสีขาว */
+            background-color: #28a745;
+            color: white;
             padding: 12px;
             border: none;
             border-radius: 5px;
@@ -109,7 +109,7 @@ $conn->close();
             transition: background-color 0.3s ease;
         }
         input[type=submit]:hover {
-            background-color: #218838; /* สีเขียวเข้มเมื่อโฮเวอร์ */
+            background-color: #218838;
         }
         .form-group {
             margin-bottom: 20px;
@@ -120,7 +120,7 @@ $conn->close();
         }
         .register-link a, .guest-login a, .admin-login a {
             text-decoration: none;
-            color: #007BFF; /* สีน้ำเงิน */
+            color: #007BFF;
             font-size: 14px;
         }
         .register-link a:hover, .guest-login a:hover, .admin-login a:hover {
@@ -129,7 +129,10 @@ $conn->close();
         .error-message {
             margin-bottom: 10px;
             text-align: center;
-            color: #e53935; /* สีแดง */
+            color: #e53935;
+        }
+        .required-field {
+            color: #e53935;
         }
     </style>
 </head>
@@ -147,19 +150,24 @@ $conn->close();
                 </select>
             </div>
             <div class="form-group">
+                <label for="s_id">รหัสนักศึกษา <span class="required-field">*</span></label>
                 <input type="text" name="s_id" placeholder="รหัสนักศึกษา" required pattern="\d{12}" title="กรุณากรอกรหัสนักศึกษา 12 ตัวอักษร">
             </div>
             <div class="form-group">
+                <label for="s_pws">รหัสผ่าน <span class="required-field">*</span></label>
                 <input type="password" name="s_pws" placeholder="รหัสผ่าน" required>
             </div>
             <div class="form-group">
-                <input type="text" name="s_na" placeholder="ชื่อ" required>
+                <label for="s_na">ชื่อ <span class="required-field">*</span></label>
+                <input type="text" id="s_na" name="s_na" placeholder="ชื่อ" required>
             </div>
             <div class="form-group">
-                <input type="text" name="s_la" placeholder="นามสกุล" required>
+                <label for="s_la">นามสกุล <span class="required-field">*</span></label>
+                <input type="text" id="s_la" name="s_la" placeholder="นามสกุล" required>
             </div>
             <div class="form-group">
-                <input type="email" name="s_email" placeholder="อีเมล" required>
+                <label for="s_email">อีเมล <span class="required-field">*</span></label>
+                <input type="email" id="s_email" name="s_email" placeholder="อีเมล" required>
             </div>
             <?php
             if (isset($error_message)) {
