@@ -236,9 +236,10 @@ $conn->close();
             <input type="text" id="s_address" name="s_address" value="<?php echo $s_address; ?>" required>
             </div>
             
-            <div class="form-group"> 
-            <label for="s_stat">สถานะนักศึกษา:</label>
-            <input type="text" id="s_stat" name="s_stat" value="<?php echo $s_stat; ?>" required>
+            <div class="form-group">
+                <label>สถานะ</label>
+                <input type="radio" name="s_stat" value="1" <?php echo $row['s_stat'] == 1 ? 'checked' : ''; ?>> ยังคงศึกษาอยู่
+                <input type="radio" name="s_stat" value="0" <?php echo $row['s_stat'] == 0 ? 'checked' : ''; ?>> จบการศึกษาแล้ว
             </div>
             
             <div class="form-group">
