@@ -185,6 +185,13 @@ function getStudentStatus($s_stat) {
             <a href="add_student.php">เพิ่มนักศึกษา</a>
             <a href="mainadmin.php">หน้าหลัก</a>
         </div>
+        <!-- ปุ่มอัปโหลดไฟล์ Excel -->
+    <form action="upload_excel.php" method="post" enctype="multipart/form-data" style="display:inline;">
+        <input type="file" name="excel_file" accept=".xlsx, .xls" required>
+        <input type="submit" value="เพิ่มนักศึกษาจาก Excel" name="upload_excel">
+    </form>
+    </div>
+
         <div class="search-bar">
             <form method="post">
                 <input type="text" name="search_query" placeholder="ค้นหารหัสนักศึกษา, ชื่อ, นามสกุล" value="<?php echo htmlspecialchars($search_query); ?>">
