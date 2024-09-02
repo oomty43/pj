@@ -1,35 +1,3 @@
-<?php
-session_start();
-
-// เชื่อมต่อกับฐานข้อมูล
-include 'db_connect.php';
-
-// ตรวจสอบการส่งข้อมูล POST
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // ตัวแปรที่รับค่าจากฟอร์ม
-    $itype_name = $_POST['itype_name'];
-
-    // สร้างการเชื่อมต่อ
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // ตรวจสอบการเชื่อมต่อ
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    // เตรียมคำสั่ง SQL เพื่อเพิ่มข้อมูล
-    $sql = "INSERT INTO info_type (itype_name) VALUES ('$itype_name')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "เพิ่มข้อมูลเรียบร้อยแล้ว";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
-    $conn->close();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -37,6 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เพิ่มประเภทข่าวสาร</title>
     <style>
+        /* คงไว้ตามโค้ดเดิม */
         body {
             font-family: Arial, sans-serif;
             background-color: #121212; /* สีพื้นหลังที่เข้ม */
@@ -97,8 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         input[type=submit]:hover {
             background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
         }
-        a.cancel-button {
-            background-color: #f44336; /* ปุ่มสีแดง */
+        a.cancel-button, a.back-button {
             color: white;
             padding: 12px 20px;
             text-decoration: none;
@@ -107,22 +75,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transition: background-color 0.3s ease;
             text-align: center;
             display: inline-block;
+            cursor: pointer;
+        }
+        a.cancel-button {
+            background-color: #f44336; /* ปุ่มสีแดง */
         }
         a.cancel-button:hover {
             background-color: #d32f2f; /* สีแดงเข้มเมื่อ hover */
         }
+        a.back-button {
+            background-color: #2196F3; /* ปุ่มสีน้ำเงิน */
+        }
+        a.back-button:hover {
+            background-color: #1e88e5; /* สีน้ำเงินเข้มเมื่อ hover */
+        }
     </style>
+    <script>
+        function resetForm() {
+            document.getElementById("addForm").reset(); // รีเซ็ตฟอร์ม
+        }
+    </script>
 </head>
 <body>
     <div class="container">
-        <h2>เพิ่มประเภทข่าวสาร</h2>
-        <form method="post" enctype="multipart/form-data">
+        <h2>เพิ่มประเภทข่าวประชาสัมพันธ์</h2>
+        <form id="addForm" method="post" enctype="multipart/form-data">
             <label for="itype_name">ประเภทข่าว:</label>
             <input type="text" id="itype_name" name="itype_name" required>
 
             <div class="button-container">
                 <input type="submit" value="เพิ่มข้อมูล">
-                <a href="display_information.php" class="cancel-button">ยกเลิก</a>
+                <a class="cancel-button" onclick="resetForm()">ยกเลิก</a>
+                <a href="display_information.php" class="back-button">ย้อนกลับ</a>
             </div>
         </form>
     </div>

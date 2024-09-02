@@ -136,11 +136,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-top: 10px;
             margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
         }
-        input[type="submit"]:hover, .cancel-button:hover {
+        input[type="submit"]:hover {
             background-color: #45a049;
         }
         .cancel-button {
-            background-color: #f44336;
+            background-color: #2196F3; /* สีน้ำเงินของปุ่มยกเลิก */
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .cancel-button:hover {
+            background-color: #1e88e5; /* สีน้ำเงินเข้มเมื่อ hover */
         }
         .button-container {
             display: flex;

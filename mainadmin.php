@@ -26,7 +26,7 @@ if (isset($_GET['logout'])) {
     <title>แดชบอร์ดผู้ดูแลระบบ</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif; 
             background-color: #121212; /* พื้นหลังสีดำ */
             margin: 0;
             padding: 0;
@@ -91,7 +91,7 @@ if (isset($_GET['logout'])) {
     </style>
     <script>
         function checkAccess() {
-            var status = <?php echo $_SESSION['status']; ?>;
+            var status = <?php echo $_SESSION['ast']; ?>;
             if (status == 1) {
                 alert('คุณไม่มีสิทธิ์เข้าถึง');
                 return false; // ยกเลิกการเปลี่ยนหน้า
@@ -105,7 +105,7 @@ if (isset($_GET['logout'])) {
         <h2>Menu Admin</h2>
         <ul>
             <li><a href="display_admin.php" class="btn-manage" onclick="return checkAccess();">จัดการข้อมูลผู้ดูแลระบบ</a></li>
-            <li><a href="display_information.php" class="btn-info">จัดการข้อมูลข่าวสาร</a></li>
+            <li><a href="display_information.php" class="btn-info">จัดการข่าวประชาสัมพันธ์</a></li>
             <li><a href="display_student.php" class="btn-student">จัดการข้อมูลนักศึกษา</a></li>
             <li><a href="?logout=true" class="btn-logout">ออกจากระบบ</a></li> <!-- ปุ่มออกจากระบบ -->
         </ul>

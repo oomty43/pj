@@ -32,16 +32,30 @@ if (isset($_POST['search'])) {
     $search_query = $_POST['search_query'];
 }
 
-// ดึงข้อมูลจากตาราง student
-$sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat FROM student WHERE 
-        s_id LIKE ? OR 
-        s_na LIKE ? OR 
-        s_la LIKE ?";
+// กำหนดจำนวนรายการที่จะแสดงต่อหน้า
+$items_per_page = 20;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $items_per_page;
+
+// ดึงข้อมูลจากตาราง student พร้อมการแบ่งหน้า
+$sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat 
+        FROM student 
+        WHERE s_id LIKE ? OR s_na LIKE ? OR s_la LIKE ?
+        LIMIT ? OFFSET ?";
 $search_param = "%" . $search_query . "%";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $search_param, $search_param, $search_param);
+$stmt->bind_param("sssii", $search_param, $search_param, $search_param, $items_per_page, $offset);
 $stmt->execute();
 $result = $stmt->get_result();
+
+// ดึงจำนวนข้อมูลทั้งหมดเพื่อใช้ในการคำนวณหน้าทั้งหมด
+$sql_total = "SELECT COUNT(*) FROM student WHERE s_id LIKE ? OR s_na LIKE ? OR s_la LIKE ?";
+$stmt_total = $conn->prepare($sql_total);
+$stmt_total->bind_param("sss", $search_param, $search_param, $search_param);
+$stmt_total->execute();
+$stmt_total->bind_result($total_items);
+$stmt_total->fetch();
+$total_pages = ceil($total_items / $items_per_page);
 
 // ฟังก์ชั่นแปลงค่า s_pna
 function getPrefix($s_pna) {
@@ -127,6 +141,9 @@ function getStudentStatus($s_stat) {
         .add-buttons a:hover {
             background-color: #45a049;
         }
+        .search-bar {
+            text-align: right;
+        }
         .search-bar input[type="text"] {
             padding: 10px;
             border: 1px solid #555;
@@ -176,6 +193,25 @@ function getStudentStatus($s_stat) {
         .blue {
             background-color: #007bff; /* สีน้ำเงิน */
         }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a {
+            color: #ffffff; /* สีของลิงก์ */
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        .pagination span {
+            color: #ffa500; /* สีของหน้าปัจจุบัน */
+            margin: 0 5px;
+        }
+
+        .pagination a:hover {
+            text-decoration: underline; /* ใส่ขีดเส้นใต้เมื่อ hover */
+        }
     </style>
 </head>
 <body>
@@ -186,11 +222,10 @@ function getStudentStatus($s_stat) {
             <a href="mainadmin.php">หน้าหลัก</a>
         </div>
         <!-- ปุ่มอัปโหลดไฟล์ Excel -->
-    <form action="upload_excel.php" method="post" enctype="multipart/form-data" style="display:inline;">
-        <input type="file" name="excel_file" accept=".xlsx, .xls" required>
-        <input type="submit" value="เพิ่มนักศึกษาจาก Excel" name="upload_excel">
-    </form>
-    </div>
+        <form action="upload_excel.php" method="post" enctype="multipart/form-data" style="display:inline;">
+            <input type="file" name="excel_file" accept=".xlsx, .xls" required>
+            <input type="submit" value="เพิ่มนักศึกษาจาก Excel" name="upload_excel" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+        </form>
 
         <div class="search-bar">
             <form method="post">
@@ -226,10 +261,25 @@ function getStudentStatus($s_stat) {
                 } else {
                     echo "<tr><td colspan='5'>ไม่พบข้อมูลนักศึกษา</td></tr>";
                 }
-                $conn->close();
                 ?>
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <?php
+            for ($i = 1; $i <= $total_pages; $i++) {
+                if ($i == $page) {
+                    echo "<span>$i</span>"; // หน้าปัจจุบันเป็นแค่ตัวเลขไม่มีลิงก์
+                } else {
+                    echo "<a href='?page=$i'>$i</a>";
+                }
+                if ($i < $total_pages) {
+                    echo " | "; // ใส่ตัวแบ่งระหว่างลิงก์
+                }
+            }
+            ?>
+        </div>
     </div>
 </body>
 </html>

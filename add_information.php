@@ -109,49 +109,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .button-group {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-top: 20px;
-        }
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 30px; /* เพิ่มระยะห่างด้านบนจากฟอร์ม */
+    gap: 20px; /* ช่องว่างระหว่างปุ่ม */
+}
 
-        input[type=submit],
-        .cancel-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            width: 45%; /* ขนาดปุ่ม */
-            text-align: center;
-            text-decoration: none;
-        }
+input[type=submit],
+.cancel-button,
+.back-button {
+    color: white;
+    padding: 12px 20px; /* เพิ่ม Padding เพื่อให้ปุ่มใหญ่ขึ้น */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    flex: 1; /* ให้ปุ่มขยายเต็มพื้นที่ที่เหลืออยู่ */
+    text-align: center;
+    text-decoration: none;
+}
 
-        input[type=submit] {
-            margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
-        }
+input[type=submit] {
+    background-color: #4CAF50; /* สีเขียว */
+}
 
-        input[type=submit]:hover {
-            background-color: #45a049;
-        }
+input[type=submit]:hover {
+    background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
+}
 
-        .cancel-button {
-            background-color: #FF6347; /* สีของปุ่มยกเลิก */
-            margin-left: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
-        }
+.cancel-button {
+    background-color: #f44336; /* สีแดงของปุ่มยกเลิก */
+}
 
-        .cancel-button:hover {
-            background-color: #FF4500; /* สีของปุ่มยกเลิกเมื่อเมาส์ชี้ */
-        }
+.cancel-button:hover {
+    background-color: #d32f2f; /* สีแดงเข้มเมื่อ hover */
+}
+
+.back-button {
+    background-color: #2196F3; /* สีน้ำเงินของปุ่มย้อนกลับ */
+}
+
+.back-button:hover {
+    background-color: #1e88e5; /* สีน้ำเงินเข้มเมื่อ hover */
+}
+
     </style>
+    <script>
+        function resetForm() {
+            document.getElementById("addForm").reset(); // รีเซ็ตฟอร์ม
+        }
+    </script>
 </head>
 <body>
     <div class="container">
-        <h2>เพิ่มข่าวสาร</h2>
-        <form method="post" enctype="multipart/form-data">
+        <h2>เพิ่มข่าวประชาสัมพันธ์</h2>
+        <form id="addForm" method="post" enctype="multipart/form-data">
             <label for="i_head">หัวข้อข่าวสาร:</label>
             <input type="text" id="i_head" name="i_head" required>
 
@@ -165,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "SELECT * FROM info_type";
             $result = $conn->query($sql);
             ?>
-            <label for="itype_id">ประเภทข่าวสาร:</label>
+            <label for="itype_id">ประเภทข่าวประชาสัมพันธ์:</label>
             <select name="itype_id" id="itype_id" required>
                 <?php foreach ($result as $row): ?>
                     <option value="<?php echo $row['itype_id']; ?>"><?php echo $row['itype_name']; ?></option>
@@ -176,7 +190,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="button-group">
                 <input type="submit" value="เพิ่มข้อมูล">
-                <a href="display_information.php" class="cancel-button">ยกเลิก</a>
+                <a href="#" class="cancel-button" onclick="resetForm()">ยกเลิก</a>
+                <a href="display_information.php" class="back-button">ย้อนกลับ</a>
             </div>
         </form>
     </div>
