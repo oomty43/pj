@@ -90,7 +90,6 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>หน้าหลักเว็บไซต์</title>
     <style>
-        /* สไตล์เดิม */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -107,58 +106,60 @@ $conn->close();
         }
         .nav-buttons a {
             padding: 10px 20px;
-            background-color: #007BFF;
+            background-color: #d35400; /* สีส้มจากโลโก้ */
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-left: 10px;
         }
         .nav-buttons a:hover {
-            background-color: #0056b3;
+            background-color: #e67e22; /* สีส้มอ่อน */
         }
         .news-container {
             padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* กำหนดให้แสดง 4 คอลัมน์ */
+            grid-gap: 20px; /* ระยะห่างระหว่างกล่องข่าว */
         }
         .news-item {
             background-color: white;
             padding: 15px;
-            margin-bottom: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .news-item img {
-            max-width: 100%; /* จำกัดความกว้างไม่ให้เกิน 100% ของคอนเทนเนอร์ */
-            max-height: 300px; /* จำกัดความสูงสูงสุดที่ 300px */
-            object-fit: cover; /* ให้รูปภาพไม่บิดเบี้ยวแต่ครอบคลุมพื้นที่ */
+            width: 100%;
+            height: 150px; /* ความสูงของภาพ */
+            object-fit: cover;
             border-radius: 5px;
-            display: block;
-            margin: 0 auto;
         }
         .news-item h2 {
-            font-size: 18px;
+            font-size: 16px;
             color: #333;
+            margin: 10px 0;
         }
         .news-item p.date {
             font-size: 14px;
             color: #666;
+            margin-bottom: 10px;
         }
         .news-item a {
-            display: inline-block;
+            display: block;
             padding: 10px;
-            background-color: #007BFF;
+            background-color: #d35400; /* สีส้มจากโลโก้ */
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 10px;
+            text-align: center;
         }
         .news-item a:hover {
-            background-color: #0056b3;
+            background-color: #e67e22; /* สีส้มอ่อน */
         }
         .welcome-message {
             margin: 20px;
             font-size: 20px;
             color: #333;
-            text-align: right; /* ทำให้ข้อความชิดขวา */
+            text-align: right;
         }
         .pagination {
             text-align: center;
@@ -166,21 +167,21 @@ $conn->close();
         }
         .pagination a {
             padding: 10px 15px;
-            background-color: #007BFF;
+            background-color: #d35400; /* สีส้มจากโลโก้ */
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin: 0 5px;
         }
         .pagination a:hover {
-            background-color: #0056b3;
+            background-color: #e67e22; /* สีส้มอ่อน */
         }
     </style>
 </head>
 <body>
 
     <!-- Banner -->
-    <img src="uploads/banner.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner1.jpg" alt="Banner" class="banner">
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
@@ -205,7 +206,7 @@ $conn->close();
                 echo "<img src='uploads/" . htmlspecialchars($item["i_cover"]) . "' alt='ข่าวสาร'>";
                 echo "<h2>" . htmlspecialchars($item["i_head"]) . "</h2>";
                 echo "<p class='date'>" . $formatted_date . "</p>"; // แสดงวันที่
-                echo "<p><a href='news_detail.php?i_id=" . htmlspecialchars($item["i_id"]) . "'>อ่านเพิ่มเติม</a></p>";
+                echo "<a href='news_detail.php?i_id=" . htmlspecialchars($item["i_id"]) . "'>อ่านเพิ่มเติม</a>";
                 echo "</div>";
             }
         } else {

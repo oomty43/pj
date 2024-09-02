@@ -60,7 +60,6 @@ if ($result->num_rows > 0) {
 $stmt->close();
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -112,20 +111,20 @@ $conn->close();
         .back-link {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #007BFF;
+            background-color: #d35400; /* สีส้มจากโลโก้ */
             color: white;
             text-decoration: none;
             border-radius: 5px;
         }
         .back-link:hover {
-            background-color: #0056b3;
+            background-color: #e67e22; /* สีส้มอ่อน */
         }
     </style>
 </head>
 <body>
     
     <!-- Banner -->
-    <img src="uploads/banner.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner1.jpg" alt="Banner" class="banner">
 
     <div class="container">
         <img src="uploads/<?php echo htmlspecialchars($news_item['i_cover']); ?>" alt="ข่าวสาร" class="news-cover">
