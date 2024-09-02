@@ -45,7 +45,7 @@ $conn->close();
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0; /* พื้นหลังสีอ่อน */
+            background-color: #e7e6e3; /* พื้นหลังสีเทาอ่อน */
             color: #333; /* ตัวอักษรสีเข้ม */
             margin: 0;
             padding: 0;
@@ -64,7 +64,7 @@ $conn->close();
         }
         h2 {
             text-align: center;
-            color: #007BFF; /* สีน้ำเงิน */
+            color: #FF5722; /* ส้มอ่อน */
             margin-bottom: 20px;
             font-weight: 600;
         }
@@ -81,7 +81,7 @@ $conn->close();
         }
         input[type=submit] {
             width: 100%;
-            background-color: #007BFF; /* สีน้ำเงิน */
+            background-color: #FF5722; /* ส้มอ่อน */
             color: white; /* ตัวอักษรสีขาว */
             padding: 12px;
             border: none;
@@ -92,7 +92,7 @@ $conn->close();
             transition: background-color 0.3s ease;
         }
         input[type=submit]:hover {
-            background-color: #0056b3; /* สีน้ำเงินเข้มเมื่อโฮเวอร์ */
+            background-color: #E64A19; /* ส้มเข้มเมื่อโฮเวอร์ */
         }
         .register-link, .guest-login, .admin-login {
             text-align: center;
@@ -100,7 +100,7 @@ $conn->close();
         }
         .register-link a, .guest-login a, .admin-login a {
             text-decoration: none;
-            color: #007BFF; /* สีน้ำเงิน */
+            color: #FF5722; /* ส้มอ่อน */
             font-size: 14px;
         }
         .register-link a:hover, .guest-login a:hover, .admin-login a:hover {
@@ -136,7 +136,7 @@ $conn->close();
             <p>ยังไม่ได้เป็นสมาชิก? <a href="register.php">สมัครสมาชิก</a></p>
         </div>
         <div class="guest-login">
-            <p><a href="guestmain.php">เยี่ยมชมเว็บไซต์</a></p>
+            <p><a href="index.php">เยี่ยมชมเว็บไซต์</a></p>
         </div>
         <div class="admin-login">
             <p><a href="loginadmin.php">เข้าสู่ระบบสำหรับผู้ดูแล</a></p>

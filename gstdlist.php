@@ -79,7 +79,7 @@ function getStudentStatus($s_stat) {
             margin-right: 10px;
         }
         .search-bar input[type="submit"] {
-            background-color: #007BFF;
+            background-color: rgb(232, 98, 1); /* เปลี่ยนสีปุ่มค้นหาเป็นสีส้ม */
             color: white;
             padding: 8px 16px;
             border: none;
@@ -87,7 +87,7 @@ function getStudentStatus($s_stat) {
             cursor: pointer;
         }
         .search-bar input[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: rgb(186, 79, 1); /* เปลี่ยนสีปุ่มค้นหาเมื่อ hover เป็นสีส้มเข้ม */
         }
         .back-link {
             margin-top: 20px;
@@ -168,7 +168,7 @@ function getStudentStatus($s_stat) {
         </table>
 
         <div class="back-link">
-            <a href="guestmain.php">กลับไปที่หน้าหลัก</a>
+            <a href="index.php">กลับไปที่หน้าหลัก</a>
         </div>
     </div>
     <?php

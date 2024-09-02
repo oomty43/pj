@@ -34,7 +34,7 @@ function thai_date($date) {
 
 // ตรวจสอบหมายเลขหน้าปัจจุบัน
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$items_per_page = 3;
+$items_per_page = 16; // เปลี่ยนจำนวนรายการต่อหน้าเป็น 16 (4x4)
 $offset = ($page - 1) * $items_per_page;
 
 // ดึงข้อมูลข่าวสารจากฐานข้อมูล
@@ -69,7 +69,7 @@ $conn->close();
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f4f4f4; /* สีพื้นหลังเดิม */
         }
         .banner {
             width: 100%;
@@ -81,22 +81,24 @@ $conn->close();
         }
         .nav-buttons a {
             padding: 10px 20px;
-            background-color: #007BFF;
+            background-color: rgb(232, 98, 1); /* เปลี่ยนสีปุ่มเป็นสีส้ม */
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-left: 10px;
         }
         .nav-buttons a:hover {
-            background-color: #0056b3;
+            background-color: rgb(186, 79, 1); /* เปลี่ยนสีปุ่มเมื่อ hover เป็นสีส้มเข้ม */
         }
         .news-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* จัดเรียงเป็น 4 คอลัมน์ */
+            gap: 20px;
             padding: 20px;
         }
         .news-item {
             background-color: white;
             padding: 15px;
-            margin-bottom: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
@@ -119,14 +121,14 @@ $conn->close();
         .news-item a {
             display: inline-block;
             padding: 10px;
-            background-color: #007BFF;
+            background-color: rgb(232, 98, 1); /* เปลี่ยนสีปุ่มเป็นสีส้ม */
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-top: 10px;
         }
         .news-item a:hover {
-            background-color: #0056b3;
+            background-color: rgb(186, 79, 1); /* เปลี่ยนสีปุ่มเมื่อ hover เป็นสีส้มเข้ม */
         }
         .welcome-message {
             margin: 20px;
@@ -140,21 +142,21 @@ $conn->close();
         }
         .pagination a {
             padding: 10px 15px;
-            background-color: #007BFF;
+            background-color: rgb(232, 98, 1); /* เปลี่ยนสีปุ่มเป็นสีส้ม */
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin: 0 5px;
         }
         .pagination a:hover {
-            background-color: #0056b3;
+            background-color: rgb(186, 79, 1); /* เปลี่ยนสีปุ่มเมื่อ hover เป็นสีส้มเข้ม */
         }
     </style>
 </head>
 <body>
 
     <!-- Banner -->
-    <img src="uploads/banner.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner1.jpg" alt="Banner" class="banner">
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">

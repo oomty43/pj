@@ -30,10 +30,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = $stmt->get_result();
 
         if ($result->num_rows == 1) {
-            // เข้าสู่ระบบสำเร็จ
-            $_SESSION['a_user'] = $a_user;
-            header("Location: mainadmin.php"); // ไปยังหน้า mainadmin.php หลังจากล็อกอินสำเร็จ
-            exit();
+            $row = $result->fetch_assoc();
+
+            // ตรวจสอบสถานะของผู้ใช้
+            if ($row['status'] == 0) {
+                $error_message = "คุณไม่มีสิทธิ์ในการเข้าถึงระบบ";
+            } else {
+                // เข้าสู่ระบบสำเร็จ
+                $_SESSION['a_user'] = $a_user;
+                header("Location: mainadmin.php"); // ไปยังหน้า mainadmin.php หลังจากล็อกอินสำเร็จ
+                exit();
+            }
         } else {
             // ล็อกอินไม่สำเร็จ
             $error_message = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";

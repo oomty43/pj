@@ -1,25 +1,25 @@
+<?php 
+session_start(); 
+if (!isset($_SESSION['a_user'])) {
+    echo "
+        <script>
+            alert('กรุณาเข้าสู่ระบบ');
+            window.location='loginadmin.php';
+        </script>
+    ";
+}
+
+// ตรวจสอบว่ามีการส่งคำสั่งออกจากระบบหรือไม่
+if (isset($_GET['logout'])) {
+    session_destroy(); // ทำลาย session
+    header("Location: loginadmin.php"); // กลับไปยังหน้าเข้าสู่ระบบ
+    exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <?php 
-    session_start(); 
-    if (!isset($_SESSION['a_user'])) {
-        echo "
-            <script>
-                alert('กรุณาเข้าสู่ระบบ');
-                window.location='loginadmin.php';
-            </script>
-        ";
-    }
-    
-    // ตรวจสอบว่ามีการส่งคำสั่งออกจากระบบหรือไม่
-    if (isset($_GET['logout'])) {
-        session_destroy(); // ทำลาย session
-        header("Location: loginadmin.php"); // กลับไปยังหน้าเข้าสู่ระบบ
-        exit();
-    }
-    ?>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,12 +89,22 @@
             background-color: #c82333; /* สีแดงเข้มเมื่อโฮเวอร์ */
         }
     </style>
+    <script>
+        function checkAccess() {
+            var status = <?php echo $_SESSION['status']; ?>;
+            if (status == 1) {
+                alert('คุณไม่มีสิทธิ์เข้าถึง');
+                return false; // ยกเลิกการเปลี่ยนหน้า
+            }
+            return true; // อนุญาตให้เข้าถึง
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h2>Menu Admin</h2>
         <ul>
-            <li><a href="display_admin.php" class="btn-manage">จัดการข้อมูลผู้ดูแลระบบ</a></li>
+            <li><a href="display_admin.php" class="btn-manage" onclick="return checkAccess();">จัดการข้อมูลผู้ดูแลระบบ</a></li>
             <li><a href="display_information.php" class="btn-info">จัดการข้อมูลข่าวสาร</a></li>
             <li><a href="display_student.php" class="btn-student">จัดการข้อมูลนักศึกษา</a></li>
             <li><a href="?logout=true" class="btn-logout">ออกจากระบบ</a></li> <!-- ปุ่มออกจากระบบ -->
