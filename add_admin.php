@@ -15,16 +15,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $a_na = $_POST['a_na'];
     $a_email = $_POST['a_email'];
     $a_pws = $_POST['a_pws'];
+    $a_st = $_POST['a_st']; // รับข้อมูลสถานะ admin
 
     // เพิ่มข้อมูลลงในฐานข้อมูล
-    $sql = "INSERT INTO admin (a_user, a_na, a_email, a_pws) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO admin (a_user, a_na, a_email, a_pws, a_st) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $a_user, $a_na, $a_email, $a_pws);
+    $stmt->bind_param("ssssi", $a_user, $a_na, $a_email, $a_pws, $a_st); // 'i' สำหรับ int
 
     if ($stmt->execute()) {
-        echo '<div style="padding: 20px; background-color: #f0f0f0; border: 1px solid #ccc; margin-top: 20px;">';
-        echo "New admin added successfully. <a href='display_admin.php'>Back to Admin Table</a>";
-        echo '</div>';
+        echo "<script>
+                alert('เพิ่มข้อมูลเรียบร้อย');
+                window.location.href='display_admin.php';
+              </script>";
     } else {
         echo '<div style="padding: 20px; background-color: #f0f0f0; border: 1px solid #ccc; margin-top: 20px;">';
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -130,6 +132,13 @@ $conn->close();
 
             <label for="a_pws">Password:</label>
             <input type="password" id="a_pws" name="a_pws" required>
+
+            <!-- New status field -->
+            <label for="a_st">สถานะ Admin:</label>
+            <select id="a_st" name="a_st" required>
+                <option value="0">เจ้าหน้าที่</option>
+                <option value="1">อาจารย์</option>
+            </select>
 
             <div class="button-group">
                 <input type="submit" value="เพิ่ม">
