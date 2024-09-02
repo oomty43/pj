@@ -11,6 +11,30 @@ if ($conn->connect_error) {
     die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
 }
 
+// ฟังก์ชั่นคำนวณรุ่นปัจจุบัน
+function calculateCurrentBatch() {
+    $currentYear = date('Y');
+    $currentMonth = date('m');
+
+    if ($currentMonth >= 3) { // ถ้าเดือนปัจจุบันมีนาคมขึ้นไป
+        return 67 + ($currentYear - 2024); // เริ่มต้นที่รุ่น 67 ในปี 2024
+    } else {
+        return 66 + ($currentYear - 2024); // ใช้รุ่นของปีที่แล้วถ้ายังไม่ถึงมีนาคม
+    }
+}
+
+// ฟังก์ชั่นแสดงตัวเลือกใน select box
+function generateBatchOptions() {
+    $currentBatch = calculateCurrentBatch();
+    $options = "";
+
+    for ($i = $currentBatch; $i >= 50; $i--) {
+        $options .= "<option value=\"$i\">$i</option>";
+    }
+
+    return $options;
+}
+
 // ฟังก์ชั่นแปลงค่า s_pna
 function getPrefix($s_pna) {
     switch ($s_pna) {
@@ -32,6 +56,11 @@ function getStudentStatus($s_stat) {
     } else {
         return "<button style='background-color: blue; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>จบการศึกษาแล้ว</button>";
     }
+}
+
+// ฟังก์ชั่นคำนวณปีการศึกษา
+function calculateAcademicYear($batch) {
+    return 2500 + intval($batch);
 }
 ?>
 
@@ -101,6 +130,12 @@ function getStudentStatus($s_stat) {
         .back-link a:hover {
             text-decoration: underline;
         }
+        .academic-year {
+            margin-top: 10px;
+            text-align: left;
+            font-size: 18px;
+            color: green; /* เปลี่ยนสีของข้อความเป็นสีเขียว */
+        }
     </style>
 </head>
 <body>
@@ -115,6 +150,10 @@ function getStudentStatus($s_stat) {
                     <option value="">เลือกสถานะทั้งหมด</option>
                     <option value="1" <?php echo isset($_GET['status']) && $_GET['status'] == 1 ? 'selected' : ''; ?>>ยังคงศึกษาอยู่</option>
                     <option value="0" <?php echo isset($_GET['status']) && $_GET['status'] == 0 ? 'selected' : ''; ?>>จบการศึกษาแล้ว</option>
+                </select>
+                <select name="batch">
+                    <option value="">เลือกรุ่นทั้งหมด</option>
+                    <?php echo generateBatchOptions(); ?>
                 </select>
                 <input type="submit" value="ค้นหา">
             </form>
@@ -136,6 +175,7 @@ function getStudentStatus($s_stat) {
                 // คำสั่ง SQL เพื่อค้นหาข้อมูลนักศึกษา
                 $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
                 $status = isset($_GET['status']) ? $conn->real_escape_string($_GET['status']) : '';
+                $batch = isset($_GET['batch']) ? $conn->real_escape_string($_GET['batch']) : '';
 
                 $sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat 
                         FROM student 
@@ -145,6 +185,10 @@ function getStudentStatus($s_stat) {
 
                 if ($status !== '') {
                     $sql .= " AND s_stat = '$status'";
+                }
+
+                if ($batch !== '') {
+                    $sql .= " AND LEFT(s_id, 2) = '$batch'";
                 }
 
                 $result = $conn->query($sql);
@@ -161,11 +205,22 @@ function getStudentStatus($s_stat) {
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='5'>ไม่มีข้อมูลนักศึกษา</td></tr>";
+                    echo "<tr><td colspan='5'>ไม่พบข้อมูลนักศึกษาที่ค้นหา</td></tr>";
                 }
                 ?>
             </tbody>
         </table>
+
+        <!-- แสดงปีการศึกษาที่ค้นหา -->
+        <div class="academic-year">
+            <?php
+            if ($batch !== '') {
+                echo "ปีการศึกษา: " . calculateAcademicYear($batch);
+            } else {
+                echo "ปีการศึกษา: ทั้งหมด";
+            }
+            ?>
+        </div>
 
         <div class="back-link">
             <a href="index.php">กลับไปที่หน้าหลัก</a>

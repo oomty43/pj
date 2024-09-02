@@ -59,14 +59,14 @@ $conn->close();
         }
         .nav-buttons a {
             padding: 10px 20px;
-            background-color: #007BFF;
+            background-color: #D35400; /* สีปุ่มสีส้ม */
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-left: 10px;
         }
         .nav-buttons a:hover {
-            background-color: #0056b3;
+            background-color: #E07B00; /* สีปุ่มส้มเข้มขึ้นเมื่อ hover */
         }
         .center-text {
             text-align: center;
@@ -123,7 +123,7 @@ $conn->close();
             display: block;
             width: 100%;
             padding: 10px;
-            background-color: #28a745;
+            background-color: #000000; /* สีปุ่มแก้ไขเป็นสีดำ */
             color: white;
             text-align: center;
             border: none;
@@ -132,7 +132,7 @@ $conn->close();
             font-size: 16px;
         }
         .btn-edit:hover {
-            background-color: #218838;
+            background-color: #333333; /* สีปุ่มแก้ไขเมื่อ hover เป็นสีเทาเข้ม */
         }
     </style>
 </head>

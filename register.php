@@ -98,7 +98,8 @@ $conn->close();
         }
         input[type=submit] {
             width: 100%;
-            background-color: #28a745;
+            background-color: #000000;
+            
             color: white;
             padding: 12px;
             border: none;
@@ -109,7 +110,7 @@ $conn->close();
             transition: background-color 0.3s ease;
         }
         input[type=submit]:hover {
-            background-color: #218838;
+            background-color: #6c757d; /* สีเทาเข้ม */
         }
         .form-group {
             margin-bottom: 20px;

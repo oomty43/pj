@@ -1,28 +1,39 @@
 <?php
 session_start();
 
-include 'std_con.php';
+// เชื่อมต่อกับฐานข้อมูล
+include 'db_connect.php';
+// สร้างการเชื่อมต่อ
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-// รับค่าการค้นหาจากฟอร์ม
-$search = isset($_POST['search']) ? $_POST['search'] : '';
-$statusFilter = isset($_POST['status']) ? $_POST['status'] : '';
-
-// คำสั่ง SQL เพื่อดึงข้อมูลนักศึกษา
-$sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat FROM student WHERE (s_id LIKE ? OR s_na LIKE ? OR s_la LIKE ?)";
-if ($statusFilter !== '') {
-    $sql .= " AND s_stat = ?";
-}
-$stmt = $conn->prepare($sql);
-$searchParam = '%' . $search . '%';
-
-if ($statusFilter !== '') {
-    $stmt->bind_param('ssss', $searchParam, $searchParam, $searchParam, $statusFilter);
-} else {
-    $stmt->bind_param('sss', $searchParam, $searchParam, $searchParam);
+// ตรวจสอบการเชื่อมต่อ
+if ($conn->connect_error) {
+    die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
 }
 
-$stmt->execute();
-$result = $stmt->get_result();
+// ฟังก์ชั่นคำนวณรุ่นปัจจุบัน
+function calculateCurrentBatch() {
+    $currentYear = date('Y');
+    $currentMonth = date('m');
+
+    if ($currentMonth >= 3) { // ถ้าเดือนปัจจุบันมีนาคมขึ้นไป
+        return 67 + ($currentYear - 2024); // เริ่มต้นที่รุ่น 67 ในปี 2024
+    } else {
+        return 66 + ($currentYear - 2024); // ใช้รุ่นของปีที่แล้วถ้ายังไม่ถึงมีนาคม
+    }
+}
+
+// ฟังก์ชั่นแสดงตัวเลือกใน select box
+function generateBatchOptions() {
+    $currentBatch = calculateCurrentBatch();
+    $options = "";
+
+    for ($i = $currentBatch; $i >= 50; $i--) {
+        $options .= "<option value=\"$i\">$i</option>";
+    }
+
+    return $options;
+}
 
 // ฟังก์ชั่นแปลงค่า s_pna
 function getPrefix($s_pna) {
@@ -39,12 +50,17 @@ function getPrefix($s_pna) {
 }
 
 // ฟังก์ชั่นแปลงค่าสถานะนักศึกษาเป็นปุ่ม
-function getStudentStatusButton($s_stat) {
+function getStudentStatus($s_stat) {
     if ($s_stat == 1) {
-        return "<button class='status-btn green'>ยังคงศึกษาอยู่</button>";
+        return "<button style='background-color: green; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>ยังคงศึกษาอยู่</button>";
     } else {
-        return "<button class='status-btn blue'>จบการศึกษาแล้ว</button>";
+        return "<button style='background-color: blue; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>จบการศึกษาแล้ว</button>";
     }
+}
+
+// ฟังก์ชั่นคำนวณปีการศึกษา
+function calculateAcademicYear($batch) {
+    return 2500 + intval($batch);
 }
 ?>
 
@@ -59,42 +75,48 @@ function getStudentStatusButton($s_stat) {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
+            background-color: #f4f4f4;
         }
         .container {
             width: 80%;
             margin: 50px auto;
-            background-color: #ffffff;
+            background-color: #fff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
+            border: 1px solid #dddddd;
+            padding: 8px;
             text-align: left;
         }
         table th {
-            background-color: #f8f8f8;
+            background-color: #f2f2f2;
         }
-        .status-btn {
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .search-bar select, .search-bar input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .search-bar input[type="submit"] {
+            background-color: rgb(232, 98, 1); /* เปลี่ยนสีปุ่มค้นหาเป็นสีส้ม */
+            color: white;
             padding: 8px 16px;
-            font-size: 14px;
-            color: #ffffff;
             border: none;
             border-radius: 4px;
-            cursor: default;
+            cursor: pointer;
         }
-        .status-btn.green {
-            background-color: #28a745;
-        }
-        .status-btn.blue {
-            background-color: #007bff;
+        .search-bar input[type="submit"]:hover {
+            background-color: rgb(186, 79, 1); /* เปลี่ยนสีปุ่มค้นหาเมื่อ hover เป็นสีส้มเข้ม */
         }
         .back-link {
             margin-top: 20px;
@@ -102,41 +124,17 @@ function getStudentStatusButton($s_stat) {
         }
         .back-link a {
             text-decoration: none;
-            color: #007bff;
+            color: #007BFF;
             font-size: 16px;
         }
         .back-link a:hover {
             text-decoration: underline;
         }
-        .search-form {
-            margin-bottom: 20px;
-            text-align: right;
-        }
-        .search-form form {
-            display: inline-block;
-        }
-        .search-form input[type="text"],
-        .search-form select {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 200px;
-            margin-right: 10px;
-            background-color: #ffffff;
-            color: #333;
-        }
-        .search-form input[type="submit"] {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #E76324;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .search-form input[type="submit"]:hover {
-            background-color: #0056b3;
+        .academic-year {
+            margin-top: 10px;
+            text-align: left;
+            font-size: 18px;
+            color: green; /* เปลี่ยนสีของข้อความเป็นสีเขียว */
         }
     </style>
 </head>
@@ -144,19 +142,24 @@ function getStudentStatusButton($s_stat) {
     <div class="container">
         <h2>รายชื่อนักศึกษา</h2>
 
-        <!-- ฟอร์มค้นหา -->
-        <div class="search-form">
-            <form method="post">
-                <input type="text" name="search" placeholder="ค้นหาตามรหัสนักศึกษา, ชื่อ, นามสกุล" value="<?php echo htmlspecialchars($search); ?>">
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form method="get" action="">
+                <input type="text" name="search" placeholder="ค้นหารหัสนักศึกษา, ชื่อ, นามสกุล" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                 <select name="status">
-                    <option value="">-- ทั้งหมด --</option>
-                    <option value="1" <?php echo ($statusFilter === '1') ? 'selected' : ''; ?>>ยังคงศึกษาอยู่</option>
-                    <option value="0" <?php echo ($statusFilter === '0') ? 'selected' : ''; ?>>จบการศึกษาแล้ว</option>
+                    <option value="">เลือกสถานะทั้งหมด</option>
+                    <option value="1" <?php echo isset($_GET['status']) && $_GET['status'] == 1 ? 'selected' : ''; ?>>ยังคงศึกษาอยู่</option>
+                    <option value="0" <?php echo isset($_GET['status']) && $_GET['status'] == 0 ? 'selected' : ''; ?>>จบการศึกษาแล้ว</option>
+                </select>
+                <select name="batch">
+                    <option value="">เลือกรุ่นทั้งหมด</option>
+                    <?php echo generateBatchOptions(); ?>
                 </select>
                 <input type="submit" value="ค้นหา">
             </form>
         </div>
 
+        <!-- Table for displaying student data -->
         <table>
             <thead>
                 <tr>
@@ -169,6 +172,27 @@ function getStudentStatusButton($s_stat) {
             </thead>
             <tbody>
                 <?php
+                // คำสั่ง SQL เพื่อค้นหาข้อมูลนักศึกษา
+                $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+                $status = isset($_GET['status']) ? $conn->real_escape_string($_GET['status']) : '';
+                $batch = isset($_GET['batch']) ? $conn->real_escape_string($_GET['batch']) : '';
+
+                $sql = "SELECT s_id, s_pna, s_na, s_la, s_email, s_stat 
+                        FROM student 
+                        WHERE (s_id LIKE '%$search%' 
+                        OR s_na LIKE '%$search%' 
+                        OR s_la LIKE '%$search%')";
+
+                if ($status !== '') {
+                    $sql .= " AND s_stat = '$status'";
+                }
+
+                if ($batch !== '') {
+                    $sql .= " AND LEFT(s_id, 2) = '$batch'";
+                }
+
+                $result = $conn->query($sql);
+
                 if ($result->num_rows > 0) {
                     // แสดงข้อมูลนักศึกษา
                     while($row = $result->fetch_assoc()) {
@@ -177,15 +201,27 @@ function getStudentStatusButton($s_stat) {
                         echo "<td>" . getPrefix($row['s_pna']) . " " . htmlspecialchars($row['s_na']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['s_la']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['s_email']) . "</td>";
-                        echo "<td>" . getStudentStatusButton($row['s_stat']) . "</td>";
+                        echo "<td>" . getStudentStatus($row['s_stat']) . "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='5'>ไม่มีข้อมูลนักศึกษา</td></tr>";
+                    echo "<tr><td colspan='5'>ไม่พบข้อมูลนักศึกษาที่ค้นหา</td></tr>";
                 }
                 ?>
             </tbody>
         </table>
+
+        <!-- แสดงปีการศึกษาที่ค้นหา -->
+        <div class="academic-year">
+            <?php
+            if ($batch !== '') {
+                echo "ปีการศึกษา: " . calculateAcademicYear($batch);
+            } else {
+                echo "ปีการศึกษา: ทั้งหมด";
+            }
+            ?>
+        </div>
+
         <div class="back-link">
             <a href="mainstd.php">กลับไปที่หน้าหลัก</a>
         </div>

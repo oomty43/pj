@@ -71,14 +71,20 @@ $conn->close();
         }
         .nav-buttons a {
             padding: 10px 20px;
-            background-color: #007BFF;
+            background-color: #D35400;
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-left: 10px;
         }
+        .form-group img {
+            max-width: 300px; /* ปรับขนาดความกว้างสูงสุดของรูปภาพ */
+            max-height: 300px; /* ปรับขนาดความสูงสูงสุดของรูปภาพ */
+            border-radius: 5px;
+            margin-bottom: 15px;
+}
         .nav-buttons a:hover {
-            background-color: #0056b3;
+            background-color: #E07B00;
         }
         .center-text {
             text-align: center;
@@ -149,7 +155,7 @@ $conn->close();
 <body>
 
     <!-- Banner -->
-    <img src="uploads/banner.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner1.jpg" alt="Banner" class="banner">
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">

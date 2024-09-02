@@ -166,7 +166,7 @@ input[type=submit]:hover {
     <div class="container">
         <h2>เพิ่มข่าวประชาสัมพันธ์</h2>
         <form id="addForm" method="post" enctype="multipart/form-data">
-            <label for="i_head">หัวข้อข่าวสาร:</label>
+            <label for="i_head">หัวข้อประชาสัมพันธ์:</label>
             <input type="text" id="i_head" name="i_head" required>
 
             <label for="i_deltail">รายละเอียด:</label>
