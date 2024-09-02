@@ -57,15 +57,17 @@ if ($result->num_rows > 0) {
         }
         .nav-buttons a {
             padding: 10px 20px;
-            background-color: #007BFF;
+            background-color: #D35400; /* สีปุ่มปกติ */
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-left: 10px;
         }
+
         .nav-buttons a:hover {
-            background-color: #0056b3;
+            background-color: #E07B00; /* สีปุ่มเมื่อ hover */
         }
+
         .center-text {
             text-align: center;
             margin: 20px 0;
@@ -152,12 +154,12 @@ if ($result->num_rows > 0) {
             background-color: #f2f2f2;
         }
         .btn-add {
-        background-color: #28a745;
-        color: white;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 5px;
-        margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
         }
         .btn-edit {
             background-color: #ffc107;
@@ -182,8 +184,6 @@ if ($result->num_rows > 0) {
         .btn-delete:hover {
             background-color: #c82333;
         }
-
-
     </style>
 </head>
 <body>
@@ -201,54 +201,47 @@ if ($result->num_rows > 0) {
         <?php echo $welcome_message; ?>
     </div>
 
-        <br></br>
-        <div class="form-container">
-    <h2>ข้อมูลการเข้าอบรม (Course)</h2>
-    <table>
-        <tr>
-            <th>ชื่อโครงการอบรม (c_na)</th>
-            <th>ชื่อ-นามสกุลนักศึกษา</th>
-            <th>ชื่อสถานที่อบรม (c_add)</th>
-            <th>ปีที่อบรม (c_date)</th>
-        </tr>
-        <?php
-        $sql = "SELECT c.c_id, c.c_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name, c.c_add, YEAR(c.c_date) AS c_year
-                FROM course c
-                INNER JOIN student s ON s.s_id = c.s_id
-                WHERE c.s_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $s_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>{$row['c_na']}</td>";
-            echo "<td>{$row['student_name']}</td>";
-            echo "<td>{$row['c_add']}</td>";
-            echo "<td>{$row['c_year']}</td>";
-            echo "<td>";
-            echo "<a class='btn-edit' href='edit_course.php?c_id={$row['c_id']}'>แก้ไข</a>";
-            echo "</td>";
-            echo "<td>";
-            echo "<a class='btn-delete' href='delete_course.php?c_id={$row['c_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
-            echo "</td>";
-            echo "</tr>";
-            echo "</tr>";
-    }
-    ?>
-</table>
-<a href="add_course.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
-
-        <h2>ข้อมูลทักษะพิเศษ (Skill)</h2>
+    <div class="form-container">
+        <h2>การเข้าอบรม (Course)</h2>
         <table>
             <tr>
-                <th>ชื่อทักษะ (sk_na)</th>
-                <th>ชื่อ-นามสกุลนักศึกษา</th>
+                <th>ชื่อโครงการอบรม </th>
+                <th>ชื่อสถานที่อบรม </th>
+                <th>ปีที่อบรม </th>
+                <th>การจัดการ</th>
             </tr>
             <?php
-            $sql = "SELECT sk.sk_id, sk.sk_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT c.c_id, c.c_na, c.c_add, YEAR(c.c_date) AS c_year
+                    FROM course c
+                    WHERE c.s_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $s_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>{$row['c_na']}</td>";
+                echo "<td>{$row['c_add']}</td>";
+                echo "<td>{$row['c_year']}</td>";
+                echo "<td>";
+                echo "<a class='btn-edit' href='edit_course.php?c_id={$row['c_id']}'>แก้ไข</a>";
+                echo "<a class='btn-delete' href='delete_course.php?c_id={$row['c_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                echo "</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+        <a href="add_course.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
+
+        <h2>ทักษะพิเศษ (Skill)</h2>
+        <table>
+            <tr>
+                <th>ทักษะ </th>
+                <th>การจัดการ</th>
+            </tr>
+            <?php
+            $sql = "SELECT sk.sk_id, sk.sk_na
                     FROM skill sk
-                    INNER JOIN student s ON s.s_id = sk.s_id
                     WHERE sk.s_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $s_id);
@@ -257,66 +250,64 @@ if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td>{$row['sk_na']}</td>";
-                echo "<td>{$row['student_name']}</td>";
                 echo "<td>";
                 echo "<a class='btn-edit' href='edit_skill.php?sk_id={$row['sk_id']}'>แก้ไข</a>";
-                echo "</td>";
-                echo "<td>";
                 echo "<a class='btn-delete' href='delete_skill.php?sk_id={$row['sk_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
                 echo "</td>";
-                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
         <a href="add_skill.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
-        <h2>ข้อมูลประวัติการฝึกงาน (Internship History)</h2>
+        
+        <h2>ประวัติการฝึกงาน (Internship History)</h2>
         <table>
-            <tr>
-                <th>ชื่อที่ฝึกงาน (its_name)</th>
-                <th>ระยะเวลาฝึกงาน (its_date)</th>
-                <th>ชื่อ-นามสกุลนักศึกษา</th>
-                <th>ไฟล์โปรเจคฝึกงาน (its_file)</th>
-            </tr>
-            <?php
-            $sql = "SELECT its.its_id, its.its_name, its.its_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name, its.its_file
-                    FROM its_history its
-                    INNER JOIN student s ON s.s_id = its.s_id
-                    WHERE its.s_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $s_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>{$row['its_name']}</td>";
-                echo "<td>{$row['its_date']}</td>";
-                echo "<td>{$row['student_name']}</td>";
-                echo "<td><a href='{$row['its_file']}'>ดาวน์โหลด</a></td>";
-                echo "<td>";
-                echo "<a class='btn-edit' href='edit_intern.php?its_id={$row['its_id']}'>แก้ไข</a>";
-                echo "</td>";
-                echo "<td>";
-                echo "<a class='btn-delete' href='delete_intern.php?its_id={$row['its_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
-                echo "</td>";
-                echo "</tr>";
-                echo "</tr>";
-            }
-            ?>
-        </table>
+    <tr>
+        <th>สถานที่ฝึกงาน </th>
+        <th>จังหวัด</th>
+        <th>ปีที่ฝึกงาน </th>
+        <th>โปรเจคฝึกงาน</th>
+        <th>การจัดการ</th>
+    </tr>
+    <?php
+    $sql = "SELECT its.its_id, its.its_name, its.its_province, its.its_date, its.its_file
+            FROM its_history its
+            WHERE its.s_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $s_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>{$row['its_name']}</td>";
+        echo "<td>{$row['its_province']}</td>";
+        echo "<td>{$row['its_date']}</td>";
+        echo "<td><a href='{$row['its_file']}'>ดาวน์โหลด</a></td>";
+        echo "<td>";
+        echo "<a class='btn-edit' href='edit_intern.php?its_id={$row['its_id']}'>แก้ไข</a>";
+        echo " ";
+        echo "<a class='btn-delete' href='delete_intern.php?its_id={$row['its_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+        echo "</td>";
+        echo "</tr>";
+    }
+    ?>
+</table>
         <a href="add_intern.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
-
-        <h2>ข้อมูลการเขียนภาษาโปรแกรม (Programming Skills)</h2>
+        <style>
+    .btn-edit {
+        margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+    }
+</style>
+        <h2>การเขียนภาษาโปรแกรม (Programming Skills)</h2>
         <table>
             <tr>
-                <th>ชื่อทักษะภาษาโปรแกรม (pg_na)</th>
-                <th>ชื่อ-นามสกุลนักศึกษา</th>
+                <th>ทักษะภาษาโปรแกรม</th>
+                <th>การจัดการ</th>
             </tr>
             <?php
-            $sql = "SELECT pg.pg_id, pg.pg_na, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT pg.pg_id, pg.pg_na
                     FROM program pg
-                    INNER JOIN student s ON s.s_id = pg.s_id
                     WHERE pg.s_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $s_id);
@@ -325,31 +316,26 @@ if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td>{$row['pg_na']}</td>";
-                echo "<td>{$row['student_name']}</td>";
                 echo "<td>";
                 echo "<a class='btn-edit' href='edit_program.php?pg_id={$row['pg_id']}'>แก้ไข</a>";
-                echo "</td>";
-                echo "<td>";
                 echo "<a class='btn-delete' href='delete_program.php?pg_id={$row['pg_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
                 echo "</td>";
-                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
         <a href="add_program.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
-        <h2>ข้อมูลการทำงาน (Work History)</h2>
+        <h2>การทำงาน (Work History)</h2>
         <table>
             <tr>
-                <th>สถานที่ทำงาน (w_na)</th>
-                <th>ปีที่เริ่มทำงาน (w_date)</th>
-                <th>ชื่อ-นามสกุลนักศึกษา</th>
+                <th>สถานที่ทำงาน </th>
+                <th>ปีที่ทำงาน </th>
+                <th>การจัดการ</th>
             </tr>
             <?php
-            $sql = "SELECT w.w_id, w.w_na, w.w_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT w.w_id, w.w_na, w.w_date
                     FROM wk w
-                    INNER JOIN student s ON s.s_id = w.s_id
                     WHERE w.s_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $s_id);
@@ -359,33 +345,28 @@ if ($result->num_rows > 0) {
                 echo "<tr>";
                 echo "<td>{$row['w_na']}</td>";
                 echo "<td>{$row['w_date']}</td>";
-                echo "<td>{$row['student_name']}</td>";
                 echo "<td>";
                 echo "<a class='btn-edit' href='edit_work.php?w_id={$row['w_id']}'>แก้ไข</a>";
-                echo "</td>";
-                echo "<td>";
                 echo "<a class='btn-delete' href='delete_work.php?w_id={$row['w_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
                 echo "</td>";
-                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
         <a href="add_work.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
-        <h2>ข้อมูลใบรับรอง (Certificates)</h2>
+        <h2>ใบรับรอง (Certificates)</h2>
         <table>
             <tr>
-                <th>ชื่อใบรับรอง (ce_na)</th>
-                <th>หน่วยงานที่รับรอง (og_na)</th>
-                <th>ปีที่ได้รับ (ce_year)</th>
-                <th>เอกสารแนบ (ce_file)</th>
-                <th>ชื่อ-นามสกุลนักศึกษา</th>
+                <th>ชื่อใบรับรอง </th>
+                <th>หน่วยงานที่รับรอง </th>
+                <th>ปีที่ได้รับ </th>
+                <th>เอกสารแนบ </th>
+                <th>การจัดการ</th>
             </tr>
             <?php
-            $sql = "SELECT ce.ce_id, ce.ce_na, ce.og_na, ce.ce_year, ce.ce_file, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT ce.ce_id, ce.ce_na, ce.og_na, ce.ce_year, ce.ce_file
                     FROM certi ce
-                    INNER JOIN student s ON s.s_id = ce.s_id
                     WHERE ce.s_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $s_id);
@@ -397,32 +378,27 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['og_na']}</td>";
                 echo "<td>{$row['ce_year']}</td>";
                 echo "<td><a href='{$row['ce_file']}'>ดาวน์โหลด</a></td>";
-                echo "<td>{$row['student_name']}</td>";
                 echo "<td>";
                 echo "<a class='btn-edit' href='edit_cert.php?ce_id={$row['ce_id']}'>แก้ไข</a>";
-                echo "</td>";
-                echo "<td>";
                 echo "<a class='btn-delete' href='delete_cert.php?ce_id={$row['ce_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
                 echo "</td>";
-                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
         <a href="add_cert.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
-        <h2>ข้อมูลกิจกรรม (Events)</h2>
+        <h2>กิจกรรม (Events)</h2>
         <table>
             <tr>
-                <th>ชื่อกิจกรรม (e_na)</th>
-                <th>สถานที่จัดกิจกรรม (e_add)</th>
-                <th>ปี (e_date)</th>
-                <th>ชื่อ-นามสกุลนักศึกษา</th>
+                <th>กิจกรรม </th>
+                <th>สถานที่จัดกิจกรรม </th>
+                <th>ปี </th>
+                <th>การจัดการ</th>
             </tr>
             <?php
-            $sql = "SELECT e.e_id, e.e_na, e.e_add, e.e_date, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT e.e_id, e.e_na, e.e_add, e.e_date
                     FROM ev e
-                    INNER JOIN student s ON s.s_id = e.s_id
                     WHERE e.s_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $s_id);
@@ -433,32 +409,26 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['e_na']}</td>";
                 echo "<td>{$row['e_add']}</td>";
                 echo "<td>{$row['e_date']}</td>";
-                echo "<td>{$row['student_name']}</td>";
                 echo "<td>";
                 echo "<a class='btn-edit' href='edit_event.php?e_id={$row['e_id']}'>แก้ไข</a>";
-                echo "</td>";
-                echo "<td>";
                 echo "<a class='btn-delete' href='delete_event.php?e_id={$row['e_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
                 echo "</td>";
-                echo "</tr>";
                 echo "</tr>";
             }
             ?>
         </table>
         <a href="add_event.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
 
-        <h2>ข้อมูลประวัติการศึกษา (Education History)</h2>
+        <h2>ประวัติการศึกษา (Education History)</h2>
         <table>
             <tr>
-                <th>ชื่อสถานที่ศึกษา (eh_na)</th>
-                <th>ระดับการศึกษา (eh_level)</th>
-                <th>ปีที่จบการศึกษา (eh_end)</th>
-                <th>ชื่อ-นามสกุลนักศึกษา</th>
+                <th>สถานที่ศึกษา </th>
+                <th>ระดับการศึกษา </th>
+                <th>ปีที่จบการศึกษา </th>
             </tr>
             <?php
-            $sql = "SELECT eh.eh_id, eh.eh_na, eh.eh_level, eh.eh_end, CONCAT(s.s_na, ' ', s.s_la) AS student_name
+            $sql = "SELECT eh.eh_id, eh.eh_na, eh.eh_level, eh.eh_end
                     FROM edu_history eh
-                    INNER JOIN student s ON s.s_id = eh.s_id
                     WHERE eh.s_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $s_id);
@@ -469,14 +439,12 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['eh_na']}</td>";
                 echo "<td>{$row['eh_level']}</td>";
                 echo "<td>{$row['eh_end']}</td>";
-                echo "<td>{$row['student_name']}</td>";
                 echo "<td>";
                 echo "<a class='btn-edit' href='edit_eh.php?eh_id={$row['eh_id']}'>แก้ไข</a>";
                 echo "</td>";
                 echo "<td>";
                 echo "<a class='btn-delete' href='delete_eh.php?eh_id={$row['eh_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
                 echo "</td>";
-                echo "</tr>";
                 echo "</tr>";
             }
             ?>
