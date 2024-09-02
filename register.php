@@ -174,7 +174,7 @@ $conn->close();
             <p>มีบัญชีอยู่แล้ว? <a href="login.php">เข้าสู่ระบบ</a></p>
         </div>
         <div class="guest-login">
-            <p><a href="guestmain.php">เยี่ยมชมเว็บไซต์</a></p>
+            <p><a href="index.php">เยี่ยมชมเว็บไซต์</a></p>
         </div>
     </div>
 </body>

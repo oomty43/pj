@@ -107,20 +107,20 @@ $conn->close();
         .back-link {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #007BFF;
+            background-color: rgb(232, 98, 1);
             color: white;
             text-decoration: none;
             border-radius: 5px;
         }
         .back-link:hover {
-            background-color: #0056b3;
+            background-color: rgb(232, 98, 1);
         }
     </style>
 </head>
 <body>
     
     <!-- Banner -->
-    <img src="uploads/banner.jpg" alt="Banner" class="banner">
+    <img src="uploads/banner1.jpg" alt="Banner" class="banner">
 
     <div class="container">
         <img src="uploads/<?php echo htmlspecialchars($news_item['i_cover']); ?>" alt="ข่าวสาร" class="news-cover">
@@ -130,7 +130,7 @@ $conn->close();
             <?php echo nl2br(htmlspecialchars($news_item['i_deltail'])); ?>
         </div>
         <div class="back-link-container">
-            <a href="guestmain.php" class="back-link">กลับไปที่หน้าหลัก</a>
+            <a href="index.php" class="back-link">กลับไปที่หน้าหลัก</a>
         </div>
     </div>
 
