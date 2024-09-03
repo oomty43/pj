@@ -122,6 +122,11 @@ function getStudentStatus($s_stat) {
 </head>
 <body>
 
+    <button onclick="window.print()" style="margin: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Print ข้อมูล
+    </button>
+    
+
 <!-- แสดงแบนเนอร์ -->
 <img src="uploads/banner1.jpg" alt="แบนเนอร์" class="banner">
 
