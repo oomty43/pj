@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
     <div class="form-container">
-        <h2>เพิ่มประวัติการทำงาน</h2>
+        <h2>แก้ไขประวัติการทำงาน</h2>
         <form id="workForm" action="add_work.php" method="post">
             <div class="form-group">
                 <label for="w_na">สถานที่ทำงาน</label>

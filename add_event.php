@@ -54,40 +54,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .form-group input[type="text"] {
+        .form-group input[type="text"],
+        .form-group input[type="date"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
         .btn-submit {
-            display: inline-block;
             padding: 10px 20px;
             background-color: #28a745;
             color: white;
-            text-align: center;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            flex: 1;
+            margin-right: 10px; /* ช่องว่างระหว่างปุ่ม */
         }
         .btn-submit:hover {
             background-color: #218838;
         }
         .btn-cancel {
-            display: inline-block;
             padding: 10px 20px;
             background-color: #dc3545;
             color: white;
-            text-align: center;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            margin-left: 10px;
+            flex: 1;
+            margin-right: 10px; /* ช่องว่างระหว่างปุ่ม */
         }
         .btn-cancel:hover {
             background-color: #c82333;
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .btn-back:hover {
+            background-color: darkblue;
         }
     </style>
 </head>
@@ -108,8 +126,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="e_date">ปีที่จัดกิจกรรม</label>
                 <input type="date" id="e_date" name="e_date" required>
             </div>
-            <button type="submit" class="btn-submit">บันทึก</button>
-            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+            <div class="button-group">
+                <button type="submit" class="btn-submit">บันทึก</button>
+                <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+                <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
+            </div>
         </form>
     </div>
 

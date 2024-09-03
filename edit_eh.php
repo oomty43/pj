@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         header("Location: stdaward.php");
+        exit();
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -68,28 +69,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .form-group .buttons {
+        .button-group {
             display: flex;
             justify-content: space-between;
+            margin-top: 20px;
         }
-        .form-group button,
-        .form-group a.btn-cancel {
-            width: 48%;
-            padding: 10px;
+        .btn-save {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            text-align: center;
-        }
-        .btn-save {
-            background-color: #28a745;
-            color: white;
+            flex: 1;
+            margin-right: 10px;
         }
         .btn-cancel {
+            padding: 10px 20px;
             background-color: #dc3545;
             color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+            margin-right: 10px;
             text-decoration: none;
+            text-align: center;
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+        .btn-back:hover {
+            background-color: darkblue;
         }
     </style>
 </head>
@@ -109,14 +134,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="eh_end">ปีที่จบการศึกษา:</label>
                 <input type="date" id="eh_end" name="eh_end" value="<?php echo $row['eh_end']; ?>" required>
             </div>
-            <div class="form-group buttons">
+            <div class="button-group">
                 <button type="submit" class="btn-save">บันทึก</button>
-                <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+                <button type="button" class="btn-cancel" onclick="document.getElementById('eh_na').value=''; document.getElementById('eh_level').value=''; document.getElementById('eh_end').value='';">ยกเลิก</button>
+                <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
             </div>
         </form>
     </div>
 </body>
 </html>
+
 <?php
 $conn->close();
 ?>

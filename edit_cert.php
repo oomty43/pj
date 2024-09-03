@@ -14,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssi", $ce_na, $og_na, $ce_year, $ce_id);
 
     if ($stmt->execute()) {
-        header("Location: stdaward.php");
+        echo "<script>alert('แก้ไขข้อมูลสำเร็จ!'); window.location.href='stdaward.php';</script>";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('เกิดข้อผิดพลาดในการแก้ไขข้อมูล! กรุณาลองใหม่');</script>";
     }
 } else {
     $sql = "SELECT * FROM certi WHERE ce_id = ?";
@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขข้อมูลใบรับรอง</title>
     <style>
         body {
@@ -64,17 +65,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
         .btn-save,
         .btn-cancel {
-            display: inline-block;
-            width: 48%;
             padding: 10px;
-            font-size: 16px;
+            width: 48%;
             border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
             text-align: center;
             text-decoration: none;
             color: white;
-            cursor: pointer;
             border: none;
         }
         .btn-save {
@@ -89,10 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .btn-cancel:hover {
             background-color: #c82333;
         }
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-        }
     </style>
 </head>
 <body>
@@ -101,15 +101,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="edit_cert.php?ce_id=<?php echo $ce_id; ?>" method="POST">
             <div class="form-group">
                 <label>ชื่อใบรับรอง:</label>
-                <input type="text" name="ce_na" value="<?php echo $row['ce_na']; ?>" required>
+                <input type="text" name="ce_na" value="<?php echo htmlspecialchars($row['ce_na']); ?>" required>
             </div>
             <div class="form-group">
                 <label>หน่วยงานที่รับรอง:</label>
-                <input type="text" name="og_na" value="<?php echo $row['og_na']; ?>" required>
+                <input type="text" name="og_na" value="<?php echo htmlspecialchars($row['og_na']); ?>" required>
             </div>
             <div class="form-group">
                 <label>ปีที่ได้รับ:</label>
-                <input type="date" name="ce_year" value="<?php echo $row['ce_year']; ?>" required>
+                <input type="date" name="ce_year" value="<?php echo htmlspecialchars($row['ce_year']); ?>" required>
             </div>
             <div class="button-group">
                 <button type="submit" class="btn-save">บันทึก</button>

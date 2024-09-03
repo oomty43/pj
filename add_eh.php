@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .form-group label {
             display: block;
@@ -61,34 +61,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn-submit {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            text-align: center;
-            border: none;
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px; /* ลดระยะห่างด้านบนของกลุ่มปุ่ม */
+            gap: 10px; /* เพิ่มช่องว่างระหว่างปุ่ม */
+        }
+        .btn-submit,
+        .btn-cancel,
+        .btn-back {
+            padding: 10px;
+            flex: 1; /* ปุ่มแต่ละปุ่มมีขนาดเท่ากัน */
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            text-align: center;
+            border: none;
+            color: white;
+        }
+        .btn-submit {
+            background-color: #28a745;
         }
         .btn-submit:hover {
             background-color: #218838;
         }
         .btn-cancel {
-            display: inline-block;
-            padding: 10px 20px;
             background-color: #dc3545;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-left: 10px;
         }
         .btn-cancel:hover {
             background-color: #c82333;
+        }
+        .btn-back {
+            background-color: blue;
+        }
+        .btn-back:hover {
+            background-color: darkblue;
         }
     </style>
 </head>
@@ -96,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form-container">
         <h2>เพิ่มประวัติการศึกษา</h2>
-        <form action="add_eh.php" method="post">
+        <form id="educationForm" action="add_eh.php" method="post">
             <div class="form-group">
                 <label for="eh_na">ชื่อสถานที่ศึกษา</label>
                 <input type="text" id="eh_na" name="eh_na" required>
@@ -109,8 +116,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="eh_end">ปีที่จบการศึกษา</label>
                 <input type="number" id="eh_end" name="eh_end" required>
             </div>
-            <button type="submit" class="btn-submit">บันทึก</button>
-            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+            <div class="button-group">
+                <button type="submit" class="btn-submit">บันทึก</button>
+                <button type="button" class="btn-cancel" onclick="document.getElementById('educationForm').reset();">ยกเลิก</button>
+                <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
+            </div>
         </form>
     </div>
 

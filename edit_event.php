@@ -14,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssi", $e_na, $e_add, $e_date, $e_id);
 
     if ($stmt->execute()) {
-        header("Location: stdaward.php");
+        echo "<script>alert('แก้ไขข้อมูลกิจกรรมสำเร็จ!'); window.location.href='stdaward.php';</script>";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('เกิดข้อผิดพลาดในการแก้ไขข้อมูล! กรุณาลองใหม่');</script>";
     }
 } else {
     $sql = "SELECT * FROM ev WHERE e_id = ?";
@@ -32,29 +32,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขข้อมูลกิจกรรม</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding: 20px;
         }
         .form-container {
-            width: 400px;
+            width: 100%;
+            max-width: 600px;
+            margin: 50px auto;
             padding: 20px;
             background-color: white;
-            border-radius: 5px;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
         }
         .form-group {
             margin-bottom: 15px;
-            text-align: left;
         }
         .form-group label {
             display: block;
@@ -68,28 +65,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .form-group .buttons {
+        .button-group {
             display: flex;
             justify-content: space-between;
         }
-        .form-group button,
-        .form-group a.btn-cancel {
-            width: 48%;
+        .btn-save,
+        .btn-cancel,
+        .btn-back {
             padding: 10px;
-            border: none;
+            width: 30%;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
             text-align: center;
+            text-decoration: none;
+            color: white;
+            border: none;
         }
         .btn-save {
             background-color: #28a745;
-            color: white;
+        }
+        .btn-save:hover {
+            background-color: #218838;
         }
         .btn-cancel {
             background-color: #dc3545;
-            color: white;
-            text-decoration: none;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+        .btn-back {
+            background-color: blue;
+        }
+        .btn-back:hover {
+            background-color: darkblue;
         }
     </style>
 </head>
@@ -99,24 +108,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="edit_event.php?e_id=<?php echo $e_id; ?>" method="POST">
             <div class="form-group">
                 <label for="e_na">ชื่อกิจกรรม:</label>
-                <input type="text" id="e_na" name="e_na" value="<?php echo $row['e_na']; ?>" required>
+                <input type="text" id="e_na" name="e_na" value="<?php echo htmlspecialchars($row['e_na']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="e_add">สถานที่จัดกิจกรรม:</label>
-                <input type="text" id="e_add" name="e_add" value="<?php echo $row['e_add']; ?>" required>
+                <input type="text" id="e_add" name="e_add" value="<?php echo htmlspecialchars($row['e_add']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="e_date">ปี:</label>
-                <input type="date" id="e_date" name="e_date" value="<?php echo $row['e_date']; ?>" required>
+                <input type="date" id="e_date" name="e_date" value="<?php echo htmlspecialchars($row['e_date']); ?>" required>
             </div>
-            <div class="form-group buttons">
+            <div class="button-group">
                 <button type="submit" class="btn-save">บันทึก</button>
                 <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+                <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
             </div>
         </form>
     </div>
 </body>
 </html>
+
 <?php
 $conn->close();
 ?>

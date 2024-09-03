@@ -1,5 +1,4 @@
 <?php
-// เริ่มต้น session
 session_start(); 
 
 include 'std_con.php';
@@ -19,13 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ตรวจสอบประเภทของไฟล์
     if ($fileType != "pdf" && $fileType != "doc" && $fileType != "docx") {
-        echo "ขออภัย, อนุญาตเฉพาะไฟล์ PDF, DOC, DOCX เท่านั้น.";
+        echo "<script>alert('ขออภัย, อนุญาตเฉพาะไฟล์ PDF, DOC, DOCX เท่านั้น.');</script>";
         $uploadOk = 0;
     }
 
     // ตรวจสอบว่ามีข้อผิดพลาดในการอัพโหลดไฟล์หรือไม่
     if ($uploadOk == 0) {
-        echo "ขออภัย, ไฟล์ของคุณไม่สามารถอัพโหลดได้.";
+        echo "<script>alert('ขออภัย, ไฟล์ของคุณไม่สามารถอัพโหลดได้.');</script>";
     } else {
         if (move_uploaded_file($ce_file["tmp_name"], $target_file)) {
             $sql = "INSERT INTO certi (ce_na, og_na, ce_year, ce_file, s_id) VALUES (?, ?, ?, ?, ?)";
@@ -33,14 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("ssssi", $ce_na, $og_na, $ce_year, $target_file, $s_id);
 
             if ($stmt->execute()) {
-                echo "เพิ่มข้อมูลใบรับรองเรียบร้อยแล้ว";
-                header("Location: stdaward.php"); // เปลี่ยนเส้นทางไปยังหน้าหลักหลังจากเพิ่มข้อมูลสำเร็จ
-                exit;
+                echo "<script>alert('เพิ่มข้อมูลใบรับรองเรียบร้อยแล้ว'); window.location.href='stdaward.php';</script>";
             } else {
-                echo "เกิดข้อผิดพลาดในการบันทึกข้อมูล: " . $stmt->error;
+                echo "<script>alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล: " . $stmt->error . "');</script>";
             }
         } else {
-            echo "ขออภัย, มีปัญหาในการอัพโหลดไฟล์ของคุณ.";
+            echo "<script>alert('ขออภัย, มีปัญหาในการอัพโหลดไฟล์ของคุณ.');</script>";
         }
     }
 }
@@ -57,9 +54,9 @@ $conn->close();
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
         }
         .form-container {
             width: 50%;
@@ -85,25 +82,58 @@ $conn->close();
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
         .btn-submit {
-            width: 100%;
-            padding: 10px;
+            padding: 10px 20px;
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            flex: 1;
+            margin-right: 10px; /* ช่องว่างระหว่างปุ่ม */
         }
         .btn-submit:hover {
             background-color: #218838;
+        }
+        .btn-cancel {
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+            margin-right: 10px; /* ช่องว่างระหว่างปุ่ม */
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .btn-back:hover {
+            background-color: darkblue;
         }
     </style>
 </head>
 <body>
     <div class="form-container">
         <h2>เพิ่มข้อมูลใบรับรอง</h2>
-        <form action="add_cert.php" method="POST" enctype="multipart/form-data">
+        <form id="certForm" action="add_cert.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="ce_na">ชื่อใบรับรอง</label>
                 <input type="text" id="ce_na" name="ce_na" required>
@@ -120,7 +150,11 @@ $conn->close();
                 <label for="ce_file">เอกสารแนบ</label>
                 <input type="file" id="ce_file" name="ce_file" accept=".pdf,.doc,.docx" required>
             </div>
-            <button type="submit" class="btn-submit">บันทึก</button>
+            <div class="button-group">
+                <button type="submit" class="btn-submit">บันทึก</button>
+                <button type="button" class="btn-cancel" onclick="document.getElementById('certForm').reset();">ยกเลิก</button>
+                <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
+            </div>
         </form>
     </div>
 </body>
