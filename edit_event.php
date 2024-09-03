@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="form-container">
         <h2>แก้ไขข้อมูลกิจกรรม</h2>
-        <form action="edit_event.php?e_id=<?php echo $e_id; ?>" method="POST">
+        <form id="editEventForm" action="edit_event.php?e_id=<?php echo $e_id; ?>" method="POST">
             <div class="form-group">
                 <label for="e_na">ชื่อกิจกรรม:</label>
                 <input type="text" id="e_na" name="e_na" value="<?php echo htmlspecialchars($row['e_na']); ?>" required>
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="button-group">
                 <button type="submit" class="btn-save">บันทึก</button>
-                <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+                <button type="button" class="btn-cancel" onclick="document.getElementById('editEventForm').reset();">ยกเลิก</button>
                 <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
             </div>
         </form>

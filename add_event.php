@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form-container">
         <h2>เพิ่มกิจกรรม</h2>
-        <form action="add_event.php" method="post">
+        <form id="eventForm" action="add_event.php" method="post">
             <div class="form-group">
                 <label for="e_na">ชื่อกิจกรรม</label>
                 <input type="text" id="e_na" name="e_na" required>
@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="button-group">
                 <button type="submit" class="btn-submit">บันทึก</button>
-                <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+                <button type="button" class="btn-cancel" onclick="document.getElementById('eventForm').reset();">ยกเลิก</button>
                 <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
             </div>
         </form>
