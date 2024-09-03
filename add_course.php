@@ -63,27 +63,56 @@ $conn->close();
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn-save {
-            display: inline-block;
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            text-align: center;
-            border: none;
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            width: 30%;
             border-radius: 5px;
-            text-decoration: none;
             font-size: 16px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-save {
+            background-color: #28a745;
         }
         .btn-save:hover {
             background-color: #218838;
         }
+        .btn-red {
+            background-color: red;
+        }
+        .btn-red:hover {
+            background-color: darkred;
+        }
+        .btn-blue {
+            background-color: blue;
+        }
+        .btn-blue:hover {
+            background-color: darkblue;
+        }
     </style>
+    <script>
+        function resetForm() {
+            if(confirm('คุณต้องการล้างฟอร์มหรือไม่?')) {
+                document.getElementById("courseForm").reset(); // ล้างฟอร์ม
+            }
+        }
+
+        function goBack() {
+            window.history.back(); // กลับไปหน้าก่อนหน้า
+        }
+    </script>
 </head>
 <body>
     <div class="form-container">
         <h2>เพิ่มข้อมูลการอบรม (Course)</h2>
-        <form method="POST" action="add_course.php">
+        <form id="courseForm" method="POST" action="add_course.php">
             <div class="form-group">
                 <label for="c_na">ชื่อโครงการอบรม</label>
                 <input type="text" id="c_na" name="c_na" required>
@@ -96,7 +125,11 @@ $conn->close();
                 <label for="c_date">วันที่อบรม</label>
                 <input type="date" id="c_date" name="c_date" required>
             </div>
-            <button type="submit" class="btn-save">บันทึกข้อมูล</button>
+            <div class="button-group">
+                <button type="submit" class="btn-save">บันทึกข้อมูล</button>
+                <button type="button" class="btn-red" onclick="resetForm()">ยกเลิก</button>
+                <button type="button" class="btn-blue" onclick="goBack()">ย้อนกลับ</button>
+            </div>
         </form>
     </div>
 </body>

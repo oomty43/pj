@@ -37,11 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("si", $sk_na, $sk_id);
 
     if ($stmt->execute()) {
-        echo "แก้ไขข้อมูลสำเร็จ!";
-        header("Location: stdaward.php");
+        echo "<script>alert('แก้ไขข้อมูลสำเร็จ!'); window.location.href='stdaward.php';</script>";
         exit();
     } else {
-        echo "เกิดข้อผิดพลาดในการแก้ไขข้อมูล";
+        echo "<script>alert('เกิดข้อผิดพลาดในการแก้ไขข้อมูล');</script>";
     }
 }
 ?>
@@ -81,31 +80,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn-save {
-            display: inline-block;
-            width: 48%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            text-align: center;
-            border: none;
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-group button,
+        .button-group a {
+            padding: 10px 20px;
+            width: 30%;
             border-radius: 5px;
-            text-decoration: none;
             font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            border: none;
             cursor: pointer;
         }
+        .btn-save {
+            background-color: #28a745;
+        }
+        .btn-save:hover {
+            background-color: #218838;
+        }
         .btn-cancel {
-            display: inline-block;
-            width: 48%;
-            padding: 10px;
             background-color: #dc3545;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
+        }
+        .btn-cancel:hover {
+            background-color: darkred;
+        }
+        .btn-back {
+            background-color: blue;
+        }
+        .btn-back:hover {
+            background-color: darkblue;
         }
     </style>
 </head>
@@ -117,8 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="sk_na">ชื่อทักษะ:</label>
                 <input type="text" id="sk_na" name="sk_na" value="<?php echo htmlspecialchars($sk_na); ?>" required>
             </div>
-            <button type="submit" class="btn-save">บันทึก</button>
-            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+            <div class="button-group">
+                <button type="submit" class="btn-save">บันทึก</button>
+                <a href="javascript:history.back()" class="btn-cancel">ยกเลิก</a>
+                <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
+            </div>
         </form>
     </div>
 </body>

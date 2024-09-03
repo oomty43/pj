@@ -40,8 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("sssi", $c_na, $c_add, $c_date, $c_id);
 
     if ($stmt->execute()) {
-        echo "แก้ไขข้อมูลเรียบร้อยแล้ว";
-        header("Location: stdaward.php");
+        echo "<script>alert('แก้ไขข้อมูลเรียบร้อยแล้ว'); window.location.href='stdaward.php';</script>";
         exit();
     } else {
         echo "เกิดข้อผิดพลาดในการแก้ไขข้อมูล: " . $conn->error;
@@ -87,31 +86,54 @@ $conn->close();
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn-save {
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-group button,
+        .button-group a {
             padding: 10px 20px;
-            background-color: #28a745;
+            width: 30%;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 16px;
+            text-decoration: none;
             color: white;
             border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
+        }
+        .btn-save {
+            background-color: #28a745;
+        }
+        .btn-save:hover {
+            background-color: #218838;
         }
         .btn-cancel {
-            padding: 10px 20px;
             background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
+        }
+        .btn-cancel:hover {
+            background-color: darkred;
+        }
+        .btn-back {
+            background-color: blue;
+        }
+        .btn-back:hover {
+            background-color: darkblue;
         }
     </style>
+    <script>
+        function resetForm() {
+            if(confirm('คุณต้องการล้างฟอร์มหรือไม่?')) {
+                document.getElementById("editForm").reset(); // ล้างฟอร์ม
+            }
+        }
+    </script>
 </head>
 <body>
 
     <div class="form-container">
         <h2>แก้ไขข้อมูลการอบรม</h2>
-        <form method="POST">
+        <form id="editForm" method="POST">
             <div class="form-group">
                 <label for="c_na">ชื่อโครงการอบรม</label>
                 <input type="text" id="c_na" name="c_na" value="<?php echo $c_na; ?>" required>
@@ -124,8 +146,11 @@ $conn->close();
                 <label for="c_date">วันที่อบรม</label>
                 <input type="date" id="c_date" name="c_date" value="<?php echo $c_date; ?>" required>
             </div>
-            <button type="submit" class="btn-save">บันทึก</button>
-            <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>
+            <div class="button-group">
+                <button type="submit" class="btn-save">บันทึก</button>
+                <button type="button" class="btn-cancel" onclick="resetForm()">ยกเลิก</button>
+                <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
+            </div>
         </form>
     </div>
 

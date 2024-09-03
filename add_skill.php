@@ -66,32 +66,66 @@ $conn->close();
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn-save {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            text-align: center;
-            border: none;
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            width: 30%;
             border-radius: 5px;
-            text-decoration: none;
             font-size: 16px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-save {
+            background-color: #28a745;
         }
         .btn-save:hover {
             background-color: #218838;
         }
+        .btn-red {
+            background-color: red;
+        }
+        .btn-red:hover {
+            background-color: darkred;
+        }
+        .btn-blue {
+            background-color: blue;
+        }
+        .btn-blue:hover {
+            background-color: darkblue;
+        }
     </style>
+    <script>
+        function resetForm() {
+            if(confirm('คุณต้องการล้างฟอร์มหรือไม่?')) {
+                document.getElementById("skillForm").reset(); // ล้างฟอร์ม
+            }
+        }
+
+        function goBack() {
+            window.history.back(); // กลับไปหน้าก่อนหน้า
+        }
+    </script>
 </head>
 <body>
 
 <div class="form-container">
     <h2>เพิ่มข้อมูลทักษะพิเศษ</h2>
-    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+    <form id="skillForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <div class="form-group">
             <label for="sk_na">ชื่อทักษะพิเศษ:</label>
             <input type="text" name="sk_na" id="sk_na" required>
         </div>
-        <button type="submit" class="btn-save">บันทึก</button>
+        <div class="button-group">
+            <button type="submit" class="btn-save">บันทึก</button>
+            <button type="button" class="btn-red" onclick="resetForm()">ยกเลิก</button>
+            <button type="button" class="btn-blue" onclick="goBack()">ย้อนกลับ</button>
+        </div>
     </form>
 </div>
 
