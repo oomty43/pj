@@ -137,6 +137,12 @@ function calculateAcademicYear($batch) {
             color: green; /* เปลี่ยนสีของข้อความเป็นสีเขียว */
         }
     </style>
+    <script>
+        // ฟังก์ชั่นสำหรับพิมพ์รายงาน
+        function printReport() {
+            window.print();
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -157,6 +163,13 @@ function calculateAcademicYear($batch) {
                 </select>
                 <input type="submit" value="ค้นหา">
             </form>
+        </div>
+
+                <!-- ปุ่มพิมพ์รายงาน -->
+                <div class="print-button">
+            <button onclick="printReport()" style="background-color: #007BFF; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+                พิมพ์รายงาน
+            </button>
         </div>
 
         <!-- Table for displaying student data -->
