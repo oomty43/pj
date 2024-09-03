@@ -65,7 +65,6 @@ if (isset($_GET['id'])) {
 $stmt->close();
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -86,6 +85,7 @@ $conn->close();
         }
         .container {
             width: 80%;
+            max-width: 800px; /* กำหนดขนาดสูงสุดของกล่อง */
             background-color: #333; /* สีพื้นหลังของกล่อง */
             padding: 20px;
             border-radius: 10px;
@@ -101,10 +101,12 @@ $conn->close();
             margin-bottom: 20px;
         }
         .news-detail img {
-            max-width: 100%;
+            width: 100%;
+            max-width: 600px; /* กำหนดขนาดสูงสุดของรูปภาพ */
             height: auto;
             margin: 10px 0;
             border-radius: 5px; /* เพิ่มมุมโค้ง */
+            object-fit: cover; /* ครอบตัดรูปให้พอดี */
         }
         .news-detail p {
             margin: 10px 0;
@@ -137,7 +139,7 @@ $conn->close();
                 <img src="uploads/<?php echo htmlspecialchars($row['i_pic']); ?>" alt="รูปภาพข่าว">
             <?php endif; ?>
             <p><?php echo nl2br(htmlspecialchars($row['i_deltail'])); ?></p>
-            <p><strong>วันที่ลงข่าว:</strong> <?php echo htmlspecialchars(thai_date($row['i_date'])); ?></p>
+            <p><strong>วันที่เผยแพร่:</strong> <?php echo htmlspecialchars(thai_date($row['i_date'])); ?></p>
         </div>
         <div class="back-link">
             <a href="display_information.php">กลับหน้าหลัก</a>

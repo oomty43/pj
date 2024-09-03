@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 }
 
 // ดึงข้อมูลจากตาราง admin
-$sql = "SELECT a_user, a_na, a_email FROM admin";
+$sql = "SELECT a_user, a_na, a_la, a_email, a_st FROM admin";
 $result = $conn->query($sql);
 ?>
 
@@ -100,27 +100,32 @@ $result = $conn->query($sql);
         <a href="mainadmin.php" class="button">หน้าหลัก</a>
         <table>
             <tr>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Actions</th>
+                <th>ชื่อผู้ใช้</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>อีเมล์</th>
+                <th>สถานะ</th>
+                <th>จัดการ</th>
             </tr>
             <?php
             if ($result->num_rows > 0) {
                 // แสดงข้อมูลในตาราง
                 while($row = $result->fetch_assoc()) {
+                    // กำหนดชื่อสถานะจาก a_st
+                    $status = $row["a_st"] == 0 ? "เจ้าหน้าที่" : "อาจารย์";
+                    
                     echo "<tr>";
                     echo "<td>" . $row["a_user"] . "</td>";
-                    echo "<td>" . $row["a_na"] . "</td>";
+                    echo "<td>" . $row["a_na"] . " " . $row["a_la"] . "</td>"; // แสดงชื่อและนามสกุล
                     echo "<td>" . $row["a_email"] . "</td>";
+                    echo "<td>" . $status . "</td>"; // แสดงสถานะ
                     echo "<td class='actions'>
-                            <a href='edit_admin.php?a_user=" . $row["a_user"] . "'>Edit</a> |
-                            <a href='delete_admin.php?a_user=" . $row["a_user"] . "' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</a>
+                            <a href='edit_admin.php?a_user=" . $row["a_user"] . "'>แก้ไข</a> |
+                            <a href='delete_admin.php?a_user=" . $row["a_user"] . "' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>
                           </td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='4'>No records found</td></tr>";
+                echo "<tr><td colspan='5'>ไม่พบข้อมูล</td></tr>";
             }
             $conn->close();
             ?>
