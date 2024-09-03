@@ -55,6 +55,7 @@ function getStudentStatus($s_stat) {
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
         }
         img.banner {
             width: 100%;
@@ -99,12 +100,36 @@ function getStudentStatus($s_stat) {
         .certificate-table th, .event-table th, .work-history-table th, .education-history-table th {
             background-color: #f2f2f2;
         }
+        .button-container {
+            position: absolute;
+            top: 80px; /* ปรับตำแหน่งตามความสูงของแบนเนอร์ */
+            right: 20px;
+        }
+        .button-container a {
+            text-decoration: none;
+            color: white;
+            background-color: rgb(232, 98, 1);
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-left: 10px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .button-container a:hover {
+            background-color: rgb(186, 79, 1);
+        }
     </style>
 </head>
 <body>
 
 <!-- แสดงแบนเนอร์ -->
 <img src="uploads/banner1.jpg" alt="แบนเนอร์" class="banner">
+
+<!-- ปุ่มไปยังหน้าหลักและหน้ารายชื่อนักศึกษา -->
+<div class="button-container">
+    <a href="index.php">หน้าหลัก</a>
+    <a href="gstdlist.php">รายชื่อนักศึกษา</a>
+</div>
 
 <div class="container">
     <?php
@@ -205,7 +230,7 @@ function getStudentStatus($s_stat) {
             $programmingSkillResult = $conn->query($programmingSkillSql);
 
             if ($programmingSkillResult->num_rows > 0) {
-                echo "<h2>ทักษะการเขียนโปรแกรม </h2>";
+                echo "<h2>ทักษะการเขียนโปรแกรม (Programming Skills)</h2>";
                 echo "<table class='programming-skill-table'>";
                 echo "<thead><tr><th>ชื่อภาษาโปรแกรม</th></tr></thead>";
                 echo "<tbody>";
@@ -226,7 +251,7 @@ function getStudentStatus($s_stat) {
             $certificateResult = $conn->query($certificateSql);
 
             if ($certificateResult->num_rows > 0) {
-                echo "<h2>ใบรับรอง </h2>";
+                echo "<h2>ใบรับรอง (Certificates)</h2>";
                 echo "<table class='certificate-table'>";
                 echo "<thead><tr><th>ชื่อใบรับรอง</th><th>หน่วยงานที่รับรอง</th><th>ปีที่ได้รับ</th><th>เอกสารแนบ</th></tr></thead>";
                 echo "<tbody>";
@@ -250,7 +275,7 @@ function getStudentStatus($s_stat) {
             $eventResult = $conn->query($eventSql);
 
             if ($eventResult->num_rows > 0) {
-                echo "<h2>กิจกรรม </h2>";
+                echo "<h2>กิจกรรม (Events)</h2>";
                 echo "<table class='event-table'>";
                 echo "<thead><tr><th>กิจกรรม</th><th>สถานที่จัดกิจกรรม</th><th>ปีที่จัดกิจกรรม</th></tr></thead>";
                 echo "<tbody>";
@@ -273,7 +298,7 @@ function getStudentStatus($s_stat) {
             $workHistoryResult = $conn->query($workHistorySql);
 
             if ($workHistoryResult->num_rows > 0) {
-                echo "<h2>การทำงาน </h2>";
+                echo "<h2>การทำงาน (Work History)</h2>";
                 echo "<table class='work-history-table'>";
                 echo "<thead><tr><th>สถานที่ทำงาน</th><th>ปีที่ทำงาน</th></tr></thead>";
                 echo "<tbody>";
@@ -295,7 +320,7 @@ function getStudentStatus($s_stat) {
             $educationHistoryResult = $conn->query($educationHistorySql);
 
             if ($educationHistoryResult->num_rows > 0) {
-                echo "<h2>ประวัติการศึกษา </h2>";
+                echo "<h2>ประวัติการศึกษา (Education History)</h2>";
                 echo "<table class='education-history-table'>";
                 echo "<thead><tr><th>สถานที่ศึกษา</th><th>ระดับการศึกษา</th><th>ปีที่จบการศึกษา</th></tr></thead>";
                 echo "<tbody>";
