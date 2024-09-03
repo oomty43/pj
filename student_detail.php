@@ -55,6 +55,22 @@ function getStudentStatus($s_stat) {
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            
+        }
+        .nav-buttons {
+            text-align: right;
+            margin: 10px;
+        }
+        .nav-buttons a {
+            padding: 10px 20px;
+            background-color: rgb(232, 98, 1); /* เปลี่ยนสีปุ่มเป็นสีส้ม */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .nav-buttons a:hover {
+            background-color: rgb(186, 79, 1); /* เปลี่ยนสีปุ่มเมื่อ hover เป็นสีส้มเข้ม */
         }
         img.banner {
             width: 100%;
@@ -110,6 +126,11 @@ function getStudentStatus($s_stat) {
 
 <!-- แสดงแบนเนอร์ -->
 <img src="uploads/banner1.jpg" alt="แบนเนอร์" class="banner">
+
+<div class="nav-buttons">
+        <a href="index.php">หน้าหลัก</a>
+        <a href="login.php">เข้าสู่ระบบ</a>
+    </div>
 
 <div class="container">
     <?php
