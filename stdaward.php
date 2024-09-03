@@ -201,37 +201,41 @@ if ($result->num_rows > 0) {
         <?php echo $welcome_message; ?>
     </div>
 
-    <div class="form-container">
-        <h2>การเข้าอบรม (Course)</h2>
-        <table>
-            <tr>
-                <th>ชื่อโครงการอบรม </th>
-                <th>ชื่อสถานที่อบรม </th>
-                <th>ปีที่อบรม </th>
-                <th>การจัดการ</th>
-            </tr>
-            <?php
-            $sql = "SELECT c.c_id, c.c_na, c.c_add, YEAR(c.c_date) AS c_year
-                    FROM course c
-                    WHERE c.s_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $s_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>{$row['c_na']}</td>";
-                echo "<td>{$row['c_add']}</td>";
-                echo "<td>{$row['c_year']}</td>";
-                echo "<td>";
-                echo "<a class='btn-edit' href='edit_course.php?c_id={$row['c_id']}'>แก้ไข</a>";
-                echo "<a class='btn-delete' href='delete_course.php?c_id={$row['c_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
-                echo "</td>";
-                echo "</tr>";
-            }
-            ?>
-        </table>
+    <div class="form-container">   
+        <div id="courseTable">
+            <h2>การเข้าอบรม (Course)</h2>
+            <table>
+                <tr>
+                    <th>ชื่อโครงการอบรม </th>
+                    <th>ชื่อสถานที่อบรม </th>
+                    <th>ปีที่อบรม </th>
+                    <th>การจัดการ</th>
+                </tr>
+                <?php
+                $sql = "SELECT c.c_id, c.c_na, c.c_add, YEAR(c.c_date) AS c_year
+                        FROM course c
+                        WHERE c.s_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $s_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>{$row['c_na']}</td>";
+                    echo "<td>{$row['c_add']}</td>";
+                    echo "<td>{$row['c_year']}</td>";
+                    echo "<td>";
+                    echo "<a class='btn-edit' href='edit_course.php?c_id={$row['c_id']}'>แก้ไข</a>";
+                    echo "<a class='btn-delete' href='delete_course.php?c_id={$row['c_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                ?>
+            </table>
+        </div>
         <a href="add_course.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
+        <a href="javascript:void(0)" onclick="printSection('courseTable')"><button class="btn-add">พิมพ์ข้อมูลการเข้าอบรม</button></a>
+
 
         <h2>ทักษะพิเศษ (Skill)</h2>
         <table>
@@ -451,6 +455,23 @@ if ($result->num_rows > 0) {
         </table>
         <a href="add_eh.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
     </div>
+    
+    <a href="javascript:void(0)" onclick="printAll()"><button class="btn-add">พิมพ์ข้อมูลทั้งหมด</button></a>
+        <script>
+        function printSection(sectionId) {
+            var printContents = document.getElementById(sectionId).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+
+        function printAll() {
+            window.print();
+        }
+    </script>  
+        
 
 </body>
 </html>
