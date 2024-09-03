@@ -197,11 +197,12 @@ function calculateAcademicYear($batch) {
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row['s_id']) . "</td>";
-                        echo "<td>" . getPrefix($row['s_pna']) . " " . htmlspecialchars($row['s_na']) . " " . htmlspecialchars($row['s_la']) . "</td>"; // รวมชื่อ-นามสกุล
+                        echo "<td><a href='student_detail.php?s_id=" . htmlspecialchars($row['s_id']) . "'>" . getPrefix($row['s_pna']) . " " . htmlspecialchars($row['s_na']) . " " . htmlspecialchars($row['s_la']) . "</a></td>";
                         echo "<td>" . htmlspecialchars($row['s_email']) . "</td>";
                         echo "<td>" . getStudentStatus($row['s_stat']) . "</td>";
                         echo "</tr>";
                     }
+                    
                 } else {
                     echo "<tr><td colspan='5'>ไม่พบข้อมูลนักศึกษาที่ค้นหา</td></tr>";
                 }
