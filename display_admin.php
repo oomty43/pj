@@ -111,7 +111,8 @@ $result = $conn->query($sql);
                 // แสดงข้อมูลในตาราง
                 while($row = $result->fetch_assoc()) {
                     // กำหนดชื่อสถานะจาก a_st
-                    $status = $row["a_st"] == 0 ? "เจ้าหน้าที่" : "อาจารย์";
+                    $status = ($row["a_st"] == 1) ? "เจ้าหน้าที่" : 
+                              (($row["a_st"] == 2) ? "อาจารย์" : "ผู้ดูแลระบบ");
                     
                     echo "<tr>";
                     echo "<td>" . $row["a_user"] . "</td>";

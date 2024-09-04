@@ -186,8 +186,8 @@ $conn->close();
             
             <label for="a_st">สถานะ:</label>
             <select id="a_st" name="a_st" required>
-                <option value="0" <?php echo ($row['a_st'] == 0) ? 'selected' : ''; ?>>เจ้าหน้าที่ (Staff)</option>
-                <option value="1" <?php echo ($row['a_st'] == 1) ? 'selected' : ''; ?>>อาจารย์ (Teacher)</option>
+                <option value="1" <?php echo ($row['a_st'] == 0) ? 'selected' : ''; ?>>เจ้าหน้าที่ (Staff)</option>
+                <option value="2" <?php echo ($row['a_st'] == 1) ? 'selected' : ''; ?>>อาจารย์ (Teacher)</option>
             </select>
 
             <div class="button-group">

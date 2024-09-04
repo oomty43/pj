@@ -89,22 +89,13 @@ if (isset($_GET['logout'])) {
             background-color: #c82333; /* สีแดงเข้มเมื่อโฮเวอร์ */
         }
     </style>
-    <script>
-        function checkAccess() {
-            var status = <?php echo $_SESSION['ast']; ?>;
-            if (status == 1) {
-                alert('คุณไม่มีสิทธิ์เข้าถึง');
-                return false; // ยกเลิกการเปลี่ยนหน้า
-            }
-            return true; // อนุญาตให้เข้าถึง
-        }
-    </script>
+
 </head>
 <body>
     <div class="container">
         <h2>Menu Admin</h2>
         <ul>
-            <li><a href="display_admin.php" class="btn-manage" onclick="return checkAccess();">จัดการข้อมูลผู้ดูแลระบบ</a></li>
+            <li><a href="display_admin.php" class="btn-manage">จัดการข้อมูลผู้ดูแลระบบ</a></li>
             <li><a href="display_information.php" class="btn-info">จัดการข่าวประชาสัมพันธ์</a></li>
             <li><a href="display_student.php" class="btn-student">จัดการข้อมูลนักศึกษา</a></li>
             <li><a href="?logout=true" class="btn-logout">ออกจากระบบ</a></li> <!-- ปุ่มออกจากระบบ -->

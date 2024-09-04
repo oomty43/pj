@@ -140,10 +140,10 @@
             <input type="text" id="phone_number" name="phone_number" maxlength="10" required oninput="validatePhoneNumber(this)">
 
             <label for="a_st">สถานะ </label>
-            <select id="a_st" name="a_st" required>
-                <option value="0">เจ้าหน้าที่</option>
-                <option value="1">อาจารย์</option>
-            </select>
+<select id="a_st" name="a_st" required>
+    <option value="1">เจ้าหน้าที่</option>
+    <option value="2">อาจารย์</option>
+</select>
 
             <div class="button-group">
                 <input type="submit" value="เพิ่ม">
