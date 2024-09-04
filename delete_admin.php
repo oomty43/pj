@@ -1,13 +1,12 @@
 <?php
 // เชื่อมต่อกับฐานข้อมูล
+session_start();
 include 'db_connect.php';
 
-// สร้างการเชื่อมต่อ
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// ตรวจสอบการเชื่อมต่อ
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!isset($_SESSION['a_st']) || $_SESSION['a_st'] < 2) {
+    echo "<script>alert('คุณไม่มีสิทธิ์ในการเข้าถึงหน้านี้');</script>";
+    header("Location: mainadmin.php");
+    exit();
 }
 
 $message = '';

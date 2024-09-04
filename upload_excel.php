@@ -11,13 +11,6 @@ if (class_exists('ZipArchive')) {
     echo 'ZipArchive is not enabled.';
 }
 
-// สร้างการเชื่อมต่อ
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// ตรวจสอบการเชื่อมต่อ
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 // ตรวจสอบว่ามีการอัปโหลดไฟล์ Excel หรือไม่
 if (isset($_POST['upload_excel']) && isset($_FILES['excel_file'])) {

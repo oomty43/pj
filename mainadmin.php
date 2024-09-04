@@ -1,22 +1,11 @@
 <?php 
-session_start(); 
-if (!isset($_SESSION['a_user'])) {
-    echo "
-        <script>
-            alert('กรุณาเข้าสู่ระบบ');
-            window.location='loginadmin.php';
-        </script>
-    ";
-}
+session_start();
+include 'db_connect.php';
+// เริ่มต้น session
 
-// ตรวจสอบว่ามีการส่งคำสั่งออกจากระบบหรือไม่
-if (isset($_GET['logout'])) {
-    session_destroy(); // ทำลาย session
-    header("Location: loginadmin.php"); // กลับไปยังหน้าเข้าสู่ระบบ
-    exit();
-}
 
-?>
+?> 
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -88,17 +77,25 @@ if (isset($_GET['logout'])) {
         a.btn-logout:hover {
             background-color: #c82333; /* สีแดงเข้มเมื่อโฮเวอร์ */
         }
+        .btn-disable {
+            background-color: #6c757d; /* พื้นหลังสีเทา */
+        }
     </style>
-
 </head>
 <body>
     <div class="container">
         <h2>Menu Admin</h2>
         <ul>
-            <li><a href="display_admin.php" class="btn-manage">จัดการข้อมูลผู้ดูแลระบบ</a></li>
+            <!-- ตรวจสอบว่า session มี a_st น้อยกว่า 2 หรือไม่ -->
+            <?php if ($_SESSION['a_st'] >= 2): ?>
+                <li><a href="display_admin.php" class="btn-manage">จัดการข้อมูลผู้ดูแลระบบ</a></li>
+            <?php else: ?>
+                <li><a class="btn-disable">ไม่อนุญาติให้เข้าถึงฟังค์ชั่น</a></li>
+            <?php endif; ?>
+            
             <li><a href="display_information.php" class="btn-info">จัดการข่าวประชาสัมพันธ์</a></li>
             <li><a href="display_student.php" class="btn-student">จัดการข้อมูลนักศึกษา</a></li>
-            <li><a href="?logout=true" class="btn-logout">ออกจากระบบ</a></li> <!-- ปุ่มออกจากระบบ -->
+            <li><a href="logout.php" class="btn-logout">ออกจากระบบ</a></li> <!-- ปุ่มออกจากระบบ -->
         </ul>
     </div>
 </body>

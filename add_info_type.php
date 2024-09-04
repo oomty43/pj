@@ -1,3 +1,34 @@
+<?php
+session_start();
+include 'db_connect.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // รับค่าจากฟอร์ม
+    $itype_id = $_POST['itype_id'];
+    $itype_name = $_POST['itype_name'];
+
+    // ตรวจสอบการเชื่อมต่อฐานข้อมูล
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // เตรียมคำสั่ง SQL สำหรับการเพิ่มข้อมูล
+    $sql = "INSERT INTO info_type (itype_name) VALUES ('$itype_name')";
+
+    // ตรวจสอบการเพิ่มข้อมูล
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('เพิ่มข้อมูลสำเร็จ');</script>";
+        header("Location: display_information.php"); // เปลี่ยนเส้นทางไปยังหน้าที่ต้องการหลังจากเพิ่มข้อมูลเสร็จสิ้น
+        exit();
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    // ปิดการเชื่อมต่อฐานข้อมูล
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="th">
 <head>

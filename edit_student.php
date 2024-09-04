@@ -4,14 +4,6 @@ session_start();
 // เชื่อมต่อกับฐานข้อมูล
 include 'db_connect.php';
 
-// สร้างการเชื่อมต่อ
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// ตรวจสอบการเชื่อมต่อ
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 // รับรหัสนักศึกษาที่ต้องการแก้ไขจาก URL parameter
 if (isset($_GET['s_id'])) {
     $s_id = $_GET['s_id'];

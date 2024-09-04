@@ -2,15 +2,6 @@
 session_start();
 // เชื่อมต่อกับฐานข้อมูล
 include 'db_connect.php';
-$conn = new mysqli($servername, $username, $password, $dbname);
-if (!isset($_SESSION['a_user'])) {
-    echo "
-        <script>
-            alert('กรุณา login');
-            window.location='loginadmin.php';
-        </script>
-    ";
-}
 
 // ตรวจสอบการส่งข้อมูล POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

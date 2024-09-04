@@ -1,19 +1,7 @@
 <?php
 session_start(); 
+include 'db_connect.php';
 
-// ข้อมูลการเชื่อมต่อฐานข้อมูล
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "project";
-
-// สร้างการเชื่อมต่อ
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// ตรวจสอบการเชื่อมต่อ
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // รับค่าจากฟอร์ม
@@ -52,8 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ดำเนินการคำสั่ง
     if ($stmt->execute()) {
-        echo "เพิ่มข้อมูลสำเร็จ!";
-        header("Location: display_student.php");
+        echo "<script>
+                alert('เพิ่มข้อมูลสำเร็จ!');
+                window.location.href='display_student.php';
+              </script>";
         exit;
     } else {
         echo "เกิดข้อผิดพลาด: " . $stmt->error;

@@ -1,14 +1,14 @@
 <?php
-// เชื่อมต่อกับฐานข้อมูล
+session_start();
 include 'db_connect.php';
+// เริ่มต้น session
 
-// สร้างการเชื่อมต่อ
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// ตรวจสอบการเชื่อมต่อ
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!isset($_SESSION['a_st']) || $_SESSION['a_st'] < 2) {
+        echo "<script>alert('คุณไม่มีสิทธิ์ในการเข้าถึงหน้านี้');</script>";
+        header("Location: mainadmin.php");
+    exit();
 }
+
 
 // ดึงข้อมูลจากตาราง admin
 $sql = "SELECT a_user, a_na, a_la, a_email, a_st FROM admin";
@@ -119,10 +119,17 @@ $result = $conn->query($sql);
                     echo "<td>" . $row["a_na"] . " " . $row["a_la"] . "</td>"; // แสดงชื่อและนามสกุล
                     echo "<td>" . $row["a_email"] . "</td>";
                     echo "<td>" . $status . "</td>"; // แสดงสถานะ
-                    echo "<td class='actions'>
-                            <a href='edit_admin.php?a_user=" . $row["a_user"] . "'>แก้ไข</a> |
-                            <a href='delete_admin.php?a_user=" . $row["a_user"] . "' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>
-                          </td>";
+                    echo "<td class='actions'>";
+                    
+                    // ตรวจสอบว่าชื่อผู้ใช้ตรงกับ session หรือไม่
+                    if ($row["a_user"] != $_SESSION['a_user']) {
+                        echo "<a href='edit_admin.php?a_user=" . $row["a_user"] . "'>แก้ไข</a> | ";
+                        echo "<a href='delete_admin.php?a_user=" . $row["a_user"] . "' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
+                    } else {
+                        echo "<a href='edit_admin.php?a_user=" . $row["a_user"] . "'>แก้ไข</a>";
+                    }
+
+                    echo "</td>";
                     echo "</tr>";
                 }
             } else {

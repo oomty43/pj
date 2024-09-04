@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 // เข้าสู่ระบบสำเร็จ
                 $_SESSION['a_user'] = $a_user;
+                $_SESSION['a_st'] = $row['a_st']; // เก็บสถานะการเข้าถึงใน session
                 header("Location: mainadmin.php"); // ไปยังหน้า mainadmin.php หลังจากล็อกอินสำเร็จ
                 exit();
             }
@@ -52,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="th">

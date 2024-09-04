@@ -1,3 +1,43 @@
+<?php
+session_start();
+include 'db_connect.php';
+
+if (!isset($_SESSION['a_st']) || $_SESSION['a_st'] < 2) {
+    echo "<script>alert('คุณไม่มีสิทธิ์ในการเข้าถึงหน้านี้');</script>";
+    header("Location: mainadmin.php");
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $a_user = $_POST['a_user'];
+    $a_na = $_POST['a_na'];
+    $a_la = $_POST['a_la'];
+    $a_email = $_POST['a_email'];
+    $a_pws = $_POST['a_pws'];
+    $phone_number = $_POST['phone_number'];
+    $a_st = $_POST['a_st'];
+
+    // ตรวจสอบการเชื่อมต่อกับฐานข้อมูล
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // เตรียมคำสั่ง SQL สำหรับการเพิ่มข้อมูล
+    $sql = "INSERT INTO admin (a_user, a_na, a_la, a_email, a_pws, phone_number, a_st) 
+            VALUES ('$a_user', '$a_na', '$a_la', '$a_email', '$a_pws', '$phone_number', '$a_st')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('เพิ่มข้อมูลสำเร็จ');</script>";
+        header("Location: display_admin.php");
+        exit();
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    // ปิดการเชื่อมต่อกับฐานข้อมูล
+    $conn->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
