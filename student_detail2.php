@@ -2,14 +2,9 @@
 session_start();
 
 // เชื่อมต่อกับฐานข้อมูล
-include 'db_connect.php';
+include 'std_con.php';
 // สร้างการเชื่อมต่อ
-$conn = new mysqli($servername, $username, $password, $dbname);
 
-// ตรวจสอบการเชื่อมต่อ
-if ($conn->connect_error) {
-    die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
-}
 
 // ฟังก์ชันแปลงค่า s_pna
 function getPrefix($s_pna) {
