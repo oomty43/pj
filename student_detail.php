@@ -159,30 +159,31 @@ function getStudentStatus($s_stat) {
             echo '</div>'; // ปิด .profile-section
 
             // ดึงข้อมูลการเข้าอบรมจากตาราง Course
-            $courseSql = "SELECT c_na, c_add, YEAR(c_date) as year FROM Course WHERE s_id = '$s_id'";
+            $courseSql = "SELECT c_na, c_add, c_date FROM course WHERE s_id = '$s_id'";
             $courseResult = $conn->query($courseSql);
-
+            
             if ($courseResult->num_rows > 0) {
-                echo "<h2>การเข้าอบรม </h2>";
+                echo "<h2>การเข้าอบรม</h2>";
                 echo "<table class='course-table'>";
                 echo "<thead><tr><th>ชื่อโครงการอบรม</th><th>ชื่อสถานที่อบรม</th><th>ปีที่อบรม</th></tr></thead>";
                 echo "<tbody>";
-
+            
                 while ($courseRow = $courseResult->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($courseRow['c_na']) . "</td>";
                     echo "<td>" . htmlspecialchars($courseRow['c_add']) . "</td>";
-                    echo "<td>" . htmlspecialchars($courseRow['year']) . "</td>";
+                    echo "<td>" . htmlspecialchars($courseRow['c_date']) . "</td>"; // ใช้ c_date ตรงๆ
                     echo "</tr>";
                 }
-
+            
                 echo "</tbody></table>";
             } else {
                 echo "<p>ไม่มีข้อมูลการเข้าอบรม</p>";
             }
+            
 
             // ดึงข้อมูลการฝึกงานจากตาราง its_history
-            $internshipSql = "SELECT its_name, its_province, YEAR(its_date) as year, its_file FROM its_history WHERE s_id = '$s_id'";
+            $internshipSql = "SELECT its_name, its_province, its_date, its_file FROM its_history WHERE s_id = '$s_id'";
             $internshipResult = $conn->query($internshipSql);
 
             if ($internshipResult->num_rows > 0) {
@@ -195,7 +196,7 @@ function getStudentStatus($s_stat) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($internshipRow['its_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($internshipRow['its_province']) . "</td>";
-                    echo "<td>" . htmlspecialchars($internshipRow['year']) . "</td>";
+                    echo "<td>" . htmlspecialchars($internshipRow['its_date']) . "</td>";
                     echo "<td><a href='uploads/" . htmlspecialchars($internshipRow['its_file']) . "' target='_blank'>ดูโปรเจค</a></td>";
                     echo "</tr>";
                 }
@@ -272,30 +273,31 @@ function getStudentStatus($s_stat) {
             }
 
             // ดึงข้อมูลกิจกรรมจากตาราง ev
-            $eventSql = "SELECT e_na, e_add, YEAR(e_date) as year FROM ev WHERE s_id = '$s_id'";
+            $eventSql = "SELECT e_na, e_add, e_date FROM ev WHERE s_id = '$s_id'";
             $eventResult = $conn->query($eventSql);
-
+            
             if ($eventResult->num_rows > 0) {
-                echo "<h2>กิจกรรม </h2>";
+                echo "<h2>กิจกรรม</h2>";
                 echo "<table class='event-table'>";
                 echo "<thead><tr><th>กิจกรรม</th><th>สถานที่จัดกิจกรรม</th><th>ปีที่จัดกิจกรรม</th></tr></thead>";
                 echo "<tbody>";
-
+            
                 while ($eventRow = $eventResult->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($eventRow['e_na']) . "</td>";
                     echo "<td>" . htmlspecialchars($eventRow['e_add']) . "</td>";
-                    echo "<td>" . htmlspecialchars($eventRow['year']) . "</td>";
+                    echo "<td>" . htmlspecialchars($eventRow['e_date']) . "</td>"; // ใช้ e_date ตรงๆ
                     echo "</tr>";
                 }
-
+            
                 echo "</tbody></table>";
             } else {
                 echo "<p>ไม่มีข้อมูลกิจกรรม</p>";
             }
-
+            
+            
             // ดึงข้อมูลการทำงานจากตาราง wk
-            $workHistorySql = "SELECT w_na, YEAR(w_date) as year FROM wk WHERE s_id = '$s_id'";
+            $workHistorySql = "SELECT w_na, w_date FROM wk WHERE s_id = '$s_id'";
             $workHistoryResult = $conn->query($workHistorySql);
 
             if ($workHistoryResult->num_rows > 0) {
@@ -307,7 +309,7 @@ function getStudentStatus($s_stat) {
                 while ($workHistoryRow = $workHistoryResult->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($workHistoryRow['w_na']) . "</td>";
-                    echo "<td>" . htmlspecialchars($workHistoryRow['year']) . "</td>";
+                    echo "<td>" . htmlspecialchars($workHistoryRow['w_date']) . "</td>";
                     echo "</tr>";
                 }
 

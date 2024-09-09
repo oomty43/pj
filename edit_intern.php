@@ -152,12 +152,13 @@ $conn->close();
         </div>
         <div class="form-group">
             <label for="its_date">ปีที่ฝึกงาน:</label>
-            <input type="date" name="its_date" value="<?php echo htmlspecialchars($row['its_date']); ?>" required>
+            <input type="text" name="its_date" value="<?php echo htmlspecialchars($row['its_date']); ?>" maxlength="4" placeholder="ค.ศ." required>
         </div>
+
         <div class="form-group">
             <label for="its_province">จังหวัดที่ฝึกงาน:</label>
             <select id="its_province" name="its_province" required>
-                <option value="">เลือกจังหวัด</option>
+                <option value="">เลือกจังหวัด:</option>
                 <?php
                 // รายชื่อจังหวัดในประเทศไทย
                 $provinces = [
@@ -192,7 +193,8 @@ $conn->close();
         <div class="button-group">
             <button type="submit" class="btn-save">บันทึก</button>
             <button type="button" class="btn-cancel" onclick="document.getElementById('its_name').value=''; document.getElementById('its_date').value=''; document.getElementById('its_province').selectedIndex=0;">ยกเลิก</button>
-            <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
+          <a href="stdaward.php" class="btn-back">ย้อนกลับ</a>
+
         </div>
     </form>
 </div>

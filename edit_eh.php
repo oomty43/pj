@@ -28,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $row = $result->fetch_assoc();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขประวัติการศึกษา</title>
     <style>
         body {
@@ -40,30 +40,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
         .form-container {
-            width: 400px;
+            width: 50%;
+            margin: 50px auto;
             padding: 20px;
             background-color: white;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
         }
         .form-group {
             margin-bottom: 15px;
-            text-align: left;
         }
         .form-group label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .form-group input[type="text"],
-        .form-group input[type="date"] {
+        .form-group input[type="text"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -73,45 +67,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
+            gap: 10px; /* ระยะห่างระหว่างปุ่ม */
+        }
+        .btn-save, .btn-cancel, .btn-back {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+            color: white;
+            border: none;
+            text-align: center;
         }
         .btn-save {
-            padding: 10px 20px;
             background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            flex: 1;
             margin-right: 10px;
+        }
+        .btn-save:hover {
+            background-color: #218838;
         }
         .btn-cancel {
-            padding: 10px 20px;
             background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            flex: 1;
             margin-right: 10px;
-            text-decoration: none;
-            text-align: center;
-        }
-        .btn-back {
-            padding: 10px 20px;
-            background-color: blue;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            flex: 1;
-            text-decoration: none;
-            text-align: center;
         }
         .btn-cancel:hover {
             background-color: #c82333;
+        }
+        .btn-back {
+            background-color: blue;
         }
         .btn-back:hover {
             background-color: darkblue;
@@ -132,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="form-group">
                 <label for="eh_end">ปีที่จบการศึกษา:</label>
-                <input type="date" id="eh_end" name="eh_end" value="<?php echo $row['eh_end']; ?>" required>
+                <input type="text" id="eh_end" name="eh_end" maxlength="4" placeholder="ค.ศ." value="<?php echo $row['eh_end']; ?>" required>
             </div>
             <div class="button-group">
                 <button type="submit" class="btn-save">บันทึก</button>
@@ -143,7 +126,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
-
-<?php
-$conn->close();
-?>

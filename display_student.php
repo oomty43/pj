@@ -4,7 +4,6 @@ session_start();
 // เชื่อมต่อกับฐานข้อมูล
 include 'db_connect.php';
 
-
 // ฟังก์ชันสำหรับลบข้อมูลนักศึกษา
 if (isset($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
@@ -219,6 +218,17 @@ function getStudentStatus($s_stat) {
             <input type="file" name="excel_file" accept=".xlsx, .xls" required>
             <input type="submit" value="เพิ่มนักศึกษาจาก Excel" name="upload_excel" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
         </form>
+           <!-- ปุ่มดาวน์โหลดคู่มือการใช้ -->
+           <a href="uploads/คู่มือการใช้.pdf" download style="background-color: #ff5722; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; display: inline-block;">
+            คู่มือการใช้
+        </a>
+
+        <!-- ปุ่มดาวน์โหลดไฟล์ตัวอย่าง -->
+        <a href="uploads/ตัวอย่างรายชื่อนักศึกษา.xlsx" download style="background-color: #ff9800; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; display: inline-block;">
+            ไฟล์ตัวอย่างรายชื่อนักศึกษา
+        </a>
+
+     
 
         <div class="search-bar">
             <form method="post">

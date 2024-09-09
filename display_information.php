@@ -5,7 +5,7 @@ session_start();
 include 'db_connect.php';
 
 
-// ฟังก์ชันสำหรับแปลงเดือนเป็นภาษาไทย
+// ฟังก์ชันสำหรับแปลงเดือนเป็นภาษาไทย โดยแสดงปีเป็น ค.ศ.
 function thai_date($date) {
     $thai_months = [
         "01" => "มกราคม",
@@ -22,13 +22,12 @@ function thai_date($date) {
         "12" => "ธันวาคม"
     ];
 
-    $year = substr($date, 0, 4) + 543; // แปลงปีเป็น พ.ศ.
-    $month = $thai_months[substr($date, 5, 2)]; // หาชื่อเดือนจากฟังก์ชันข้างต้น
-    $day = substr($date, 8, 2); // ดึงวันที่ออกมา
+    $year = substr($date, 0, 4); // ไม่แปลงปีเป็น พ.ศ. แต่ให้เป็น ค.ศ.
+    $month = $thai_months[substr($date, 5, 2)];
+    $day = substr($date, 8, 2);
 
     return "$day $month $year";
 }
-
 // เตรียมคำสั่ง SQL เพื่อดึงข้อมูลข่าวสาร
 $sql = "SELECT i.i_id, i.i_head, i.a_id, it.itype_name, i.i_date
         FROM information i

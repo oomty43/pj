@@ -19,7 +19,7 @@ if (isset($_GET['c_id'])) {
         $row = $result->fetch_assoc();
         $c_na = $row['c_na'];
         $c_add = $row['c_add'];
-        $c_date = $row['c_date'];
+        $c_date = $row['c_date']; // ข้อมูลที่เก็บในฐานข้อมูลเป็น varchar(4)
     } else {
         echo "ไม่พบข้อมูลที่ต้องการแก้ไข";
         exit();
@@ -79,8 +79,7 @@ $conn->close();
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .form-group input[type="text"],
-        .form-group input[type="date"] {
+        .form-group input[type="text"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -135,16 +134,16 @@ $conn->close();
         <h2>แก้ไขข้อมูลการอบรม</h2>
         <form id="editForm" method="POST">
             <div class="form-group">
-                <label for="c_na">ชื่อโครงการอบรม</label>
+                <label for="c_na">ชื่อโครงการอบรม:</label>
                 <input type="text" id="c_na" name="c_na" value="<?php echo $c_na; ?>" required>
             </div>
             <div class="form-group">
-                <label for="c_add">ชื่อสถานที่อบรม</label>
+                <label for="c_add">ชื่อสถานที่อบรม:</label>
                 <input type="text" id="c_add" name="c_add" value="<?php echo $c_add; ?>" required>
             </div>
             <div class="form-group">
-                <label for="c_date">วันที่อบรม</label>
-                <input type="date" id="c_date" name="c_date" value="<?php echo $c_date; ?>" required>
+                <label for="c_date">ปีที่อบรม:</label>
+                <input type="text" id="c_date" name="c_date" placeholder="ค.ศ." pattern="\d{4}" value="<?php echo $c_date; ?>" required>
             </div>
             <div class="button-group">
                 <button type="submit" class="btn-save">บันทึก</button>

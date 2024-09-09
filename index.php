@@ -8,7 +8,7 @@ if ($conn->connect_error) {
     die("การเชื่อมต่อล้มเหลว: " . $conn->connect_error);
 }
 
-// ฟังก์ชันสำหรับแปลงเดือนเป็นภาษาไทย
+// ฟังก์ชันสำหรับแปลงเดือนเป็นภาษาไทย โดยแสดงปีเป็น ค.ศ.
 function thai_date($date) {
     $thai_months = [
         "01" => "มกราคม",
@@ -25,13 +25,12 @@ function thai_date($date) {
         "12" => "ธันวาคม"
     ];
 
-    $year = substr($date, 0, 4) + 543; // แปลงปีเป็น พ.ศ.
-    $month = $thai_months[substr($date, 5, 2)]; // หาชื่อเดือนจากฟังก์ชันข้างต้น
-    $day = substr($date, 8, 2); // ดึงวันที่ออกมา
+    $year = substr($date, 0, 4); 
+    $month = $thai_months[substr($date, 5, 2)];
+    $day = substr($date, 8, 2);
 
     return "$day $month $year";
 }
-
 // ตรวจสอบหมายเลขหน้าปัจจุบัน
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $items_per_page = 16; // เปลี่ยนจำนวนรายการต่อหน้าเป็น 16 (4x4)
