@@ -56,8 +56,7 @@ $conn->close();
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .form-group input[type="text"],
-        .form-group input[type="date"] {
+        .form-group input[type="text"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -100,12 +99,12 @@ $conn->close();
     <script>
         function resetForm() {
             if(confirm('คุณต้องการล้างฟอร์มหรือไม่?')) {
-                document.getElementById("courseForm").reset(); // ล้างฟอร์ม
+                document.getElementById("courseForm").reset();
             }
         }
 
         function goBack() {
-            window.history.back(); // กลับไปหน้าก่อนหน้า
+            window.history.back();
         }
     </script>
 </head>
@@ -114,16 +113,16 @@ $conn->close();
         <h2>เพิ่มข้อมูลการอบรม (Course)</h2>
         <form id="courseForm" method="POST" action="add_course.php">
             <div class="form-group">
-                <label for="c_na">ชื่อโครงการอบรม</label>
+                <label for="c_na">ชื่อโครงการอบรม:</label>
                 <input type="text" id="c_na" name="c_na" required>
             </div>
             <div class="form-group">
-                <label for="c_add">ชื่อสถานที่อบรม</label>
+                <label for="c_add">ชื่อสถานที่อบรม:</label>
                 <input type="text" id="c_add" name="c_add" required>
             </div>
             <div class="form-group">
-                <label for="c_date">วันที่อบรม</label>
-                <input type="date" id="c_date" name="c_date" required>
+                <label for="c_date">ปีที่อบรม:</label>
+                <input type="text" id="c_date" name="c_date" placeholder="ค.ศ." pattern="\d{4}" required>
             </div>
             <div class="button-group">
                 <button type="submit" class="btn-save">บันทึกข้อมูล</button>

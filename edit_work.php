@@ -118,9 +118,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" id="w_na" name="w_na" required>
             </div>
             <div class="form-group">
-                <label for="w_date">ปีที่เริ่มทำงาน</label>
-                <input type="date" id="w_date" name="w_date" required>
-            </div>
+    <label for="w_date">ปีที่เริ่มทำงาน</label>
+    <input type="text" id="w_date" name="w_date" maxlength="4" placeholder="ค.ศ." required>
+</div>
             <div class="button-group">
                 <button type="submit" class="btn-submit">บันทึก</button>
                 <button type="button" class="btn-cancel" onclick="document.getElementById('workForm').reset();">ยกเลิก</button>

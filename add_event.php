@@ -115,17 +115,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>เพิ่มกิจกรรม</h2>
         <form id="eventForm" action="add_event.php" method="post">
             <div class="form-group">
-                <label for="e_na">ชื่อกิจกรรม</label>
+                <label for="e_na">ชื่อกิจกรรม:</label>
                 <input type="text" id="e_na" name="e_na" required>
             </div>
             <div class="form-group">
-                <label for="e_add">สถานที่จัดกิจกรรม</label>
+                <label for="e_add">สถานที่จัดกิจกรรม:</label>
                 <input type="text" id="e_add" name="e_add" required>
             </div>
             <div class="form-group">
-                <label for="e_date">ปีที่จัดกิจกรรม</label>
-                <input type="date" id="e_date" name="e_date" required>
-            </div>
+    <label for="e_date">ปีที่จัดกิจกรรม:</label>
+    <input type="text" id="e_date" name="e_date" maxlength="4" placeholder="ค.ศ." required>
+</div>
+
             <div class="button-group">
                 <button type="submit" class="btn-submit">บันทึก</button>
                 <button type="button" class="btn-cancel" onclick="document.getElementById('eventForm').reset();">ยกเลิก</button>

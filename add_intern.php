@@ -46,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -77,7 +76,6 @@ $conn->close();
             margin-bottom: 5px;
         }
         .form-group input[type="text"],
-        .form-group input[type="number"],
         .form-group input[type="file"],
         .form-group select {
             width: 100%;
@@ -133,7 +131,7 @@ $conn->close();
             </div>
             <div class="form-group">
                 <label for="its_date">ปีที่ฝึกงาน:</label>
-                <input type="number" id="its_date" name="its_date" required>
+                <input type="text" id="its_date" name="its_date" placeholder="ค.ศ." pattern="\d{4}" maxlength="4" minlength="4" required>
             </div>
             <div class="form-group">
                 <label for="its_province">จังหวัดที่ฝึกงาน:</label>
@@ -151,9 +149,6 @@ $conn->close();
                         "พระนครศรีอยุธยา", "ภูเก็ต", "มหาสารคาม", "มุกดาหาร", "ยะลา",
                         "ยโสธร", "ลำปาง", "ลำพูน", "เลย", "ศรีสะเกษ",
                         "สกลนคร", "สงขลา", "สตูล", "สมุทรปราการ", "สมุทรสงคราม",
-                        "สมุทรสาคร", "สุโขทัย", "สุพรรณบุรี", "สุราษฎร์ธานี", "สุรินทร์",
-                        "อ่างทอง", "อำนาจเจริญ", "อุดรธานี", "อุทัยธานี", "เชียงใหม่",
-                        "เชียงราย", "ตราด", "ลำปาง", "ลำพูน", "หนองคาย"
                     ];
 
                     foreach ($provinces as $province) {

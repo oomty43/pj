@@ -212,7 +212,7 @@ if ($result->num_rows > 0) {
                     <th>การจัดการ</th>
                 </tr>
                 <?php
-                $sql = "SELECT c.c_id, c.c_na, c.c_add, YEAR(c.c_date) AS c_year
+                $sql = "SELECT c.c_id, c.c_na, c.c_add,c.c_date
                         FROM course c
                         WHERE c.s_id = ?";
                 $stmt = $conn->prepare($sql);
@@ -223,7 +223,7 @@ if ($result->num_rows > 0) {
                     echo "<tr>";
                     echo "<td>{$row['c_na']}</td>";
                     echo "<td>{$row['c_add']}</td>";
-                    echo "<td>{$row['c_year']}</td>";
+                    echo "<td>{$row['c_date']}</td>";
                     echo "<td>";
                     echo "<a class='btn-edit' href='edit_course.php?c_id={$row['c_id']}'>แก้ไข</a>";
                     echo "<a class='btn-delete' href='delete_course.php?c_id={$row['c_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
@@ -429,6 +429,7 @@ if ($result->num_rows > 0) {
                 <th>สถานที่ศึกษา </th>
                 <th>ระดับการศึกษา </th>
                 <th>ปีที่จบการศึกษา </th>
+                <th>การจัดการ</th>
             </tr>
             <?php
             $sql = "SELECT eh.eh_id, eh.eh_na, eh.eh_level, eh.eh_end
@@ -445,8 +446,6 @@ if ($result->num_rows > 0) {
                 echo "<td>{$row['eh_end']}</td>";
                 echo "<td>";
                 echo "<a class='btn-edit' href='edit_eh.php?eh_id={$row['eh_id']}'>แก้ไข</a>";
-                echo "</td>";
-                echo "<td>";
                 echo "<a class='btn-delete' href='delete_eh.php?eh_id={$row['eh_id']}' onclick='return confirm(\"คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?\");'>ลบ</a>";
                 echo "</td>";
                 echo "</tr>";

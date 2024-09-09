@@ -108,9 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" name="og_na" value="<?php echo htmlspecialchars($row['og_na']); ?>" required>
             </div>
             <div class="form-group">
-                <label>ปีที่ได้รับ:</label>
-                <input type="date" name="ce_year" value="<?php echo htmlspecialchars($row['ce_year']); ?>" required>
-            </div>
+    <label for="ce_year">ปีที่ได้รับ</label>
+    <input type="text" id="ce_year" name="ce_year" maxlength="4" placeholder="ค.ศ." required>
+</div>
             <div class="button-group">
                 <button type="submit" class="btn-save">บันทึก</button>
                 <a href="stdaward.php" class="btn-cancel">ยกเลิก</a>

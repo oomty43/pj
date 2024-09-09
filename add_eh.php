@@ -105,17 +105,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>เพิ่มประวัติการศึกษา</h2>
         <form id="educationForm" action="add_eh.php" method="post">
             <div class="form-group">
-                <label for="eh_na">ชื่อสถานที่ศึกษา</label>
+                <label for="eh_na">ชื่อสถานที่ศึกษา:</label>
                 <input type="text" id="eh_na" name="eh_na" required>
             </div>
             <div class="form-group">
-                <label for="eh_level">ระดับการศึกษา</label>
+                <label for="eh_level">ระดับการศึกษา:</label>
                 <input type="text" id="eh_level" name="eh_level" required>
             </div>
             <div class="form-group">
-                <label for="eh_end">ปีที่จบการศึกษา</label>
-                <input type="number" id="eh_end" name="eh_end" required>
-            </div>
+    <label for="eh_end">ปีที่จบการศึกษา:</label>
+    <input type="text" id="eh_end" name="eh_end" maxlength="4" placeholder="ค.ศ." required>
+</div>
+
             <div class="button-group">
                 <button type="submit" class="btn-submit">บันทึก</button>
                 <button type="button" class="btn-cancel" onclick="document.getElementById('educationForm').reset();">ยกเลิก</button>

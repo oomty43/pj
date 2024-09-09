@@ -115,9 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" id="e_add" name="e_add" value="<?php echo htmlspecialchars($row['e_add']); ?>" required>
             </div>
             <div class="form-group">
-                <label for="e_date">ปี:</label>
-                <input type="date" id="e_date" name="e_date" value="<?php echo htmlspecialchars($row['e_date']); ?>" required>
-            </div>
+    <label for="e_date">ปีที่จัดกิจกรรม:</label>
+    <input type="text" id="e_date" name="e_date" maxlength="4" placeholder="ค.ศ." required>
+</div>
+
             <div class="button-group">
                 <button type="submit" class="btn-save">บันทึก</button>
                 <button type="button" class="btn-cancel" onclick="document.getElementById('editEventForm').reset();">ยกเลิก</button>

@@ -135,17 +135,18 @@ $conn->close();
         <h2>เพิ่มข้อมูลใบรับรอง</h2>
         <form id="certForm" action="add_cert.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="ce_na">ชื่อใบรับรอง</label>
+                <label for="ce_na">ชื่อใบรับรอง:</label>
                 <input type="text" id="ce_na" name="ce_na" required>
             </div>
             <div class="form-group">
-                <label for="og_na">หน่วยงานที่รับรอง</label>
+                <label for="og_na">หน่วยงานที่รับรอง:</label>
                 <input type="text" id="og_na" name="og_na" required>
             </div>
             <div class="form-group">
-                <label for="ce_year">ปีที่ได้รับ</label>
-                <input type="number" id="ce_year" name="ce_year" required>
-            </div>
+    <label for="ce_year">ปีที่ได้รับ:</label>
+    <input type="text" id="ce_year" name="ce_year" maxlength="4" placeholder="ค.ศ." required>
+</div>
+
             <div class="form-group">
                 <label for="ce_file">เอกสารแนบ</label>
                 <input type="file" id="ce_file" name="ce_file" accept=".pdf,.doc,.docx" required>
