@@ -4,7 +4,6 @@ session_start();
 // เชื่อมต่อกับฐานข้อมูล
 include 'db_connect.php';
 
-
 // ตรวจสอบว่ามีการส่งค่า id มาหรือไม่
 if (isset($_GET['id'])) {
     $i_id = $_GET['id'];

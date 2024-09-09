@@ -22,7 +22,7 @@ function thai_date($date) {
         "12" => "ธันวาคม"
     ];
 
-    $year = substr($date, 0, 4); // ไม่แปลงปีเป็น พ.ศ. แต่ให้เป็น ค.ศ.
+    $year = substr($date, 0, 4); 
     $month = $thai_months[substr($date, 5, 2)];
     $day = substr($date, 8, 2);
 
@@ -136,7 +136,7 @@ $result = $conn->query($sql);
                 <?php
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $thai_date = thai_date($row['i_date']); // แปลงวันที่เป็นภาษาไทย
+                        $thai_date = thai_date($row['i_date']); 
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row['i_head']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['a_id']) . "</td>";

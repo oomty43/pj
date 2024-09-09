@@ -7,15 +7,32 @@ include 'db_connect.php';
 // ฟังก์ชันสำหรับลบข้อมูลนักศึกษา
 if (isset($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
-    $sql = "DELETE FROM student WHERE s_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $delete_id);
-    if ($stmt->execute()) {
-        echo "<script>alert('ลบข้อมูลเรียบร้อยแล้ว'); window.location='display_student.php';</script>";
+
+    // ตรวจสอบว่า a_user อยู่ใน session
+    if (isset($_SESSION['a_user'])) {
+        $a_user = $_SESSION['a_user']; // ดึงข้อมูล a_user จาก session
+
+        // ลบข้อมูลนักศึกษา
+        $sql = "DELETE FROM student WHERE s_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $delete_id);
+        if ($stmt->execute()) {
+            // บันทึกการกระทำลง admin_logs โดยใช้ a_user เป็น a_id
+            $action_type = 'ลบข้อมูล';
+            $log_sql = "INSERT INTO admin_logs (a_id, action_type, student_id) VALUES (?, ?, ?)";
+            $log_stmt = $conn->prepare($log_sql);
+            $log_stmt->bind_param("sss", $a_user, $action_type, $delete_id);
+            $log_stmt->execute();
+            $log_stmt->close();
+
+            echo "<script>alert('ลบข้อมูลเรียบร้อยแล้ว'); window.location='display_student.php';</script>";
+        } else {
+            echo "Error: " . $conn->error;
+        }
+        $stmt->close();
     } else {
-        echo "Error: " . $conn->error;
+        echo "<script>alert('ไม่สามารถลบข้อมูลได้เนื่องจากไม่มีข้อมูล a_user'); window.location='display_student.php';</script>";
     }
-    $stmt->close();
 }
 
 // ฟังก์ชันค้นหา
@@ -72,7 +89,6 @@ function getStudentStatus($s_stat) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -204,6 +220,20 @@ function getStudentStatus($s_stat) {
         .pagination a:hover {
             text-decoration: underline; /* ใส่ขีดเส้นใต้เมื่อ hover */
         }
+
+        /* เพิ่มสไตล์สำหรับปุ่ม Log */
+        .btn-log {
+            background-color: #f39c12;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        .btn-log:hover {
+            background-color: #e67e22;
+        }
     </style>
 </head>
 <body>
@@ -211,15 +241,17 @@ function getStudentStatus($s_stat) {
         <h2>ข้อมูลนักศึกษา</h2>
         <div class="add-buttons">
             <a href="add_student.php">เพิ่มนักศึกษา</a>
+            <a href="logdetail.php" class="btn-log">เช็ค Log</a> <!-- ลิงก์เช็ค Log -->
             <a href="mainadmin.php">หน้าหลัก</a>
+          
         </div>
         <!-- ปุ่มอัปโหลดไฟล์ Excel -->
         <form action="upload_excel.php" method="post" enctype="multipart/form-data" style="display:inline;">
             <input type="file" name="excel_file" accept=".xlsx, .xls" required>
             <input type="submit" value="เพิ่มนักศึกษาจาก Excel" name="upload_excel" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
         </form>
-           <!-- ปุ่มดาวน์โหลดคู่มือการใช้ -->
-           <a href="uploads/คู่มือการใช้.pdf" download style="background-color: #ff5722; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; display: inline-block;">
+        <!-- ปุ่มดาวน์โหลดคู่มือการใช้ -->
+        <a href="uploads/คู่มือการใช้.pdf" download style="background-color: #ff5722; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; display: inline-block;">
             คู่มือการใช้
         </a>
 
@@ -227,8 +259,6 @@ function getStudentStatus($s_stat) {
         <a href="uploads/ตัวอย่างรายชื่อนักศึกษา.xlsx" download style="background-color: #ff9800; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; display: inline-block;">
             ไฟล์ตัวอย่างรายชื่อนักศึกษา
         </a>
-
-     
 
         <div class="search-bar">
             <form method="post">

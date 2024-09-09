@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // ค้นหาข้อมูลผู้ดูแลในฐานข้อมูล
         $sql = "SELECT * FROM admin WHERE a_user = ? AND a_pws = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $a_user, $a_pws);
+        $stmt->bind_param("ss", $a_user, $a_pws);  // เปลี่ยนมาเป็นการตรวจสอบรหัสผ่านแบบธรรมดา
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $error_message = "คุณไม่มีสิทธิ์ในการเข้าถึงระบบ";
             } else {
                 // เข้าสู่ระบบสำเร็จ
-                $_SESSION['a_user'] = $a_user;
+                $_SESSION['a_user'] = $a_user;  // เก็บ a_user ใน session
                 $_SESSION['a_st'] = $row['a_st']; // เก็บสถานะการเข้าถึงใน session
                 header("Location: mainadmin.php"); // ไปยังหน้า mainadmin.php หลังจากล็อกอินสำเร็จ
                 exit();
@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
+
 
 
 <!DOCTYPE html>

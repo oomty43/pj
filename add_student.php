@@ -1,7 +1,6 @@
 <?php
-session_start(); 
+session_start();
 include 'db_connect.php';
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // รับค่าจากฟอร์ม
@@ -23,6 +22,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $s_province = $_POST['s_province'];
     $s_country = $_POST['s_country'];
 
+    // ตรวจสอบความยาวของรหัสนักศึกษา
+    if (strlen($s_id) !== 12) {
+        echo "<script>alert('รหัสนักศึกษาต้องมีความยาว 12 ตัวอักษร'); window.history.back();</script>";
+        exit;
+    }
+
+    // ตรวจสอบว่ามีรหัสนักศึกษานี้อยู่แล้วหรือไม่
+    $check_sql = "SELECT s_id FROM student WHERE s_id = ?";
+    $check_stmt = $conn->prepare($check_sql);
+    $check_stmt->bind_param("s", $s_id);
+    $check_stmt->execute();
+    $check_stmt->store_result();
+
+    if ($check_stmt->num_rows > 0) {
+        // ถ้ามีรหัสนักศึกษานี้อยู่แล้ว แสดงแจ้งเตือนและหยุดการบันทึก
+        echo "<script>alert('รหัสนักศึกษานี้มีอยู่ในระบบแล้ว'); window.history.back();</script>";
+        exit;
+    }
+
     // ตรวจสอบและอัพโหลดไฟล์ภาพ
     $target_dir = "uploads/";
     $target_file = $target_dir . basename($s_pic);
@@ -34,12 +52,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // เตรียมคำสั่งสำหรับการดำเนินการ
     $stmt = $conn->prepare($sql);
-
-    // ผูกค่าที่จะใช้กับคำสั่ง SQL
     $stmt->bind_param("sssssssssssssssss", $s_id, $s_pws, $s_pna, $s_na, $s_la, $s_email, $s_address, $s_stat, $s_pic, $s_bloodtype, $s_race, $s_birth, $s_nationlity, $religious, $s_marriage, $s_province, $s_country);
 
     // ดำเนินการคำสั่ง
     if ($stmt->execute()) {
+        // บันทึก log การเพิ่มข้อมูลนักศึกษา
+        if (isset($_SESSION['a_user'])) {
+            $admin_user = $_SESSION['a_user']; // แอดมินที่ล็อกอิน
+            $action_type = 'เพิ่ม';
+            $log_sql = "INSERT INTO admin_logs (a_id, action_type, student_id, timestamp) VALUES (?, ?, ?, NOW())";
+            $log_stmt = $conn->prepare($log_sql);
+            $log_stmt->bind_param("sss", $admin_user, $action_type, $s_id);
+            $log_stmt->execute();
+        }
+
         echo "<script>
                 alert('เพิ่มข้อมูลสำเร็จ!');
                 window.location.href='display_student.php';
