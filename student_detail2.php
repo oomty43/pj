@@ -3,8 +3,6 @@ session_start();
 
 // เชื่อมต่อกับฐานข้อมูล
 include 'std_con.php';
-// สร้างการเชื่อมต่อ
-
 
 // ฟังก์ชันแปลงค่า s_pna
 function getPrefix($s_pna) {
@@ -26,6 +24,18 @@ function getStudentStatus($s_stat) {
         return "<button style='background-color: green; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>ยังคงศึกษาอยู่</button>";
     } else {
         return "<button style='background-color: blue; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>จบการศึกษาแล้ว</button>";
+    }
+}
+
+if (isset($_GET['s_id'])) {
+    $s_id = $conn->real_escape_string($_GET['s_id']);
+    
+    // ดึงข้อมูลนักศึกษาจากฐานข้อมูล
+    $sql = "SELECT * FROM student WHERE s_id = '$s_id'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
     }
 }
 ?>
@@ -132,9 +142,12 @@ function getStudentStatus($s_stat) {
 </head>
 <body>
 
-    <button onclick="window.print()" style="margin: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+          <!-- เปลี่ยนปุ่ม Print ข้อมูลเป็นลิงก์ที่ไปยัง print_std_detail.php -->
+    <?php if (isset($s_id)): ?>
+    <a href="print_std_detail.php?s_id=<?php echo $s_id; ?>" style="margin: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none;">
         Print ข้อมูล
-    </button>
+    </a>
+    <?php endif; ?>
     
 
 <!-- แสดงแบนเนอร์ -->
