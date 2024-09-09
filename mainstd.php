@@ -17,7 +17,7 @@ function getPrefix($s_pna) {
     }
 }
 
-// ฟังก์ชันสำหรับแปลงวันที่เป็นภาษาไทย
+// ฟังก์ชันสำหรับแปลงเดือนเป็นภาษาไทย โดยแสดงปีเป็น ค.ศ.
 function thai_date($date) {
     $thai_months = [
         "01" => "มกราคม",
@@ -34,11 +34,11 @@ function thai_date($date) {
         "12" => "ธันวาคม"
     ];
 
-    $year = (int)date('Y', strtotime($date)) + 543; // แปลงปีเป็น พ.ศ.
-    $month = $thai_months[date('m', strtotime($date))]; // หาชื่อเดือน
-    $day = date('d', strtotime($date)); // ดึงวันที่
+    $year = substr($date, 0, 4); // ไม่แปลงปีเป็น พ.ศ. แต่ให้เป็น ค.ศ.
+    $month = $thai_months[substr($date, 5, 2)];
+    $day = substr($date, 8, 2);
 
-    return "$day $month $year"; // คืนค่าที่แปลงแล้ว
+    return "$day $month $year";
 }
 
 // ดึงข้อมูลนักศึกษาจากฐานข้อมูลตาม user id ใน session
