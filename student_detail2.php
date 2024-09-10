@@ -222,7 +222,7 @@ if (isset($_GET['s_id'])) {
                     echo "<td>" . htmlspecialchars($internshipRow['its_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($internshipRow['its_province']) . "</td>";
                     echo "<td>" . htmlspecialchars($internshipRow['its_date']) . "</td>";
-                    echo "<td><a href='uploads/" . htmlspecialchars($internshipRow['its_file']) . "' target='_blank'>ดูโปรเจค</a></td>";
+                    echo "<td><a href='" . htmlspecialchars($internshipRow['its_file']) . "' target='_blank'>ดูโปรเจค</a></td>";
                     echo "</tr>";
                 }
 
@@ -288,7 +288,7 @@ if (isset($_GET['s_id'])) {
                     echo "<td>" . htmlspecialchars($certificateRow['ce_na']) . "</td>";
                     echo "<td>" . htmlspecialchars($certificateRow['og_na']) . "</td>";
                     echo "<td>" . htmlspecialchars($certificateRow['ce_year']) . "</td>";
-                    echo "<td><a href='uploads/" . htmlspecialchars($certificateRow['ce_file']) . "' target='_blank'>ดูเอกสาร</a></td>";
+                    echo "<td><a href='" . htmlspecialchars($certificateRow['ce_file']) . "' target='_blank'>ดูเอกสาร</a></td>";
                     echo "</tr>";
                 }
 
