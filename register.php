@@ -2,7 +2,7 @@
 session_start();
 
 // เชื่อมต่อกับฐานข้อมูล
-include 'db_connect.php';
+include 'conn.php';
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
