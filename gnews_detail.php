@@ -1,7 +1,6 @@
 <?php
 session_start(); // เริ่มต้น session
 
-
 // เชื่อมต่อฐานข้อมูล
 $conn = new mysqli("localhost", "root", "", "project");
 
@@ -52,9 +51,17 @@ if ($result->num_rows > 0) {
     exit();
 }
 
+// ดึงข้อมูลรูปภาพเพิ่มเติมจากฐานข้อมูล
+$sql_pic = "SELECT i_pic FROM information_pic WHERE i_id = ?";
+$stmt_pic = $conn->prepare($sql_pic);
+$stmt_pic->bind_param("i", $i_id);
+$stmt_pic->execute();
+$result_pic = $stmt_pic->get_result();
+
 $stmt->close();
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -98,6 +105,20 @@ $conn->close();
             font-size: 18px;
             color: #333;
             line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .additional-images {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* ช่องว่างระหว่างรูปภาพ */
+            margin-top: 20px;
+        }
+        .additional-images img {
+            width: 100%;
+            max-width: 600px; /* ขนาดรูปภาพเพิ่มเติมใหญ่ขึ้น */
+            height: auto;
+            border-radius: 5px;
+            object-fit: cover;
         }
         .back-link-container {
             text-align: center; /* จัดตำแหน่งปุ่มให้อยู่ตรงกลาง */
@@ -128,8 +149,18 @@ $conn->close();
         <div class="news-detail">
             <?php echo nl2br(htmlspecialchars($news_item['i_deltail'])); ?>
         </div>
+
+        <!-- แสดงรูปภาพเพิ่มเติมแบบรายการ (list) -->
+        <div class="additional-images">
+            <?php if ($result_pic->num_rows > 0): ?>
+                <?php while ($pic_row = $result_pic->fetch_assoc()): ?>
+                    <img src="uploads/<?php echo htmlspecialchars($pic_row['i_pic']); ?>" alt="รูปภาพเพิ่มเติม">
+                <?php endwhile; ?>
+            <?php endif; ?>
+        </div>
+
         <div class="back-link-container">
-            <a href="mainstd.php" class="back-link">กลับไปที่หน้าหลัก</a>
+            <a href="index.php" class="back-link">กลับไปที่หน้าหลัก</a>
         </div>
     </div>
 
