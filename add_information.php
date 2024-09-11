@@ -12,14 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $a_user = $_POST['a_user'];
 
     // ดึงวันที่ปัจจุบัน
-    $i_date = date("Y-m-d H:i:s"); // รูปแบบเวลาจะเป็นปี-เดือน-วัน ชั่วโมง:นาที:วินาที
+    $i_date = date("Y-m-d H:i:s");
 
-    // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
+    // ตรวจสอบว่ามีการอัปโหลดรูปปกหรือไม่
     if ($_FILES['i_cover']['name']) {
         $i_cover = $_FILES['i_cover']['name'];
         $i_cover_tmp = $_FILES['i_cover']['tmp_name'];
 
-        // อัปโหลดไฟล์รูปภาพ
+        // อัปโหลดไฟล์รูปปก
         $upload_directory = "uploads/";
         move_uploaded_file($i_cover_tmp, $upload_directory . $i_cover);
     } else {
@@ -31,11 +31,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // เตรียมคำสั่ง SQL เพื่อเพิ่มข้อมูล
+    // เพิ่มข้อมูลข่าวประชาสัมพันธ์ในตาราง information
     $sql = "INSERT INTO information (i_head, i_deltail, i_cover, itype_id, i_date, a_id)
             VALUES ('$i_head', '$i_deltail', '$i_cover', '$itype_id', '$i_date','$a_user')";
 
     if ($conn->query($sql) === TRUE) {
+        // ดึงค่า i_id ของข่าวประชาสัมพันธ์ที่เพิ่งถูกเพิ่ม
+        $info_id = $conn->insert_id;
+
+        // ตรวจสอบว่ามีการอัปโหลดรูปภาพเพิ่มเติมหรือไม่
+        if (!empty($_FILES['i_pic']['name'][0])) {
+            $upload_directory = "uploads/";
+            
+            foreach ($_FILES['i_pic']['name'] as $key => $pic_name) {
+                $i_pic_tmp = $_FILES['i_pic']['tmp_name'][$key];
+                $i_pic_name = $_FILES['i_pic']['name'][$key];
+                move_uploaded_file($i_pic_tmp, $upload_directory . $i_pic_name);
+
+                // เพิ่มข้อมูลรูปภาพเพิ่มเติมในตาราง information_pics
+                $sql_pic = "INSERT INTO information_pic (i_id, i_pic) VALUES ('$info_id', '$i_pic_name')";
+                $conn->query($sql_pic);
+            }
+        }
+
         echo "<script>
             alert('บันทึกข้อมูลเรียบร้อยแล้ว');
             window.location = 'display_information.php'; // พากลับไปยังหน้าจัดการข้อมูล
@@ -45,6 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="th">
@@ -162,9 +181,12 @@ input[type=submit]:hover {
 
             <label for="i_deltail">รายละเอียด:</label>
             <textarea id="i_deltail" name="i_deltail" rows="4" required></textarea>
-
             <label for="i_cover">รูปปก:</label>
             <input type="file" id="i_cover" name="i_cover" accept="image/*" required>
+
+            <label for="i_pic">รูปภาพเพิ่มเติม:</label>
+<input type="file" id="i_pic" name="i_pic[]" accept="image/*" multiple>
+
 
             <?php 
             $sql = "SELECT * FROM info_type";

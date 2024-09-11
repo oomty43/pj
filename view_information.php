@@ -4,7 +4,6 @@ session_start();
 // เชื่อมต่อกับฐานข้อมูล
 include 'db_connect.php';
 
-
 // ฟังก์ชันสำหรับแปลงวันที่เป็นเดือนภาษาไทย
 function thai_date($date) {
     $thai_months = [
@@ -22,9 +21,9 @@ function thai_date($date) {
         "12" => "ธันวาคม"
     ];
 
-    $year = substr($date, 0, 4) + 543; // แปลงปีเป็น พ.ศ.
-    $month = $thai_months[substr($date, 5, 2)]; // หาชื่อเดือนจากฟังก์ชันข้างต้น
-    $day = substr($date, 8, 2); // ดึงวันที่ออกมา
+    $year = substr($date, 0, 4); 
+    $month = $thai_months[substr($date, 5, 2)]; 
+    $day = substr($date, 8, 2); 
 
     return "$day $month $year";
 }
@@ -50,6 +49,13 @@ if (isset($_GET['id'])) {
         echo "ไม่พบข้อมูล";
         exit();
     }
+
+    // ดึงข้อมูลรูปภาพเพิ่มเติมจากตาราง information_pic
+    $sql_pic = "SELECT i_pic FROM information_pic WHERE i_id = ?";
+    $stmt_pic = $conn->prepare($sql_pic);
+    $stmt_pic->bind_param("i", $i_id);
+    $stmt_pic->execute();
+    $result_pic = $stmt_pic->get_result();
 } else {
     echo "ไม่มีข้อมูลที่ร้องขอ";
     exit();
@@ -66,8 +72,8 @@ $conn->close();
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #181818; /* สีพื้นหลังที่เข้ม */
-            color: #fff; /* สีตัวอักษร */
+            background-color: #181818;
+            color: #fff;
             text-align: center;
             margin: 0;
             padding: 0;
@@ -78,31 +84,44 @@ $conn->close();
         }
         .container {
             width: 80%;
-            max-width: 800px; /* กำหนดขนาดสูงสุดของกล่อง */
-            background-color: #333; /* สีพื้นหลังของกล่อง */
+            max-width: 800px;
+            background-color: #333;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             margin: 50px auto;
         }
         h2 {
-            color: #ffa500; /* สีของหัวข้อ */
+            color: #ffa500;
             margin-bottom: 20px;
         }
         .news-detail {
             text-align: left;
             margin-bottom: 20px;
         }
-        .news-detail img {
+        .news-detail img.cover {
             width: 100%;
-            max-width: 600px; /* กำหนดขนาดสูงสุดของรูปภาพ */
+            max-width: 400px; /* ปรับขนาดรูปภาพปกให้เล็กลง */
             height: auto;
             margin: 10px 0;
-            border-radius: 5px; /* เพิ่มมุมโค้ง */
-            object-fit: cover; /* ครอบตัดรูปให้พอดี */
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        .news-detail img.additional {
+            width: 100%;
+            max-width: 120px; /* ขนาดรูปภาพเพิ่มเติม */
+            height: auto;
+            border-radius: 5px;
+            object-fit: cover;
         }
         .news-detail p {
             margin: 10px 0;
+        }
+        .additional-images {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
         }
         .back-link {
             margin-top: 20px;
@@ -126,12 +145,22 @@ $conn->close();
         <div class="news-detail">
             <p><strong>ประเภทข่าว:</strong> <?php echo htmlspecialchars($row['itype_name']); ?></p>
             <?php if (!empty($row['i_cover'])): ?>
-                <img src="uploads/<?php echo htmlspecialchars($row['i_cover']); ?>" alt="รูปภาพปก">
+                <!-- แสดงรูปภาพปก -->
+                <img class="cover" src="uploads/<?php echo htmlspecialchars($row['i_cover']); ?>" alt="รูปภาพปก">
             <?php endif; ?>
-            <?php if (!empty($row['i_pic'])): ?>
-                <img src="uploads/<?php echo htmlspecialchars($row['i_pic']); ?>" alt="รูปภาพข่าว">
-            <?php endif; ?>
+            <!-- แสดงรายละเอียดข่าวประชาสัมพันธ์ -->
             <p><?php echo nl2br(htmlspecialchars($row['i_deltail'])); ?></p>
+
+            <!-- แสดงรูปภาพเพิ่มเติมแบบคอลัมน์ 5x5 -->
+            <div class="additional-images">
+                <?php if ($result_pic->num_rows > 0): ?>
+                    <?php while ($pic_row = $result_pic->fetch_assoc()): ?>
+                        <img class="additional" src="uploads/<?php echo htmlspecialchars($pic_row['i_pic']); ?>" alt="รูปภาพเพิ่มเติม">
+                    <?php endwhile; ?>
+                <?php endif; ?>
+            </div>
+
+            <!-- วันที่เผยแพร่ย้ายไปอยู่ด้านล่าง -->
             <p><strong>วันที่เผยแพร่:</strong> <?php echo htmlspecialchars(thai_date($row['i_date'])); ?></p>
         </div>
         <div class="back-link">
