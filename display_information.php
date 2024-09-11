@@ -119,7 +119,7 @@ $result = $conn->query($sql);
         <h2>ข้อมูลข่าวประชาสัมพันธ์</h2>
         <div class="add-buttons">
             <a href="add_info_type.php">เพิ่มประเภทข่าว</a>
-            <a href="add_information.php">เพิ่มข่าวสาร</a>
+            <a href="add_information.php">เพิ่มข่าวประชาสัมพันธ์</a>
             <a href="mainadmin.php">หน้าหลัก</a>
         </div>
         <table>
