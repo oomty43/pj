@@ -35,6 +35,7 @@ if (isset($_POST['upload_excel']) && isset($_FILES['excel_file'])) {
             $s_la = $row[3];
             $s_email = $row[4];
             $s_pws = !empty($row[5]) ? $row[5] : '1234';
+            $s_stat = isset($row[6]) ? $row[6] : 2; // ถ้าไม่มีสถานะใน Excel ให้กำหนดเป็น 2
 
             // ตรวจสอบความยาวของรหัสนักศึกษา
             if (strlen($s_id) < 12) {
@@ -43,9 +44,9 @@ if (isset($_POST['upload_excel']) && isset($_FILES['excel_file'])) {
             }
 
             // เตรียมคำสั่ง SQL สำหรับเพิ่มข้อมูล
-            $sql = "INSERT INTO student (s_id, s_pna, s_na, s_la, s_email, s_pws) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO student (s_id, s_pna, s_na, s_la, s_email, s_pws, s_stat) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssss", $s_id, $s_pna, $s_na, $s_la, $s_email, $s_pws);
+            $stmt->bind_param("sssssss", $s_id, $s_pna, $s_na, $s_la, $s_email, $s_pws, $s_stat);
 
             // ดำเนินการเพิ่มข้อมูล
             if (!$stmt->execute()) {

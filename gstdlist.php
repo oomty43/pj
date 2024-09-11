@@ -53,8 +53,12 @@ function getPrefix($s_pna) {
 function getStudentStatus($s_stat) {
     if ($s_stat == 1) {
         return "<button style='background-color: green; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>ยังคงศึกษาอยู่</button>";
-    } else {
+    } elseif ($s_stat == 0) {
         return "<button style='background-color: blue; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>จบการศึกษาแล้ว</button>";
+    } elseif ($s_stat == 2) {
+        return "<button style='background-color: gray; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>ยังไม่ได้จัดการข้อมูล</button>";
+    } else {
+        return "<button style='background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px;'>ข้อมูลไม่ถูกต้อง</button>";
     }
 }
 

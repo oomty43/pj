@@ -160,6 +160,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <label for="i_deltail">เนื้อหาข่าว:</label>
             <textarea name="i_deltail" rows="5" required><?php echo htmlspecialchars($i_deltail); ?></textarea>
+            <script>
+                    function validateForm() {
+                        var detail = document.getElementById("i_deltail").value;
+
+                        if (detail.length > 2500) {
+                            alert("รายละเอียดของข่าวมีตัวหนังสือมากเกิน 2500 ตัว โปรดกระชับเนื้อหาให้สั้นลง");
+                            return false; // หยุดการส่งฟอร์ม
+                        }
+
+                        return true; // อนุญาตให้ส่งฟอร์มถ้าไม่มีปัญหา
+                    }
+            </script>
+            <form id="addForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+
 
             <label for="itype_id">ประเภทข่าว:</label>
             <select name="itype_id" required>

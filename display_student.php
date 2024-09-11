@@ -84,10 +84,15 @@ function getPrefix($s_pna) {
 function getStudentStatus($s_stat) {
     if ($s_stat == 1) {
         return "<span class='btn-status green'>ยังคงศึกษาอยู่</span>"; // ปุ่มสีเขียว
-    } else {
+    } elseif ($s_stat == 0) {
         return "<span class='btn-status blue'>จบการศึกษาแล้ว</span>"; // ปุ่มสีน้ำเงิน
+    } elseif ($s_stat == 2) {
+        return "<span class='btn-status gray'>ยังไม่ได้จัดการข้อมูล</span>"; // ปุ่มสีเทา
+    } else {
+        return "<span class='btn-status red'>ข้อมูลไม่ถูกต้อง</span>"; // ปุ่มสีแดง
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="th">
@@ -205,7 +210,13 @@ function getStudentStatus($s_stat) {
             margin-top: 20px;
             text-align: center;
         }
+        .gray {
+            background-color: #808080; /* สีเทา */
+        }
 
+        .red {
+            background-color: #ff0000; /* สีแดง */
+        }
         .pagination a {
             color: #ffffff; /* สีของลิงก์ */
             text-decoration: none;

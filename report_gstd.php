@@ -25,7 +25,16 @@ function getPrefix($s_pna) {
 
 // ฟังก์ชั่นแปลงค่าสถานะนักศึกษา
 function getStudentStatus($s_stat) {
-    return ($s_stat == 1) ? "ยังคงศึกษาอยู่" : "จบการศึกษาแล้ว";
+    switch ($s_stat) {
+        case 0:
+            return "จบการศึกษาแล้ว";
+        case 1:
+            return "ยังคงศึกษาอยู่";
+        case 2:
+            return "ยังไม่ได้จัดการข้อมูล";
+        default:
+            return "ข้อมูลไม่ถูกต้อง";
+    }
 }
 
 // ดึงค่าจาก query string

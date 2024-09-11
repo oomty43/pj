@@ -181,6 +181,21 @@ input[type=submit]:hover {
 
             <label for="i_deltail">รายละเอียด:</label>
             <textarea id="i_deltail" name="i_deltail" rows="4" required></textarea>
+            <script>
+                    function validateForm() {
+                        var detail = document.getElementById("i_deltail").value;
+
+                        if (detail.length > 2500) {
+                            alert("รายละเอียดของข่าวมีตัวหนังสือมากเกิน 2500 ตัว โปรดกระชับเนื้อหาให้สั้นลง");
+                            return false; // หยุดการส่งฟอร์ม
+                        }
+
+                        return true; // อนุญาตให้ส่งฟอร์มถ้าไม่มีปัญหา
+                    }
+            </script>
+            <form id="addForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+
+
             <label for="i_cover">รูปปก:</label>
             <input type="file" id="i_cover" name="i_cover" accept="image/*" required>
 
