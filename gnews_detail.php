@@ -55,7 +55,6 @@ if ($result->num_rows > 0) {
 $stmt->close();
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -107,13 +106,13 @@ $conn->close();
         .back-link {
             display: inline-block;
             padding: 10px 20px;
-            background-color: rgb(232, 98, 1);
+            background-color: #E76324; /* สีปุ่มตามที่กำหนด */
             color: white;
             text-decoration: none;
             border-radius: 5px;
         }
         .back-link:hover {
-            background-color: rgb(232, 98, 1);
+            background-color: #d35400; /* สีเมื่อเมาส์ชี้ */
         }
     </style>
 </head>
@@ -130,7 +129,7 @@ $conn->close();
             <?php echo nl2br(htmlspecialchars($news_item['i_deltail'])); ?>
         </div>
         <div class="back-link-container">
-            <a href="index.php" class="back-link">กลับไปที่หน้าหลัก</a>
+            <a href="mainstd.php" class="back-link">กลับไปที่หน้าหลัก</a>
         </div>
     </div>
 
