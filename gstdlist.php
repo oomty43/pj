@@ -170,7 +170,7 @@ function calculateAcademicYear($batch) {
                 <tr>
                     <th>รหัสนักศึกษา</th>
                     <th>ชื่อ-นามสกุล</th>
-                    <th>อีเมล</th>
+                    <th>อีเมล์</th>
                     <th>สถานะ</th>
                 </tr>
             </thead>

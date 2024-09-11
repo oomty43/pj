@@ -208,7 +208,7 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label>อีเมล</label>
+                <label>อีเมล์</label>
                 <input type="text" name="s_email" value="<?php echo $row['s_email']; ?>">
             </div>
 

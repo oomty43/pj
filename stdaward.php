@@ -234,8 +234,6 @@ if ($result->num_rows > 0) {
             </table>
         </div>
         <a href="add_course.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
-        <a href="javascript:void(0)" onclick="printSection('courseTable')"><button class="btn-add">พิมพ์ข้อมูลการเข้าอบรม</button></a>
-
 
         <h2>ทักษะพิเศษ (Skill)</h2>
         <table>
@@ -455,21 +453,7 @@ if ($result->num_rows > 0) {
         <a href="add_eh.php"><button class="btn-add">เพิ่มข้อมูล</button></a> <!-- ปุ่มเพิ่ม -->
     </div>
     
-    <a href="javascript:void(0)" onclick="printAll()"><button class="btn-add">พิมพ์ข้อมูลทั้งหมด</button></a>
-        <script>
-        function printSection(sectionId) {
-            var printContents = document.getElementById(sectionId).innerHTML;
-            var originalContents = document.body.innerHTML;
 
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
-        }
-
-        function printAll() {
-            window.print();
-        }
-    </script>  
         
 
 </body>
